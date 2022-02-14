@@ -4,31 +4,6 @@
         <name>WebAPItwe</name>
     </assembly>
     <members>
-        <member name="M:WebAPItwe.Controllers.MembersController.GetMembers">
-            <summary>
-            Get list all members
-            </summary>
-        </member>
-        <member name="M:WebAPItwe.Controllers.MembersController.GetMember(System.String)">
-            <summary>
-            Get a mentor by id
-            </summary>
-        </member>
-        <member name="M:WebAPItwe.Controllers.MembersController.PutMember(System.String,WebAPItwe.Entities.Member)">
-            <summary>
-            Update a mentor
-            </summary>
-        </member>
-        <member name="M:WebAPItwe.Controllers.MembersController.PostMember(WebAPItwe.Entities.Member)">
-            <summary>
-            Create a mentor
-            </summary>
-        </member>
-        <member name="M:WebAPItwe.Controllers.MembersController.DeleteMember(System.String)">
-            <summary>
-            Delete mentor by id
-            </summary>
-        </member>
         <member name="M:WebAPItwe.Controllers.MentorController.GetAll">
             <summary>
             Get list all mentors
