@@ -50,7 +50,7 @@ namespace WebAPItwe.Repositories
             }).FirstOrDefaultAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<MentorModel>>> FindByName(string name)
+        public async Task<IEnumerable<MentorModel>> FindByName(string name)
         {
             return await context.Mentors.Where(x => x.Fullname.Contains(name)).Select(x => new MentorModel
             {
@@ -72,5 +72,21 @@ namespace WebAPItwe.Repositories
             }).ToListAsync();
         }
 
+        public async Task<IEnumerable<MentorModel>> Filter(string major)
+        {
+            var listMentor = await (from me in context.Mentors 
+                              join mt in context.MentorMajors on me.Id equals mt.MentorId 
+                              join ma in context.Majors on mt.MajorId equals ma.Id
+                              where ma.Name == major 
+                              select new MentorModel
+                              {
+                                  Id = me.Id,
+                                  Fullname = me.Fullname,
+                                  Address = me.Address
+
+                              }
+                              ).ToListAsync();
+            return listMentor;
+        }
     }
 }

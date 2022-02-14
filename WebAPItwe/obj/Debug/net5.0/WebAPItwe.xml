@@ -24,5 +24,10 @@
             Search mentor by name
             </summary>
         </member>
+        <member name="M:WebAPItwe.Controllers.MentorController.Filter(System.String)">
+            <summary>
+            Filter by major name
+            </summary>
+        </member>
     </members>
 </doc>

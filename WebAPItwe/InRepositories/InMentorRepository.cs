@@ -12,6 +12,7 @@ namespace WebAPItwe.InRepositories
         Task<IEnumerable<MentorModel>> GetAll();
         Task<MentorModel> GetById(string Id);
         Task<IEnumerable<MentorModel>> SortByPrice();
-        Task<ActionResult<IEnumerable<MentorModel>>> FindByName(string name);
+        Task<IEnumerable<MentorModel>> FindByName(string name);
+        Task<IEnumerable<MentorModel>> Filter(string major);
     }
 }

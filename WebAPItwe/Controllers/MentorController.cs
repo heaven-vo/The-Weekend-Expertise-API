@@ -25,9 +25,9 @@ namespace WebAPItwe.Controllers
         /// Get list all mentors
         /// </summary>
         [HttpGet]
-        public async Task<IEnumerable<MentorModel>> GetAll()
+        public async Task<ActionResult> GetAll()
         {
-            return await mentorRepository.GetAll();
+            return Ok( await mentorRepository.GetAll());
         }
 
         //GET: api/v1/mentors/{id}
@@ -35,9 +35,9 @@ namespace WebAPItwe.Controllers
         /// Get a mentor by id
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<MentorModel>> GetById(string id)
+        public async Task<ActionResult> GetById(string id)
         {
-            return await mentorRepository.GetById(id);
+            return Ok(await mentorRepository.GetById(id));
         }
 
         //GET: api/v1/mentors/sorting?sort_by=xxx&order_by=xxx
@@ -55,14 +55,24 @@ namespace WebAPItwe.Controllers
         /// Search mentor by name
         /// </summary>
         [HttpGet("byName")]
-        public async Task<ActionResult<IEnumerable<MentorModel>>> FindByName(string name)
+        public async Task<ActionResult> FindByName(string name)
         {
             var mentor = await mentorRepository.FindByName(name);
-            if (!mentor.Value.Any())
+            if (!mentor.Any())
             {
                 return NotFound();
             }
-            return await mentorRepository.FindByName(name);
+            return Ok(await mentorRepository.FindByName(name));
+        }
+        //GET: api/v1/mentors/filter?major=xxx
+        /// <summary>
+        /// Filter by major name
+        /// </summary>
+        [HttpGet("filter")]
+        public async Task<ActionResult> Filter(string major)
+        {
+            var listMentor = await mentorRepository.Filter(major);
+            return (listMentor.Any()) ? Ok(listMentor) : NotFound();
         }
     }
 }
