@@ -18,7 +18,7 @@ namespace WebAPItwe.Repositories
         {
             this.context = context;
         }
-
+        //Test query not important
         public IEnumerable<MentorModel> Get()
         {
             var test = from Ads in context.Mentors
@@ -28,7 +28,7 @@ namespace WebAPItwe.Repositories
             return (IEnumerable<MentorModel>)context.Mentors.FromSqlRaw("SELECT * FROM Mentor")
                 .ToList();
         }
-        public async Task<IEnumerable<MentorModel>> GetAll()
+        public async Task<IEnumerable<MentorModel>> GetAll(int pageIndex, int pageSize)
         {
             //var test = await context.Mentors.FromSqlRaw("SELECT * FROM Mentor").ToListAsync();
             return await context.Mentors.Select(x => new MentorModel
@@ -37,7 +37,7 @@ namespace WebAPItwe.Repositories
                 Fullname = x.Fullname,
                 Address = x.Address
 
-            }).ToListAsync();
+            }).Skip((pageIndex-1)*pageSize).Take(pageSize).ToListAsync();
         }
 
         public async Task<MentorModel> GetById(string id)

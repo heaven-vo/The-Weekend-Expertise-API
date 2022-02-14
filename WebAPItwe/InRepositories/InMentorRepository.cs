@@ -9,7 +9,7 @@ namespace WebAPItwe.InRepositories
 {
     public interface InMentorRepository
     {
-        Task<IEnumerable<MentorModel>> GetAll();
+        Task<IEnumerable<MentorModel>> GetAll(int pageIndex, int pageSize);
         Task<MentorModel> GetById(string Id);
         Task<IEnumerable<MentorModel>> SortByPrice();
         Task<IEnumerable<MentorModel>> FindByName(string name);

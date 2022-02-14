@@ -4,7 +4,7 @@
         <name>WebAPItwe</name>
     </assembly>
     <members>
-        <member name="M:WebAPItwe.Controllers.MentorController.GetAll">
+        <member name="M:WebAPItwe.Controllers.MentorController.GetAll(System.Int32,System.Int32)">
             <summary>
             Get list all mentors
             </summary>

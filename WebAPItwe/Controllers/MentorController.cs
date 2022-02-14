@@ -20,14 +20,14 @@ namespace WebAPItwe.Controllers
             this.mentorRepository = mentorRepository;
         }
 
-        //GET: api/v1/mentor
+        //GET: api/v1/mentor?pageIndex=1&pageSize=3
         /// <summary>
-        /// Get list all mentors
+        /// Get list all mentors with pagination
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll(int pageIndex, int pageSize)
         {
-            return Ok( await mentorRepository.GetAll());
+            return Ok( await mentorRepository.GetAll(pageIndex, pageSize));
         }
 
         //GET: api/v1/mentors/{id}
