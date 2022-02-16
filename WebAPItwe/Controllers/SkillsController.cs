@@ -65,7 +65,7 @@ namespace WebAPItwe.Controllers
                 }
                 else
                 {
-                    throw;
+                    throw new Exception("Dell biet");
                 }
             }
 
@@ -94,7 +94,7 @@ namespace WebAPItwe.Controllers
                 }
             }
 
-            return CreatedAtAction("GetSkill", new { id = skill.Id }, skill);
+            return CreatedAtAction(nameof(GetSkill), new { id = skill.Id }, skill);
         }
 
         // DELETE: api/Skills/5

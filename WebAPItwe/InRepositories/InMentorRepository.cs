@@ -7,7 +7,7 @@ using WebAPItwe.Models;
 
 namespace WebAPItwe.InRepositories
 {
-    public interface InMentorRepository
+    public interface InMentorRepository 
     {
         Task<IEnumerable<MentorModel>> GetAll(int pageIndex, int pageSize);
         Task<MentorModel> GetById(string Id);

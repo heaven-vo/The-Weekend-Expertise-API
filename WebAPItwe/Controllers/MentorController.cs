@@ -11,6 +11,7 @@ namespace WebAPItwe.Controllers
 {
     [Route("api/v1/mentors")]
     [ApiController]
+    [Produces("application/json")]
     public class MentorController : ControllerBase
     {
         private readonly InMentorRepository mentorRepository;
@@ -37,7 +38,10 @@ namespace WebAPItwe.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(string id)
         {
-            return Ok(await mentorRepository.GetById(id));
+            var mentor = await mentorRepository.GetById(id);
+            if (mentor == null)
+                return NotFound();
+            return Ok(mentor);
         }
 
         //GET: api/v1/mentors/sorting?sort_by=xxx&order_by=xxx
