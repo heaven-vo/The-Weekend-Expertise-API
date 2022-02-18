@@ -35,7 +35,15 @@ namespace WebAPItwe.Repositories
             { 
                 Id = x.Id,
                 Fullname = x.Fullname,
-                Address = x.Address
+                Address = x.Address,
+                Phone = x.Phone,
+                Image = x.Image,
+                Sex = x.Sex,
+                Price = x.Price,
+                Birthday =x.Birthday,
+                Rate = x.Rate, 
+                Description = x.Description,
+                Status = x.Status
 
             }).Skip((pageIndex-1)*pageSize).Take(pageSize).ToListAsync();
         }

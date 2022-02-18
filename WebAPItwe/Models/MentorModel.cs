@@ -15,6 +15,8 @@ namespace WebAPItwe.Models
         public string Sex { get; set; }
         public double Price { get; set; }
         public DateTime Birthday { get; set; }
+        public int Rate { get; set; }
+        public string Description { get; set; }
         public string Status { get; set; }
     }
 }

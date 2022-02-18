@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace WebAPItwe.Entities
 {
+    [Table("Mentor")]
     public partial class Mentor
     {
         public Mentor()
@@ -23,6 +25,8 @@ namespace WebAPItwe.Entities
         public string Sex { get; set; }
         public double Price { get; set; }
         public DateTime Birthday { get; set; }
+        public int Rate { get; set; }
+        public string Description { get; set; }
         public string Status { get; set; }
 
         public virtual ICollection<MentorMajor> MentorMajors { get; set; }
