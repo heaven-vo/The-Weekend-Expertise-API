@@ -4,6 +4,11 @@
         <name>WebAPItwe</name>
     </assembly>
     <members>
+        <member name="M:WebAPItwe.Controllers.MemberController.GetMemberProfile(System.String)">
+            <summary>
+            Get a member profile
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.MentorController.GetAll(System.Int32,System.Int32)">
             <summary>
             Get list all mentors with pagination
@@ -14,19 +19,24 @@
             Get a mentor by id
             </summary>
         </member>
-        <member name="M:WebAPItwe.Controllers.MentorController.SortbyPrice">
+        <member name="M:WebAPItwe.Controllers.MentorController.SortbyPrice(System.Int32,System.Int32)">
             <summary>
             Sort list mentor by price
             </summary>
         </member>
-        <member name="M:WebAPItwe.Controllers.MentorController.FindByName(System.String)">
+        <member name="M:WebAPItwe.Controllers.MentorController.FindByName(System.String,System.Int32,System.Int32)">
             <summary>
             Search mentor by name
             </summary>
         </member>
-        <member name="M:WebAPItwe.Controllers.MentorController.Filter(System.String)">
+        <member name="M:WebAPItwe.Controllers.MentorController.Filter(System.String,System.Int32,System.Int32)">
             <summary>
             Filter by major name
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.RegisterController.RegisterMember(WebAPItwe.Models.MemberRegisterModel)">
+            <summary>
+            Register a member account and a member
             </summary>
         </member>
     </members>

@@ -31,7 +31,7 @@ namespace WebAPItwe.Repositories
         public async Task<IEnumerable<MentorModel>> GetAll(int pageIndex, int pageSize)
         {
             //var test = await context.Mentors.FromSqlRaw("SELECT * FROM Mentor").ToListAsync();
-            return await context.Mentors.Select(x => new MentorModel
+            var listMentor = await context.Mentors.Select(x => new MentorModel
             { 
                 Id = x.Id,
                 Fullname = x.Fullname,
@@ -46,41 +46,81 @@ namespace WebAPItwe.Repositories
                 Status = x.Status
 
             }).Skip((pageIndex-1)*pageSize).Take(pageSize).ToListAsync();
+            foreach(MentorModel mentor in listMentor)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            }
+            return listMentor;
         }
 
         public async Task<MentorModel> GetById(string id)
         {
-            return await context.Mentors.Where(x => x.Id == id).Select(x => new MentorModel
+            var mentor = await context.Mentors.Where(x => x.Id == id).Select(x => new MentorModel
             {
                 Id = x.Id,
                 Fullname = x.Fullname,
-                Address = x.Address
+                Address = x.Address,
+                Phone = x.Phone,
+                Image = x.Image,
+                Sex = x.Sex,
+                Price = x.Price,
+                Birthday = x.Birthday,
+                Rate = x.Rate,
+                Description = x.Description,
+                Status = x.Status
             }).FirstOrDefaultAsync();
+            if (mentor != null) 
+                    mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            return mentor;
         }
 
-        public async Task<IEnumerable<MentorModel>> FindByName(string name)
+        public async Task<IEnumerable<MentorModel>> FindByName(string name, int pageIndex, int pageSize)
         {
-            return await context.Mentors.Where(x => x.Fullname.Contains(name)).Select(x => new MentorModel
+            var listMentor = await context.Mentors.Where(x => x.Fullname.Contains(name)).Select(x => new MentorModel
             {
                 Id = x.Id,
                 Fullname = x.Fullname,
-                Address = x.Address
-
-            }).ToListAsync();
+                Address = x.Address,
+                Phone = x.Phone,
+                Image = x.Image,
+                Sex = x.Sex,
+                Price = x.Price,
+                Birthday = x.Birthday,
+                Rate = x.Rate,
+                Description = x.Description,
+                Status = x.Status
+            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (MentorModel mentor in listMentor)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            }
+            return listMentor;
         }
 
-        public async Task<IEnumerable<MentorModel>> SortByPrice()
+        public async Task<IEnumerable<MentorModel>> SortByPrice(int pageIndex, int pageSize)
         {
-            return await context.Mentors.OrderBy(x => x.Price).Select(x => new MentorModel
+            var listMentor = await context.Mentors.OrderBy(x => x.Price).Select(x => new MentorModel
             {
                 Id = x.Id,
                 Fullname = x.Fullname,
-                Address = x.Address
-
-            }).ToListAsync();
+                Address = x.Address,
+                Phone = x.Phone,
+                Image = x.Image,
+                Sex = x.Sex,
+                Price = x.Price,
+                Birthday = x.Birthday,
+                Rate = x.Rate,
+                Description = x.Description,
+                Status = x.Status
+            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (MentorModel mentor in listMentor)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            }
+            return listMentor;
         }
 
-        public async Task<IEnumerable<MentorModel>> Filter(string major)
+        public async Task<IEnumerable<MentorModel>> Filter(string major, int pageIndex, int pageSize)
         {
             var listMentor = await (from me in context.Mentors 
                               join mt in context.MentorMajors on me.Id equals mt.MentorId 
@@ -90,11 +130,32 @@ namespace WebAPItwe.Repositories
                               {
                                   Id = me.Id,
                                   Fullname = me.Fullname,
-                                  Address = me.Address
-
+                                  Address = me.Address,
+                                  Phone = me.Phone,
+                                  Image = me.Image,
+                                  Sex = me.Sex,
+                                  Price = me.Price,
+                                  Birthday = me.Birthday,
+                                  Rate = me.Rate,
+                                  Description = me.Description,
+                                  Status = me.Status
                               }
-                              ).ToListAsync();
+                              ).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (MentorModel mentor in listMentor)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            }
             return listMentor;
+        }
+        public async Task<List<string>> GetMajorByMentorId(string mentorId)
+        {
+            List<string> listMajor = await (from me in context.Mentors
+                                join mt in context.MentorMajors on me.Id equals mt.MentorId
+                                join ma in context.Majors on mt.MajorId equals ma.Id
+                                where me.Id == mentorId
+                                select ma.Name                            
+                              ).ToListAsync();
+            return listMajor;
         }
     }
 }

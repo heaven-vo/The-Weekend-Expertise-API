@@ -22,6 +22,7 @@ namespace WebAPItwe
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -56,6 +57,11 @@ namespace WebAPItwe
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            // add cors
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +80,11 @@ namespace WebAPItwe
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Make sure you call this before calling app.UseMvc()
+            app.UseCors(options => options.AllowAnyOrigin());
+
+
 
             app.UseAuthorization();
 
