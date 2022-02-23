@@ -20,7 +20,9 @@ namespace WebAPItwe.Controllers
         {
             _context = context;
         }
-
+        /// <summary>
+        /// Get all major
+        /// </summary>
         // GET: api/Major
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MajorModel>>> GetMajors()
