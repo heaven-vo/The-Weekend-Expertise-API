@@ -10,7 +10,7 @@
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
     <_SelectedScaffolderID>ApiControllerWithContextScaffolder</_SelectedScaffolderID>
     <_SelectedScaffolderCategoryPath>root/Common/Api</_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\Properties\PublishProfiles\TheWeekendExpertise - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\.github\workflows\theweekendexpertise.yml</NameOfLastUsedPublishProfile>
     <Controller_SelectedScaffolderID>MvcControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/MVC/Controller</Controller_SelectedScaffolderCategoryPath>
     <ActiveDebugProfile>WebAPItwe</ActiveDebugProfile>

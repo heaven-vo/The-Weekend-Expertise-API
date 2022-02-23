@@ -4,6 +4,11 @@
         <name>WebAPItwe</name>
     </assembly>
     <members>
+        <member name="M:WebAPItwe.Controllers.MajorController.GetMajors">
+            <summary>
+            Get all major
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.MemberController.GetMemberProfile(System.String)">
             <summary>
             Get a member profile
