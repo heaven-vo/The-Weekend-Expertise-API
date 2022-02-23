@@ -21,6 +21,9 @@ namespace WebAPItwe.Controllers
             this.inUserRepository = inUserRepository;
             this.inMemberRepository = inMemberRepository;
         }
+        /// <summary>
+        /// Register a member account and a member
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<MemberModel>> RegisterMember(MemberRegisterModel member)
         {

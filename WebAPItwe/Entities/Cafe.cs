@@ -17,6 +17,7 @@ namespace WebAPItwe.Entities
         }
 
         public string Id { get; set; }
+        public string name { get; set; }
         public string Image { get; set; }
         public string OpenTime { get; set; }
         public string CloseTime { get; set; }

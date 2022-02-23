@@ -11,7 +11,7 @@ namespace WebAPItwe.Controllers
 {
     [Route("api/v1/mentors")]
     [ApiController]
-    [Produces("application/json")]
+    
     public class MentorController : ControllerBase
     {
         private readonly InMentorRepository mentorRepository;
@@ -44,38 +44,38 @@ namespace WebAPItwe.Controllers
             return Ok(mentor);
         }
 
-        //GET: api/v1/mentors/sorting?sort_by=xxx&order_by=xxx
+        //GET: api/v1/mentors/sorting?pageIndex=1&pageSize=3
         /// <summary>
         /// Sort list mentor by price
         /// </summary>
         [HttpGet("sorting")]
-        public async Task<IEnumerable<MentorModel>> SortbyPrice()
+        public async Task<IEnumerable<MentorModel>> SortbyPrice(int pageIndex, int pageSize)
         {
-            return await mentorRepository.SortByPrice();
+            return await mentorRepository.SortByPrice(pageIndex, pageSize);
         }
 
-        //GET: api/v1/mentors/byName?name=xxx
+        //GET: api/v1/mentors/byName?name=xxx&pageIndex=1&pageSize=3
         /// <summary>
         /// Search mentor by name
         /// </summary>
         [HttpGet("byName")]
-        public async Task<ActionResult> FindByName(string name)
+        public async Task<ActionResult> FindByName(string name, int pageIndex, int pageSize)
         {
-            var mentor = await mentorRepository.FindByName(name);
-            if (!mentor.Any())
-            {
-                return NotFound();
-            }
-            return Ok(await mentorRepository.FindByName(name));
+            var mentor = await mentorRepository.FindByName(name, pageIndex, pageSize);
+            //if (!mentor.Any())
+            //{
+            //    return NotFound();
+            //}
+            return Ok(mentor);
         }
-        //GET: api/v1/mentors/filter?major=xxx
+        //GET: api/v1/mentors/filter?major=xxx&pageIndex=1&pageSize=3
         /// <summary>
         /// Filter by major name
         /// </summary>
         [HttpGet("filter")]
-        public async Task<ActionResult> Filter(string major)
+        public async Task<ActionResult> Filter(string major, int pageIndex, int pageSize)
         {
-            var listMentor = await mentorRepository.Filter(major);
+            var listMentor = await mentorRepository.Filter(major, pageIndex, pageSize);
             return (listMentor.Any()) ? Ok(listMentor) : NotFound();
         }
     }

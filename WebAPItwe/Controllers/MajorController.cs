@@ -10,50 +10,51 @@ using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers
 {
-    [Route("api/v1/skills")]
+    [Route("api/v1/majors")]
     [ApiController]
-    public class SkillsController : ControllerBase
+    public class MajorController : ControllerBase
     {
         private readonly dbEWTContext _context;
 
-        public SkillsController(dbEWTContext context)
+        public MajorController(dbEWTContext context)
         {
             _context = context;
         }
 
-        // GET: api/Skills
+        // GET: api/Major
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills()
+        public async Task<ActionResult<IEnumerable<MajorModel>>> GetMajors()
         {
-            return await _context.Skills.Select(x => new SkillModel {Id = x.Id, Name = x.Name }).ToListAsync();
+            return await _context.Majors.Select(x => new MajorModel { Id = x.Id, Name = x.Name, Status = x.Status }).ToListAsync();
         }
 
-        // GET: api/Skills/5
+        // GET: api/Major/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SkillModel>> GetSkill(string id)
+        public async Task<ActionResult<MajorModel>> GetMajor(string id)
         {
-            var skill = await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var major = await _context.Majors.Select(x => new MajorModel { Id = x.Id, Name = x.Name, Status = x.Status }).Where(x => x.Id == id).FirstOrDefaultAsync();
 
-            if (skill == null)
+            if (major == null)
             {
                 return NotFound();
             }
 
-            return skill;
+            return major;
         }
 
-        // PUT: api/Skills/5
+        // PUT: api/Major/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSkill(string id, SkillModel skill)
+        public async Task<IActionResult> PutMajor(string id, MajorModel major)
         {
-            if (id != skill.Id)
+            if (id != major.Id)
             {
                 return BadRequest();
             }
-            Skill en = new Skill();
-            en.Id = skill.Id;
-            en.Name = skill.Name;
+            Major en = new Major();
+            en.Id = major.Id;
+            en.Name = major.Name;
+            en.Status = major.Status;
             _context.Entry(en).State = EntityState.Modified;
 
             try
@@ -62,35 +63,36 @@ namespace WebAPItwe.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SkillExists(id))
+                if (!MajorExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw new Exception("Dell biet");
+                    throw;
                 }
             }
 
-            return Ok( new { StatusCode = 200, message = "Update skill successful" });
+            return NoContent();
         }
 
-        // POST: api/Skills
+        // POST: api/Major
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<SkillModel>> PostSkill(SkillModel skill)
+        public async Task<ActionResult<Major>> PostMajor(MajorModel major)
         {
-            Skill en = new Skill();
-            en.Id = skill.Id;
-            en.Name = skill.Name;
-            _context.Skills.Add(en);
+            Major en = new Major();
+            en.Id = major.Id;
+            en.Name = major.Name;
+            en.Status = major.Status;
+            _context.Majors.Add(en);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (SkillExists(skill.Id))
+                if (MajorExists(major.Id))
                 {
                     return Conflict();
                 }
@@ -100,28 +102,28 @@ namespace WebAPItwe.Controllers
                 }
             }
 
-            return CreatedAtAction(nameof(GetSkill), new { id = skill.Id }, skill);
+            return CreatedAtAction("GetMajor", new { id = major.Id }, major);
         }
 
-        // DELETE: api/Skills/5
+        // DELETE: api/Major/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSkill(string id)
+        public async Task<IActionResult> DeleteMajor(string id)
         {
-            var skill = await _context.Skills.FindAsync(id);
-            if (skill == null)
+            var major = await _context.Majors.FindAsync(id);
+            if (major == null)
             {
                 return NotFound();
             }
 
-            _context.Skills.Remove(skill);
+            _context.Majors.Remove(major);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool SkillExists(string id)
+        private bool MajorExists(string id)
         {
-            return _context.Skills.Any(e => e.Id == id);
+            return _context.Majors.Any(e => e.Id == id);
         }
     }
 }
