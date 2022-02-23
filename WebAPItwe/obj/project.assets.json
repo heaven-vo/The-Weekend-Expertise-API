@@ -7534,11 +7534,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DUONGAS\\Documents\\VS_Projects\\tweWebAPI\\WebAPItwe\\WebAPItwe.csproj",
+      "projectUniqueName": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\WebAPItwe.csproj",
       "projectName": "WebAPItwe",
-      "projectPath": "C:\\Users\\DUONGAS\\Documents\\VS_Projects\\tweWebAPI\\WebAPItwe\\WebAPItwe.csproj",
+      "projectPath": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\WebAPItwe.csproj",
       "packagesPath": "C:\\Users\\DUONGAS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DUONGAS\\Documents\\VS_Projects\\tweWebAPI\\WebAPItwe\\obj\\",
+      "outputPath": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DUONGAS\\AppData\\Roaming\\NuGet\\NuGet.Config",
