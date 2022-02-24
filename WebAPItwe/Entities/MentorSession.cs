@@ -10,8 +10,8 @@ namespace WebAPItwe.Entities
         public string Id { get; set; }
         public string MentorId { get; set; }
         public string SessionId { get; set; }
-        public DateTime RequestDate { get; set; }
-        public DateTime AcceptDate { get; set; }
+        public string RequestDate { get; set; }
+        public string AcceptDate { get; set; }
         public string Status { get; set; }
 
         public virtual Mentor Mentor { get; set; }

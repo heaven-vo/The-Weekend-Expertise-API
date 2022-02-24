@@ -4,6 +4,36 @@
         <name>WebAPItwe</name>
     </assembly>
     <members>
+        <member name="M:WebAPItwe.Controllers.CafeController.GetAll(System.Int32,System.Int32)">
+            <summary>
+            Get list all cafe with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.CafeController.GetById(System.String)">
+            <summary>
+            Get a cafe by id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.CafeController.GetByName(System.String)">
+            <summary>
+            Search cafe by name
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.CafeController.PutCafe(System.String,WebAPItwe.Entities.Cafe)">
+            <summary>
+            Update cafe by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.CafeController.PostCafe(WebAPItwe.Entities.Cafe)">
+            <summary>
+            Create cafe by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.CafeController.DeleteCafe(System.String)">
+            <summary>
+            Delete cafe by Id
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.MajorController.GetMajors">
             <summary>
             Get all major
@@ -42,6 +72,36 @@
         <member name="M:WebAPItwe.Controllers.RegisterController.RegisterMember(WebAPItwe.Models.MemberRegisterModel)">
             <summary>
             Register a member account and a member
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.GetSkills">
+            <summary>
+            Get list all Skill with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.GetSkill(System.String)">
+            <summary>
+            Get a Skill by id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.GetByName(System.String)">
+            <summary>
+            Search Skill by name
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.PutSkill(System.String,WebAPItwe.Models.SkillModel)">
+            <summary>
+            Update Skill by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.PostSkill(WebAPItwe.Models.SkillModel)">
+            <summary>
+            Create Skill by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.GetByName(System.String)">
+            <summary>
+            Search Skill by name
             </summary>
         </member>
     </members>

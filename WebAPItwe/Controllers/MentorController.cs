@@ -62,10 +62,6 @@ namespace WebAPItwe.Controllers
         public async Task<ActionResult> FindByName(string name, int pageIndex, int pageSize)
         {
             var mentor = await mentorRepository.FindByName(name, pageIndex, pageSize);
-            //if (!mentor.Any())
-            //{
-            //    return NotFound();
-            //}
             return Ok(mentor);
         }
         //GET: api/v1/mentors/filter?major=xxx&pageIndex=1&pageSize=3

@@ -28,8 +28,6 @@ namespace WebAPItwe.Repositories
         public async Task<Object> GetMemberProfile(string username)
         {
             string memberId =  context.Users.Where(x => x.Email == username).Select(x => x.Id).FirstOrDefault();
-            Console.WriteLine(memberId);
-            //if (memberId == null) return null;
             var member = await (from m in context.Members 
                                 join ma in context.Majors on m.MajorId equals ma.Id
                                 into Details
@@ -56,13 +54,10 @@ namespace WebAPItwe.Repositories
             string memberId = context.Users.Where(x => x.Email == username).Select(x => x.Id).FirstOrDefault();
             if(memberId == null)
             {
-                Console.WriteLine("memberId null");
                 return null; 
             }
-            Console.WriteLine("memberId not null");
             var member = await context.Members.FindAsync(memberId);
             var majorId =  context.Majors.Where(x => x.Name == memberProfile.MajorName).Select(x => x.Id).FirstOrDefault();
-            Console.WriteLine("MajorID: " + majorId.ToString());
             member.Fullname = memberProfile.Fullname;
             member.Image = memberProfile.Image;
             member.Address = memberProfile.Address;
@@ -77,7 +72,6 @@ namespace WebAPItwe.Repositories
                 await context.SaveChangesAsync();
             }catch(Exception e)
             {
-                Console.WriteLine(e.ToString());
                 throw ;
             }
             return memberProfile;

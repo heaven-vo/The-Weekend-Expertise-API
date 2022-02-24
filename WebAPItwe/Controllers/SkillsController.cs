@@ -21,27 +21,60 @@ namespace WebAPItwe.Controllers
             _context = context;
         }
 
-        // GET: api/Skills
+        // GET: api/v1/skills
+        /// <summary>
+        /// Get list all Skill with pagination
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills()
         {
-            return await _context.Skills.Select(x => new SkillModel {Id = x.Id, Name = x.Name }).ToListAsync();
+            return Ok(await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).ToListAsync());
         }
 
-        // GET: api/Skills/5
+        // GET: api/v1/skills/5
+        /// <summary>
+        /// Get a Skill by id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<SkillModel>> GetSkill(string id)
         {
-            var skill = await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).Where(x => x.Id == id).FirstOrDefaultAsync();
-
-            if (skill == null)
-            {
-                return NotFound();
-            }
-
-            return skill;
+            var skill = await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).Where(x => x.Id == id).FirstOrDefaultAsync();   
+            return Ok(skill);
         }
 
+        //GET: api/v1/cafe/byName?name=xxx
+        /// <summary>
+        /// Search Skill by name
+        /// </summary>
+        [HttpGet("name")]
+        public async Task<ActionResult<Skill>> GetByName(string name)
+        {
+            try
+            {
+                var result = await (from Skill in _context.Skills
+                                    where Skill.Name.Contains(name)    // search gần đúng
+                                    select new
+                                    {
+                                        Skill.Id,
+                                        Skill.Name,
+                                    }
+                               ).ToListAsync();
+                if (!result.Any())
+                {
+                    return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
+                }
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Update Skill by Id
+        /// </summary>
         // PUT: api/Skills/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -54,10 +87,10 @@ namespace WebAPItwe.Controllers
             Skill en = new Skill();
             en.Id = skill.Id;
             en.Name = skill.Name;
-            _context.Entry(en).State = EntityState.Modified;
 
             try
             {
+                _context.Entry(en).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -68,13 +101,16 @@ namespace WebAPItwe.Controllers
                 }
                 else
                 {
-                    throw new Exception("Dell biet");
+                    throw new Exception("Dell biet :)");
                 }
             }
 
-            return Ok( new { StatusCode = 200, message = "Update skill successful" });
+            return Ok(skill);
         }
 
+        /// <summary>
+        /// Create Skill by Id
+        /// </summary>
         // POST: api/Skills
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -83,9 +119,10 @@ namespace WebAPItwe.Controllers
             Skill en = new Skill();
             en.Id = skill.Id;
             en.Name = skill.Name;
-            _context.Skills.Add(en);
+            
             try
             {
+                _context.Skills.Add(en);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)

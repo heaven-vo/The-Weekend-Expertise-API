@@ -23,14 +23,14 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Get all major
         /// </summary>
-        // GET: api/Major
+        // GET: api/v1/majors
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MajorModel>>> GetMajors()
         {
             return await _context.Majors.Select(x => new MajorModel { Id = x.Id, Name = x.Name, Status = x.Status }).ToListAsync();
         }
 
-        // GET: api/Major/5
+        // GET: api/v1/majors/5
         [HttpGet("{id}")]
         public async Task<ActionResult<MajorModel>> GetMajor(string id)
         {
@@ -38,13 +38,40 @@ namespace WebAPItwe.Controllers
 
             if (major == null)
             {
-                return NotFound();
+                return BadRequest(new { StatusCode = 404, message = "Not Found" });
             }
 
-            return major;
+            return Ok(major);
         }
 
-        // PUT: api/Major/5
+        //Get: api/v1/majors/name?name=xxxx
+        [HttpGet("name")]
+        public async Task<ActionResult<Major>> GetByName(string name)
+        {
+            try
+            {
+                var result = await (from Major in _context.Majors
+                                    where Major.Name.Contains(name)    // search gần đúng
+                                    select new
+                                    {
+                                        Major.Id,
+                                        Major.Name,
+                                    }
+                               ).ToListAsync();
+                if (!result.Any())
+                {
+                    return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
+                }
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
+
+        // PUT: api/v1/majors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMajor(string id, MajorModel major)
@@ -56,18 +83,18 @@ namespace WebAPItwe.Controllers
             Major en = new Major();
             en.Id = major.Id;
             en.Name = major.Name;
-            en.Status = major.Status;
-            _context.Entry(en).State = EntityState.Modified;
+            en.Status = major.Status;    
 
             try
             {
+                _context.Entry(en).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!MajorExists(id))
                 {
-                    return NotFound();
+                    return NotFound(new { StatusCode = 404, message = "The major is not existed." });
                 }
                 else
                 {
@@ -75,15 +102,15 @@ namespace WebAPItwe.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok(en);
         }
 
-        // POST: api/Major
+        // POST: api/v1/majors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Major>> PostMajor(MajorModel major)
         {
-            Major en = new Major();
+            var en = new Major();
             en.Id = major.Id;
             en.Name = major.Name;
             en.Status = major.Status;
