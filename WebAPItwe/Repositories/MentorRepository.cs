@@ -157,5 +157,18 @@ namespace WebAPItwe.Repositories
                               ).ToListAsync();
             return listMajor;
         }
+
+        public async Task<IEnumerable<object>> LoadMentorFeedback(string id, int pageIndex, int pageSize)
+        {
+            var feedback = await (from me in context.Mentors 
+                                           join ses in context.Sessions on me.Id equals ses.MentorId 
+                                           join meses in context.MemberSessions on ses.Id equals meses.SessionId 
+                                           where me.Id == id && meses.FeedbackOfMentor != null 
+                                           select new { meses.MemberName, 
+                                                        meses.DateMentorFeedback,
+                                                        meses.FeedbackOfMentor
+                                           }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return feedback; 
+        }
     }
 }

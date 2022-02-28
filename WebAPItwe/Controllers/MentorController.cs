@@ -74,5 +74,16 @@ namespace WebAPItwe.Controllers
             var listMentor = await mentorRepository.Filter(major, pageIndex, pageSize);
             return (listMentor.Any()) ? Ok(listMentor) : NotFound();
         }
+
+        //GET: api/v1/mentors/feedbacks/{id}?pageIndex=1&pageSize=3
+        /// <summary>
+        /// Load comment by mentor id
+        /// </summary>
+        [HttpGet("feedbacks/{id}")]
+        public async Task<ActionResult> LoadFeedbackMentor(string id, int pageIndex, int pageSize)
+        {
+            var feedback = await mentorRepository.LoadMentorFeedback(id, pageIndex, pageSize);
+            return Ok(feedback);
+        }
     }
 }

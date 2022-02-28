@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace WebAPItwe.Entities
 {
+    [Table("Session")]
+
     public partial class Session
     {
         public Session()
