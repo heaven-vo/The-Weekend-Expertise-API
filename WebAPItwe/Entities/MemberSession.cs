@@ -19,7 +19,7 @@ namespace WebAPItwe.Entities
         public string DateMentorFeedback { get; set; }
         public string DateCafeFeedback { get; set; }
         public string SessionId { get; set; }
-        public string Status { get; set; }
+        public Boolean Status { get; set; }
 
         public virtual Member Member { get; set; }
         public virtual Session Session { get; set; }

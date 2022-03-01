@@ -19,7 +19,8 @@ namespace WebAPItwe.Entities
 
         public string Id { get; set; }
         public int Slot { get; set; }
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
+        public string DateCreated { get; set; }
         public int MaxPerson { get; set; }
         public string Status { get; set; }
         public string MentorId { get; set; }

@@ -22,10 +22,11 @@ namespace WebAPItwe.Entities
         public string Address { get; set; }
         public string Phone { get; set; }
         public string Sex { get; set; }
-        public string MajorId { get; set; }
+        public string Facebook { get; set; }
         public string Birthday { get; set; }
-        public Boolean Status { get; set; }
+        public string MajorId { get; set; }
         public string Grade { get; set; }
+        public Boolean Status { get; set; }
 
         public virtual Major Major { get; set; }
         public virtual ICollection<MemberSession> MemberSessions { get; set; }

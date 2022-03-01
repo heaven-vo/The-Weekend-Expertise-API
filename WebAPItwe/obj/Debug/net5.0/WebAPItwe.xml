@@ -69,6 +69,11 @@
             Filter by major name
             </summary>
         </member>
+        <member name="M:WebAPItwe.Controllers.MentorController.LoadFeedbackMentor(System.String,System.Int32,System.Int32)">
+            <summary>
+            Load comment by mentor id
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.RegisterController.RegisterMember(WebAPItwe.Models.MemberRegisterModel)">
             <summary>
             Register a member account and a member
