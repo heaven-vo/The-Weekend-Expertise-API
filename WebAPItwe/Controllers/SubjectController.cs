@@ -21,6 +21,9 @@ namespace WebAPItwe.Controllers
         }
 
         // GET: api/v1/subjects
+        /// <summary>
+        /// Get list all Subject with pagination
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Subject>>> GetSubjects(int pageIndex, int pageSize)
         {
@@ -44,7 +47,9 @@ namespace WebAPItwe.Controllers
             }
         }
 
-        // GET: api/v1/subjects/5
+        /// <summary>
+        /// Get a Subject by id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<Subject>> GetSubject(string id)
         {
@@ -97,7 +102,9 @@ namespace WebAPItwe.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Search Subject by majorId
+        /// </summary>
         [HttpGet("MajorId")]
         public async Task<ActionResult<Subject>> GetByMajorId(string majorId)
         {
@@ -124,6 +131,10 @@ namespace WebAPItwe.Controllers
             }
         }
         // PUT: api/v1/subjects/5
+        // PUT: api/Subjects/5
+        /// <summary>
+        /// Update Subject by Id
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSubject(string id, Subject subject)
         {
@@ -144,6 +155,9 @@ namespace WebAPItwe.Controllers
         }
 
         // POST: api/v1/subjects
+        /// <summary>
+        /// Create Subject by Id
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<Subject>> PostSubject(Subject subject)
         {
@@ -167,6 +181,9 @@ namespace WebAPItwe.Controllers
         }
 
         // DELETE: api/v1/subjects/5
+        /// <summary>
+        /// Delete Subject by Id
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSubject(string id)
         {

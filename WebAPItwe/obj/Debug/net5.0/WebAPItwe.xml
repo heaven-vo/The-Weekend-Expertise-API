@@ -6,7 +6,7 @@
     <members>
         <member name="M:WebAPItwe.Controllers.CafeController.GetAll(System.Int32,System.Int32)">
             <summary>
-            Get list all cafe with pagination
+            Get list all cafe with pagination.
             </summary>
         </member>
         <member name="M:WebAPItwe.Controllers.CafeController.GetById(System.String)">
@@ -74,12 +74,87 @@
             Load comment by mentor id
             </summary>
         </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.GetMentorMajors(System.Int32,System.Int32)">
+            <summary>
+            Get list all MentorMajor with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.GetMentorMajor(System.String)">
+            <summary>
+            Get a MentorMajor by id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.GetByMentorId(System.String)">
+            <summary>
+            Search MentorMajor by mentorId
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.GetByMajorId(System.String)">
+            <summary>
+            Search MentorSkill by majorId
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.PutMentorMajor(System.String,WebAPItwe.Entities.MentorMajor)">
+            <summary>
+            Update MentorMajor by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.PostMentorMajor(WebAPItwe.Entities.MentorMajor)">
+            <summary>
+            Create MentorMajor by Id
+            </summary>54
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorMajorController.DeleteMentorMajor(System.String)">
+            <summary>
+            Delete MentorMajor by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.GetMentorSkills(System.Int32,System.Int32)">
+            <summary>
+            Get list all MentorSkill with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.GetBySKillId(System.String)">
+            <summary>
+            Search MentorSkill by SKillId
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.GetMentorSkill(System.String)">
+            <summary>
+            Get a MentorSkill by id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.GetByMentorId(System.String)">
+            <summary>
+            Search MentorSkill by mentorId
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.PutMentorSkill(System.String,WebAPItwe.Entities.MentorSkill)">
+            <summary>
+            Update MentorSkill by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.MentorSkillController.PostMentorSkill(WebAPItwe.Entities.MentorSkill)">
+            <summary>
+            Update MentorSkill by Id
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.RegisterController.RegisterMember(WebAPItwe.Models.MemberRegisterModel)">
             <summary>
             Register a member account and a member
             </summary>
         </member>
-        <member name="M:WebAPItwe.Controllers.SkillsController.GetSkills">
+        <member name="M:WebAPItwe.Controllers.SessionsController.GetSessions(System.Int32,System.Int32)">
+            <summary>
+            Get list all Session with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SessionsController.GetSession(System.String)">
+            <summary>
+            Get a Session by id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SkillsController.GetSkills(System.Int32,System.Int32)">
             <summary>
             Get list all Skill with pagination
             </summary>
@@ -104,9 +179,39 @@
             Create Skill by Id
             </summary>
         </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.GetSubjects(System.Int32,System.Int32)">
+            <summary>
+            Get list all Subject with pagination
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.GetSubject(System.String)">
+            <summary>
+            Get a Subject by id
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.SubjectsController.GetByName(System.String)">
             <summary>
             Search Skill by name
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.GetByMajorId(System.String)">
+            <summary>
+            Search Subject by majorId
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.PutSubject(System.String,WebAPItwe.Entities.Subject)">
+            <summary>
+            Update Subject by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.PostSubject(WebAPItwe.Entities.Subject)">
+            <summary>
+            Create Subject by Id
+            </summary>
+        </member>
+        <member name="M:WebAPItwe.Controllers.SubjectsController.DeleteSubject(System.String)">
+            <summary>
+            Delete Subject by Id
             </summary>
         </member>
     </members>

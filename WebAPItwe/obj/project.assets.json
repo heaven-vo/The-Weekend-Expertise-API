@@ -7529,19 +7529,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\DUONGAS\\.nuget\\packages\\": {}
+    "C:\\Users\\ACER\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\WebAPItwe.csproj",
+      "projectUniqueName": "D:\\repo\\The-Weekend-Expertise-API-v1\\WebAPItwe\\WebAPItwe.csproj",
       "projectName": "WebAPItwe",
-      "projectPath": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\WebAPItwe.csproj",
-      "packagesPath": "C:\\Users\\DUONGAS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DUONGAS\\Desktop\\TWE\\The-Weekend-Expertise-API\\WebAPItwe\\obj\\",
+      "projectPath": "D:\\repo\\The-Weekend-Expertise-API-v1\\WebAPItwe\\WebAPItwe.csproj",
+      "packagesPath": "C:\\Users\\ACER\\.nuget\\packages\\",
+      "outputPath": "D:\\repo\\The-Weekend-Expertise-API-v1\\WebAPItwe\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\DUONGAS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\ACER\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7612,7 +7612,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

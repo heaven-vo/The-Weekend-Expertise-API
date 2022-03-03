@@ -11,7 +11,7 @@
     <_SelectedScaffolderID>ApiControllerEmptyScaffolder</_SelectedScaffolderID>
     <_SelectedScaffolderCategoryPath>root/Common/Api</_SelectedScaffolderCategoryPath>
     <NameOfLastUsedPublishProfile>C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\.github\workflows\theweekendexpertise.yml</NameOfLastUsedPublishProfile>
-    <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
+    <Controller_SelectedScaffolderID>ApiControllerWithContextScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
     <ActiveDebugProfile>WebAPItwe</ActiveDebugProfile>
   </PropertyGroup>
