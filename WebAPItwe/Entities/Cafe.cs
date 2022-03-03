@@ -25,8 +25,9 @@ namespace WebAPItwe.Entities
         public string Longitude { get; set; }
         public string Latitude { get; set; }
         public string Distric { get; set; }
-        public double Price { get; set; }
         public string Description { get; set; }
+        public double Rate { get; set; }
+        public double Price { get; set; }    
         public string Status { get; set; }
 
         public virtual ICollection<Session> Sessions { get; set; }

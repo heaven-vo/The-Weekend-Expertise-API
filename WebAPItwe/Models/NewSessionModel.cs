@@ -11,6 +11,7 @@ namespace WebAPItwe.Models
         public string CafeId { get; set; }
         public string MemberId { get; set; }
         public string MemberName { get; set; }
+        public string MemberImage { get; set; }
         public string Date { get; set; }
         public int Slot { get; set; }
         public string SubjectId { get; set; }

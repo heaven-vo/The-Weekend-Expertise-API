@@ -165,6 +165,8 @@ namespace WebAPItwe.Repositories
                                            join meses in context.MemberSessions on ses.Id equals meses.SessionId 
                                            where me.Id == id && meses.FeedbackOfMentor != null 
                                            select new { meses.MemberName, 
+                                                        meses.MemberImage,
+                                                        meses.MentorVoting,
                                                         meses.DateMentorFeedback,
                                                         meses.FeedbackOfMentor
                                            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();

@@ -45,5 +45,18 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }
         }
+        [HttpPost("feedback/{memberId}")]
+        public async Task<ActionResult> CreateFeedback(string memberId, FeedbackModel feedback)
+        {
+            try
+            {
+                var result = await inMemberRepository.CreateFeedback(memberId, feedback);
+                return Ok(result);
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
     }
 }

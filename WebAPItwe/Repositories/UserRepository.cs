@@ -17,25 +17,22 @@ namespace WebAPItwe.Repositories
             this.context = context;
         }
 
-        public async Task<string> RegisterMemberAccount(MemberRegisterModel member)
+        public async Task RegisterMemberAccount(MemberRegisterModel member)
         {
             var check = context.Users.Where(x => x.Email == member.Email).FirstOrDefault();
             if(check == null)
             {
-                String id = Guid.NewGuid().ToString();
                 context.Add(new User
                 {
-                    Id = id,
+                    Id = member.Id,
                     Name = member.Name,
                     Email = member.Email,
-                    Password = member.Password,
                     RoleId = "1",
                     Status = true
                 });
                 try
                 {
                    await context.SaveChangesAsync();
-                    return id;
                 }
                 catch
                 {

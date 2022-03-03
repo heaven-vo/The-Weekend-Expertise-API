@@ -8,6 +8,6 @@ namespace WebAPItwe.InRepositories
 {
     public interface InUserRepository
     {
-        Task<string> RegisterMemberAccount(MemberRegisterModel member);
+        Task RegisterMemberAccount(MemberRegisterModel member);
     }
 }

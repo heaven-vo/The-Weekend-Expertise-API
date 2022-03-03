@@ -79,6 +79,11 @@
             Register a member account and a member
             </summary>
         </member>
+        <member name="M:WebAPItwe.Controllers.SessionController.CreateNewSession(WebAPItwe.Models.NewSessionModel)">
+            <summary>
+            Create new Session 
+            </summary>
+        </member>
         <member name="M:WebAPItwe.Controllers.SkillsController.GetSkills">
             <summary>
             Get list all Skill with pagination

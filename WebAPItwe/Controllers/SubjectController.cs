@@ -104,7 +104,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 var result = await (from Subject in _context.Subjects
-                                    where Subject.MajorId.Contains(majorId)    // search gần đúng
+                                    where Subject.MajorId == majorId   // search gần đúng
                                     select new
                                     {
                                         Subject.Id,

@@ -30,8 +30,8 @@ namespace WebAPItwe.Controllers
             MemberModel newMember = null;
             try
             {
-                string id = await inUserRepository.RegisterMemberAccount(member);
-                newMember = await inMemberRepository.CreateNewMember(id, member.Name);
+                await inUserRepository.RegisterMemberAccount(member);
+                newMember = await inMemberRepository.CreateNewMember(member.Id, member.Name);
             }
             catch
             {

@@ -70,11 +70,35 @@ namespace WebAPItwe.Repositories
             try
             {
                 await context.SaveChangesAsync();
-            }catch(Exception e)
+            }catch
             {
                 throw ;
             }
             return memberProfile;
         }
-    }
+        public async Task<object> CreateFeedback(string memberId, FeedbackModel feedback)
+        {
+            Console.WriteLine(feedback.SessionId);
+            var session = await context.Sessions.FindAsync(feedback.SessionId);
+            if(session.Status == "Done") {
+                var memberSessionId = await context.MemberSessions.Where(x => x.MemberId == memberId).Select(x => x.Id).FirstOrDefaultAsync();            
+                var memberSession = await context.MemberSessions.FindAsync(memberSessionId);
+                String dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                if (memberSession != null)
+                {
+                    memberSession.MentorVoting = feedback.MentorVoting;
+                    memberSession.CafeVoting = feedback.CafeVoting;
+                    memberSession.FeedbackOfMentor = feedback.FeedbackOfMentor;
+                    memberSession.FeedbackOfCafe = feedback.FeedbackOfCafe;
+                    memberSession.DateMentorFeedback = dateCreated;
+                    memberSession.DateCafeFeedback = dateCreated;
+
+                    context.Entry(memberSession).State = EntityState.Modified;
+                    await context.SaveChangesAsync();
+                    return feedback;
+                }
+            }
+            return null;
+        }
+    }   
 }

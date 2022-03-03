@@ -27,13 +27,14 @@ namespace WebAPItwe.Repositories
             context.Add(session);
 
             var memberSession = new MemberSession {Id = Guid.NewGuid().ToString(), MemberId = newSession.MemberId, MemberName = newSession.MemberName,
-                                                    SessionId = sessionId, Status = true};
+                                                   MemberImage = newSession.MemberImage ,MentorVoting = 0, CafeVoting = 0, SessionId = sessionId, Status = true};
             context.Add(memberSession);
             foreach(var mentorId in newSession.ListMentor)
             {
                 var mentor = new MentorSession {Id = Guid.NewGuid().ToString(), MentorId = mentorId, SessionId = sessionId, AcceptDate = dateCreated, Status = false };
                 context.Add(mentor);
             }
+            //Bo sua lai
             var payment = new Payment { Id = Guid.NewGuid().ToString(), Amount = newSession.Payments.Amount, Type = newSession.Payments.Type, SessionId = sessionId ,Status = "true" };
             context.Add(payment);
             await context.SaveChangesAsync();

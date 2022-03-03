@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebAPItwe.Controllers
+namespace WebAPItwe.Controllers.Member
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class HistoryController : ControllerBase
     {
     }
 }
