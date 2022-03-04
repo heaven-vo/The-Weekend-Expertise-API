@@ -23,7 +23,7 @@ namespace WebAPItwe.Repositories
             String dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             Session session = new Session { Id = sessionId, Slot = newSession.Slot, Date = newSession.Date,
                                             DateCreated = dateCreated, MaxPerson = newSession.MaxPerson, Status = "WaitCafe",
-                                            MemberId = newSession.MemberId, SubjectId = newSession.SubjectId, CafeId = newSession.CafeId};
+                                            MemberId = newSession.MemberId, MajorId = newSession.MajorId, SubjectId = newSession.SubjectId, CafeId = newSession.CafeId};
             context.Add(session);
 
             var memberSession = new MemberSession {Id = Guid.NewGuid().ToString(), MemberId = newSession.MemberId, MemberName = newSession.MemberName,

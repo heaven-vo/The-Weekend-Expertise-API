@@ -22,11 +22,12 @@ namespace WebAPItwe.Entities
         public string Date { get; set; }
         public string DateCreated { get; set; }
         public int MaxPerson { get; set; }
-        public string Status { get; set; }
         public string MentorId { get; set; }
         public string MemberId { get; set; }
+        public string MajorId { get; set; }
         public string SubjectId { get; set; }
         public string CafeId { get; set; }
+        public string Status { get; set; }
 
         public virtual Cafe Cafe { get; set; }
         public virtual Member Member { get; set; }

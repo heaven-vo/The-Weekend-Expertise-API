@@ -56,10 +56,10 @@ namespace WebAPItwe.Controllers
                                      c.Name,
                                      c.MajorId
 
-                                 }).ToListAsync();
+                                 }).FirstOrDefaultAsync();
 
 
-            if (!subject.Any())
+            if (subject == null)
             {
                 return BadRequest(new { StatusCode = 404, message = "Not Found" });
             }
