@@ -21,6 +21,9 @@ namespace WebAPItwe.Controllers
         }
 
         // GET: api/v1/mentorMajors
+        /// <summary>
+        /// Get list all MentorMajor with pagination
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MentorMajor>>> GetMentorMajors(int pageIndex, int pageSize)
         {
@@ -45,6 +48,10 @@ namespace WebAPItwe.Controllers
         }
 
         // GET: api/v1/mentorMajors/5
+        // GET: api/MentorMajors/5
+        /// <summary>
+        /// Get a MentorMajor by id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<MentorMajor>> GetMentorMajor(string id)
         {
@@ -66,19 +73,21 @@ namespace WebAPItwe.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Search MentorMajor by mentorId
+        /// </summary>
         [HttpGet("mentorId")]
-        public async Task<ActionResult<MentorSkill>> GetByMentorId(string mentorId)
+        public async Task<ActionResult<MentorMajor>> GetByMentorId(string mentorId)
         {
             try
             {
-                var result = await (from MentorSkill in _context.MentorSkills
-                                    where MentorSkill.MentorId.Contains(mentorId)    // search gần đúng
+                var result = await (from MentorMajor in _context.MentorMajors
+                                    where MentorMajor.MentorId.Contains(mentorId)    // search gần đúng
                                     select new
                                     {
-                                        MentorSkill.Id,
-                                        MentorSkill.SkillId,
-                                        MentorSkill.MentorId
+                                        MentorMajor.Id,
+                                        MentorMajor.MajorId,
+                                        MentorMajor.MentorId
                                     }).ToListAsync();
                 if (!result.Any())
                 {
@@ -93,8 +102,11 @@ namespace WebAPItwe.Controllers
             }
         }
 
+        /// <summary>
+        /// Search MentorSkill by majorId
+        /// </summary>
         [HttpGet("MajorId")]
-        public async Task<ActionResult<MentorSkill>> GetByMajorId(string majorId)
+        public async Task<ActionResult<MentorMajor>> GetByMajorId(string majorId)
         {
             try
             {
@@ -119,7 +131,9 @@ namespace WebAPItwe.Controllers
             }
         }
         // PUT: api/MentorMajors/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update MentorMajor by Id
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMentorMajor(string id, MentorMajor mentorMajor)
         {
@@ -140,7 +154,9 @@ namespace WebAPItwe.Controllers
         }
 
         // POST: api/MentorMajors
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create MentorMajor by Id
+        /// </summary>54
         [HttpPost]
         public async Task<ActionResult<MentorMajor>> PostMentorMajor(MentorMajor mentorMajor)
         {
@@ -163,6 +179,9 @@ namespace WebAPItwe.Controllers
         }
 
         // DELETE: api/MentorMajors/5
+        /// <summary>
+        /// Delete MentorMajor by Id
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMentorMajor(string id)
         {

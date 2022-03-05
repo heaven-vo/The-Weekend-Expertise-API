@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebAPItwe.Entities;
 using WebAPItwe.InRepositories;
 using WebAPItwe.Models;
 
@@ -34,8 +36,6 @@ namespace WebAPItwe.Controllers
             {
                 return Conflict();
             }
-
-
 
         }
 

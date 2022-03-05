@@ -21,6 +21,9 @@ namespace WebAPItwe.Controllers
         }
 
         // GET: api/v1/mentorSkills
+        /// <summary>
+        /// Get list all MentorSkill with pagination
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MentorSkill>>> GetMentorSkills(int pageIndex, int pageSize)
         {
@@ -43,9 +46,40 @@ namespace WebAPItwe.Controllers
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
+        /// <summary>
+        /// Search MentorSkill by SKillId
+        /// </summary>
+        [HttpGet("SKillId")]
+        public async Task<ActionResult<MentorSkill>> GetBySKillId(string skillId)
+        {
+            try
+            {
+                var result = await (from MentorSkill in _context.MentorSkills
+                                    where MentorSkill.SkillId.Contains(skillId)    // search gần đúng
+                                    select new
+                                    {
+                                        MentorSkill.Id,
+                                        MentorSkill.SkillId,
+                                        MentorSkill.MentorId
+                                    }).ToListAsync();
+                if (!result.Any())
+                {
+                    return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
+                }
+                return Ok(result);
 
-        // GET: aapi/v1/mentorSkills/5
-        [HttpGet("{id}")]
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+            }
+
+            // GET: aapi/v1/mentorSkills/5
+            /// <summary>
+            /// Get a MentorSkill by id
+            /// </summary>
+            [HttpGet("{id}")]
         public async Task<ActionResult<MentorSkill>> GetMentorSkill(string id)
         {
             var result = await (from c in _context.MentorSkills
@@ -67,6 +101,9 @@ namespace WebAPItwe.Controllers
         }
 
         //Get: api/v1/mentorSkills/mentorId
+        /// <summary>
+        /// Search MentorSkill by mentorId
+        /// </summary>
         [HttpGet("mentorId")]
         public async Task<ActionResult<MentorSkill>> GetByMentorId(string mentorId)
         {
@@ -93,6 +130,9 @@ namespace WebAPItwe.Controllers
             }
         }
         // Put: api/v1/mentorSkills/5
+        /// <summary>
+        /// Update MentorSkill by Id
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMentorSkill(string id, MentorSkill mentorSkill)
         {
@@ -113,6 +153,9 @@ namespace WebAPItwe.Controllers
         }
 
         // POST: api/v1/mentorSkills
+        /// <summary>
+        /// Update MentorSkill by Id
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<MentorSkill>> PostMentorSkill(MentorSkill mentorSkill)
         {

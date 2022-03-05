@@ -21,7 +21,7 @@ namespace WebAPItwe.Controllers
         }
         //GET: api/v1/cafe?pageIndex=1&pageSize=3
         /// <summary>
-        /// Get list all cafe with pagination
+        /// Get list all cafe with pagination.
         /// </summary>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cafe>>> GetAll(int pageIndex, int pageSize)
