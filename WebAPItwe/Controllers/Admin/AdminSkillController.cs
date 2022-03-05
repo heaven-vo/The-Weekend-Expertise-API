@@ -12,11 +12,11 @@ namespace WebAPItwe.Controllers
 {
     [Route("api/v1/admin/skills")]
     [ApiController]
-    public class SkillController : ControllerBase
+    public class AdminSkillController : ControllerBase
     {
         private readonly dbEWTContext _context;
 
-        public SkillController(dbEWTContext context)
+        public AdminSkillController(dbEWTContext context)
         {
             _context = context;
         }
@@ -25,23 +25,16 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Get list all Skill with pagination
         /// </summary>
-        [HttpGet]
+        [HttpGet("skill")]
         public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills(int pageIndex, int pageSize)
         {
             try
             {
                 var session = await (from c in _context.Skills
-                                     join ms in _context.MentorSkills on c.Id equals ms.SkillId
-                                     join mt in _context.Mentors on ms.MentorId equals mt.Id
-                                     join mm in _context.MentorMajors on mt.Id equals mm.MentorId
-                                     join m in _context.Majors on  mm.MajorId equals m.Id
-
                                      select new
                                      {
                                          Id = c.Id,
-                                         Fullname = mt.Fullname,
-                                         Major = m.Name,
-                                         Skill = c.Name
+                                         Name = c.Name,
 
                                      }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -62,18 +55,11 @@ namespace WebAPItwe.Controllers
         public async Task<ActionResult<SkillModel>> GetSkill(string id)
         {
             var session = await (from c in _context.Skills
-                                 join ms in _context.MentorSkills on c.Id equals ms.SkillId
-                                 join mt in _context.Mentors on ms.MentorId equals mt.Id
-                                 join mm in _context.MentorMajors on mt.Id equals mm.MentorId
-                                 join m in _context.Majors on mm.MajorId equals m.Id
                                  where c.Id == id
-
                                  select new
                                  {
                                      Id = c.Id,
-                                     Fullname = mt.Fullname,
-                                     Major = m.Name,
-                                     Skill = c.Name
+                                     Name = c.Name
 
                                  }).ToListAsync();
 
@@ -96,18 +82,12 @@ namespace WebAPItwe.Controllers
             try
             {
                 var session = await (from c in _context.Skills
-                                     join ms in _context.MentorSkills on c.Id equals ms.SkillId
-                                     join mt in _context.Mentors on ms.MentorId equals mt.Id
-                                     join mm in _context.MentorMajors on mt.Id equals mm.MentorId
-                                     join m in _context.Majors on mm.MajorId equals m.Id
                                      where c.Name.Contains(name)
 
                                      select new
                                      {
                                          Id = c.Id,
-                                         Fullname = mt.Fullname,
-                                         Major = m.Name,
-                                         Skill = c.Name
+                                         Name = c.Name,
 
                                      }).ToListAsync();
                 if (!session.Any())
@@ -131,32 +111,20 @@ namespace WebAPItwe.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutSkill(string id, SkillModel skill)
         {
-            if (id != skill.Id)
-            {
-                return BadRequest();
-            }
-            Skill en = new Skill();
-            en.Id = skill.Id;
-            en.Name = skill.Name;
-
             try
             {
-                _context.Entry(en).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SkillExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw new Exception("Dell biet :)");
-                }
-            }
+                var result = _context.Skills.Find(id);
+                result.Id = skill.Id;
+                result.Name = skill.Name;
 
-            return Ok(skill);
+                await _context.SaveChangesAsync();
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
         }
 
         /// <summary>
@@ -167,30 +135,27 @@ namespace WebAPItwe.Controllers
         [HttpPost]
         public async Task<ActionResult<SkillModel>> PostSkill(SkillModel skill)
         {
-            Skill en = new Skill();
-            en.Id = skill.Id;
-            en.Name = skill.Name;
-            
             try
             {
-                _context.Skills.Add(en);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (SkillExists(skill.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+                var result = new Skill();
 
-            return CreatedAtAction(nameof(GetSkill), new { id = skill.Id }, skill);
+                result.Id = skill.Id;
+                result.Name = skill.Name;
+
+                _context.Skills.Add(result);
+                await _context.SaveChangesAsync();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
         }
 
+        /// <summary>
+        /// Delete skill by Id
+        /// </summary>
         // DELETE: api/Skills/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSkill(string id)
@@ -207,9 +172,5 @@ namespace WebAPItwe.Controllers
             return NoContent();
         }
 
-        private bool SkillExists(string id)
-        {
-            return _context.Skills.Any(e => e.Id == id);
-        }
     }
 }
