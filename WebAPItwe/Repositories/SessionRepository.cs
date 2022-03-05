@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,11 +20,13 @@ namespace WebAPItwe.Repositories
 
         public async Task CreateNewSession(NewSessionModel newSession)
         {
-            String sessionId = Guid.NewGuid().ToString();
-            String dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string sessionId = Guid.NewGuid().ToString();
+            string dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            string subjectName = await context.Subjects.Where(x => x.Id == newSession.SubjectId).Select(x => x.Name).FirstOrDefaultAsync();
             Session session = new Session { Id = sessionId, Slot = newSession.Slot, Date = newSession.Date,
                                             DateCreated = dateCreated, MaxPerson = newSession.MaxPerson, Status = "WaitCafe",
-                                            MemberId = newSession.MemberId, MajorId = newSession.MajorId, SubjectId = newSession.SubjectId, CafeId = newSession.CafeId};
+                                            MemberId = newSession.MemberId, MajorId = newSession.MajorId, SubjectId = newSession.SubjectId, 
+                                            SubjectName = subjectName, CafeId = newSession.CafeId};
             context.Add(session);
 
             var memberSession = new MemberSession {Id = Guid.NewGuid().ToString(), MemberId = newSession.MemberId, MemberName = newSession.MemberName,

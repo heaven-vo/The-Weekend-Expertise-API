@@ -37,6 +37,7 @@ namespace WebAPItwe
             services.AddScoped<InUserRepository, UserRepository>();
             services.AddScoped<InMemberRepository, MemberRepository>();
             services.AddScoped<InSessionRepository, SessionRepository>();
+            services.AddScoped<InMemberSessionRepository, MemberSessionRepository>();
             services.AddControllers();
             services.AddDbContext<dbEWTContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnectionString")));
             services.AddSwaggerGen(c =>

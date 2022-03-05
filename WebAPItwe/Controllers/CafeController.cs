@@ -36,7 +36,8 @@ namespace WebAPItwe.Controllers
                                      Image = c.Image,
                                      Street = c.Street,
                                      Distric = c.Distric,
-                                     Description = c.Description
+                                     Description = c.Description,
+                                     Rate = c.Rate
                                  }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
 
@@ -65,7 +66,8 @@ namespace WebAPItwe.Controllers
                                   c.CloseTime,
                                   c.Street,
                                   c.Distric,
-                                  c.Description
+                                  c.Description,
+                                  c.Rate
                               }).ToListAsync();
 
 
@@ -96,7 +98,8 @@ namespace WebAPItwe.Controllers
                                         Cafe.CloseTime,
                                         Cafe.Street,
                                         Cafe.Distric,
-                                        Cafe.Description
+                                        Cafe.Description,
+                                        Cafe.Rate
                                     }
                                ).ToListAsync();
                 if (!result.Any())

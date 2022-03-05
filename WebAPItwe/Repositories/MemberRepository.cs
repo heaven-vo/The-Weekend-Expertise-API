@@ -78,7 +78,6 @@ namespace WebAPItwe.Repositories
         }
         public async Task<object> CreateFeedback(string memberId, FeedbackModel feedback)
         {
-            Console.WriteLine(feedback.SessionId);
             var session = await context.Sessions.FindAsync(feedback.SessionId);
             if(session.Status == "Done") {
                 var memberSessionId = await context.MemberSessions.Where(x => x.MemberId == memberId).Select(x => x.Id).FirstOrDefaultAsync();            
