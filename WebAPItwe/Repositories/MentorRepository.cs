@@ -36,6 +36,7 @@ namespace WebAPItwe.Repositories
                 Id = x.Id,
                 Fullname = x.Fullname,
                 Address = x.Address,
+                Slogan = x.Slogan,
                 Phone = x.Phone,
                 Image = x.Image,
                 Sex = x.Sex,

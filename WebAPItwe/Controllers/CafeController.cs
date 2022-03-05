@@ -34,6 +34,8 @@ namespace WebAPItwe.Controllers
                                      Id = c.Id,
                                      name = c.Name,
                                      Image = c.Image,
+                                     OpenTime = c.OpenTime,
+                                     CloseTime = c.CloseTime,
                                      Street = c.Street,
                                      Distric = c.Distric,
                                      Description = c.Description,

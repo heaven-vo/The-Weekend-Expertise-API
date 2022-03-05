@@ -24,11 +24,13 @@ namespace WebAPItwe.Repositories
                                  where m.MemberId == memberId && s.Status == "Done" 
                                  select new HistoryModel {
                                         SessionId = s.Id,
+                                        SubjectName = s.SubjectName,
                                         Slot = s.Slot,
-                                        Date = s.Date
+                                        Date = s.Date,
+                                        MentorName = s.MentorName
                                  }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
-            return null;
+            return history;
         }
     }
 }
