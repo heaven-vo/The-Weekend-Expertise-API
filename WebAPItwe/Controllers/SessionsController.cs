@@ -40,7 +40,7 @@ namespace WebAPItwe.Controllers
                                          MaxPerson = c.MaxPerson,
                                          Fullname = cm.Fullname,
                                          Distric = cf.Distric,
-                                         DateCreated = c.DateCreated,
+                                         Date = c.Date,
                                          Phone = cm.Phone,
                                          Status = c.Status
 
