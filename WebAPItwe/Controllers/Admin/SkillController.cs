@@ -10,13 +10,13 @@ using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers
 {
-    [Route("api/v1/skills")]
+    [Route("api/v1/admin/skills")]
     [ApiController]
-    public class SkillsController : ControllerBase
+    public class SkillController : ControllerBase
     {
         private readonly dbEWTContext _context;
 
-        public SkillsController(dbEWTContext context)
+        public SkillController(dbEWTContext context)
         {
             _context = context;
         }
@@ -26,9 +26,32 @@ namespace WebAPItwe.Controllers
         /// Get list all Skill with pagination
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills()
+        public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills(int pageIndex, int pageSize)
         {
-            return Ok(await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).ToListAsync());
+            try
+            {
+                var session = await (from c in _context.Skills
+                                     join ms in _context.MentorSkills on c.Id equals ms.SkillId
+                                     join mt in _context.Mentors on ms.MentorId equals mt.Id
+                                     join mm in _context.MentorMajors on mt.Id equals mm.MentorId
+                                     join m in _context.Majors on  mm.MajorId equals m.Id
+
+                                     select new
+                                     {
+                                         Id = c.Id,
+                                         Fullname = mt.Fullname,
+                                         Major = m.Name,
+                                         Skill = c.Name
+
+                                     }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+
+                return Ok(session);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
         }
 
         // GET: api/v1/skills/5
@@ -38,8 +61,29 @@ namespace WebAPItwe.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SkillModel>> GetSkill(string id)
         {
-            var skill = await _context.Skills.Select(x => new SkillModel { Id = x.Id, Name = x.Name }).Where(x => x.Id == id).FirstOrDefaultAsync();
-            return Ok(skill);
+            var session = await (from c in _context.Skills
+                                 join ms in _context.MentorSkills on c.Id equals ms.SkillId
+                                 join mt in _context.Mentors on ms.MentorId equals mt.Id
+                                 join mm in _context.MentorMajors on mt.Id equals mm.MentorId
+                                 join m in _context.Majors on mm.MajorId equals m.Id
+                                 where c.Id == id
+
+                                 select new
+                                 {
+                                     Id = c.Id,
+                                     Fullname = mt.Fullname,
+                                     Major = m.Name,
+                                     Skill = c.Name
+
+                                 }).ToListAsync();
+
+
+            if (!session.Any())
+            {
+                return BadRequest(new { StatusCode = 404, message = "Not Found" });
+            }
+
+            return Ok(session);
         }
 
         //GET: api/v1/cafe/byName?name=xxx
@@ -51,19 +95,26 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var result = await (from Skill in _context.Skills
-                                    where Skill.Name.Contains(name)    // search gần đúng
-                                    select new
-                                    {
-                                        Skill.Id,
-                                        Skill.Name,
-                                    }
-                               ).ToListAsync();
-                if (!result.Any())
+                var session = await (from c in _context.Skills
+                                     join ms in _context.MentorSkills on c.Id equals ms.SkillId
+                                     join mt in _context.Mentors on ms.MentorId equals mt.Id
+                                     join mm in _context.MentorMajors on mt.Id equals mm.MentorId
+                                     join m in _context.Majors on mm.MajorId equals m.Id
+                                     where c.Name.Contains(name)
+
+                                     select new
+                                     {
+                                         Id = c.Id,
+                                         Fullname = mt.Fullname,
+                                         Major = m.Name,
+                                         Skill = c.Name
+
+                                     }).ToListAsync();
+                if (!session.Any())
                 {
                     return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
                 }
-                return Ok(result);
+                return Ok(session);
 
             }
             catch (Exception ex)
@@ -119,7 +170,7 @@ namespace WebAPItwe.Controllers
             Skill en = new Skill();
             en.Id = skill.Id;
             en.Name = skill.Name;
-
+            
             try
             {
                 _context.Skills.Add(en);

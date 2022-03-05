@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAPItwe.Entities;
 
 namespace WebAPItwe.Controllers.Admin
 {
@@ -13,7 +14,7 @@ namespace WebAPItwe.Controllers.Admin
     {
          private readonly dbEWTContext _context;
 
-        public CafeController(dbEWTContext context)
+        public AdminController(dbEWTContext context)
         {
             _context = context;
         }

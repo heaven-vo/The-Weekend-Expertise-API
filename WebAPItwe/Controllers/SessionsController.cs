@@ -6,164 +6,38 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPItwe.Entities;
+using WebAPItwe.InRepositories;
+using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers
 {
-    [Route("api/v1/Session")]
+    [Route("api/v1/sessions")]
     [ApiController]
-    public class SessionsController : ControllerBase
+    public class SessionController : ControllerBase
     {
-        private readonly dbEWTContext _context;
+        private readonly InSessionRepository sessionRepository;
 
-        public SessionsController(dbEWTContext context)
+        public SessionController(InSessionRepository sessionRepository)
         {
-            _context = context;
+            this.sessionRepository = sessionRepository;
         }
-
-        // GET: api/Sessions
         /// <summary>
-        /// Get list all Session with pagination
+        /// Create new Session 
         /// </summary>
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Session>>> GetSessions(int pageIndex, int pageSize)
-        {
-
-            try
-            {
-                var session = await (from c in _context.Sessions
-                                     join cm in _context.Mentors on c.MentorId equals cm.Id
-                                     join cf in _context.Cafes on c.CafeId equals cf.Id
-
-                                     select new
-                                     {
-                                         Id = c.Id,
-                                         MaxPerson = c.MaxPerson,
-                                         Fullname = cm.Fullname,
-                                         Distric = cf.Distric,
-                                         Date = c.Date,
-                                         Phone = cm.Phone,
-                                         Status = c.Status
-
-                                     }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-
-
-                return Ok(session);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(409, new { StatusCode = 409, message = ex.Message});
-            }
-        }
-
-        // GET: api/Sessions/5
-        /// <summary>
-        /// Get a Session by id
-        /// </summary>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Session>> GetSession(string id)
-        {
-             var session = await (from c in _context.Sessions
-                                  
-                                   join cm in _context.Mentors on c.MentorId equals cm.Id
-                                   join cf in _context.Cafes on c.CafeId equals cf.Id
-                                   where c.Id == id
-
-                                  select new
-                                   {
-                                       Id = c.Id,
-                                       MaxPerson = c.MaxPerson,
-                                       Fullname = cm.Fullname,
-                                       Distric = cf.Distric,
-                                       DateCreated = c.DateCreated,
-                                       Phone = cm.Phone,
-                                       Status = c.Status
-
-                                   }).ToListAsync();
-
-
-            if (!session.Any())
-            {
-                return BadRequest(new { StatusCode = 404, message = "Not Found" });
-            }
-
-            return Ok(session);
-        }
-
-        // PUT: api/Sessions/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSession(string id, Session session)
-        {
-            if (id != session.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(session).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SessionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Sessions
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Session>> PostSession(Session session)
+        public async Task<ActionResult> CreateNewSession(NewSessionModel newSession)
         {
-            _context.Sessions.Add(session);
             try
             {
-                await _context.SaveChangesAsync();
+                await sessionRepository.CreateNewSession(newSession);
+                return Ok();
             }
-            catch (DbUpdateException)
+            catch
             {
-                if (SessionExists(session.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return Conflict();
             }
 
-            return CreatedAtAction("GetSession", new { id = session.Id }, session);
         }
 
-        // DELETE: api/Sessions/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSession(string id)
-        {
-            var session = await _context.Sessions.FindAsync(id);
-            if (session == null)
-            {
-                return NotFound();
-            }
-
-            _context.Sessions.Remove(session);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool SessionExists(string id)
-        {
-            return _context.Sessions.Any(e => e.Id == id);
-        }
     }
 }
