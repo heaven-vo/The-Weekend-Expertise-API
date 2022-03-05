@@ -40,12 +40,12 @@ namespace WebAPItwe.Controllers
                 var member = await inMemberRepository.UpdateMemberProfile(username, memberProfile);
                 return Ok(member);
             }
-            catch (Exception e)
+            catch
             {
                 return Conflict();
             }
         }
-        [HttpPost("feedback/{memberId}")]
+        [HttpPost("new_feedback/{memberId}")]
         public async Task<ActionResult> CreateFeedback(string memberId, FeedbackModel feedback)
         {
             try

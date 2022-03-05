@@ -38,6 +38,15 @@ namespace WebAPItwe.Controllers
             }
 
         }
+        /// <summary>
+        /// Load 4 recommend session for home page  
+        /// </summary>
+        [HttpGet("home")]
+        public async Task<ActionResult> LoadRecommendSession (string memberId)
+        {
+            var listSession = await sessionRepository.LoadRecommendSession(memberId);
+            return Ok(listSession);
+        }
 
     }
 }

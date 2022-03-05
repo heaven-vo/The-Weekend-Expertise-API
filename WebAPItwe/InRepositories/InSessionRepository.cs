@@ -9,5 +9,6 @@ namespace WebAPItwe.InRepositories
     public interface InSessionRepository
     {
         Task CreateNewSession(NewSessionModel newSession);
+        Task<object> LoadRecommendSession(string memberId);
     }
 }

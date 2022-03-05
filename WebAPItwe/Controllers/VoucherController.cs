@@ -20,6 +20,16 @@ namespace WebAPItwe.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Get top voucher for home page
+        /// </summary>
+        // GET: api/v1/majors
+        [HttpGet("voucher_home")]
+        public async Task<ActionResult> GetTopVoucher()
+        {
+            return Ok(await _context.Vouchers.Select(x => x.Image).Take(4).ToListAsync());
+        }
+
         // GET: api/Vouchers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Voucher>>> GetVouchers()

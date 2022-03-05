@@ -79,10 +79,10 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Load comment by mentor id
         /// </summary>
-        [HttpGet("feedbacks/{id}")]
-        public async Task<ActionResult> LoadFeedbackMentor(string id, int pageIndex, int pageSize)
+        [HttpGet("feedback/{mentorId}")]
+        public async Task<ActionResult> LoadFeedbackMentor(string mentorId, int pageIndex, int pageSize)
         {
-            var feedback = await mentorRepository.LoadMentorFeedback(id, pageIndex, pageSize);
+            var feedback = await mentorRepository.LoadMentorFeedback(mentorId, pageIndex, pageSize);
             return Ok(feedback);
         }
     }

@@ -24,11 +24,14 @@ namespace WebAPItwe.Entities
         public int MaxPerson { get; set; }
         public string MentorId { get; set; }
         public string MentorName { get; set; }
+        public double Price { get; set; }
         public string MemberId { get; set; }
         public string MajorId { get; set; }
         public string SubjectId { get; set; }
         public string SubjectName { get; set; }
+        public string SubjectImage { get; set; }
         public string CafeId { get; set; }
+        public string CafeName { get; set; }
         public string Status { get; set; }
 
         public virtual Cafe Cafe { get; set; }
