@@ -1,21 +1,21 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebAPItwe.Entities;
 
-namespace WebAPItwe.Controllers
+namespace WebAPItwe.Controllers.Admin
 {
     [Route("api/v1/admin/sessions")]
     [ApiController]
-    public class SessionController : ControllerBase
+    public class AdminSessionController : ControllerBase
     {
         private readonly dbEWTContext _context;
 
-        public SessionController(dbEWTContext context)
+        public AdminSessionController(dbEWTContext context)
         {
             _context = context;
         }
@@ -51,7 +51,7 @@ namespace WebAPItwe.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(409, new { StatusCode = 409, message = ex.Message});
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
 
@@ -62,23 +62,23 @@ namespace WebAPItwe.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Session>> GetSession(string id)
         {
-             var session = await (from c in _context.Sessions
-                                  
-                                   join cm in _context.Mentors on c.MentorId equals cm.Id
-                                   join cf in _context.Cafes on c.CafeId equals cf.Id
-                                   where c.Id == id
+            var session = await (from c in _context.Sessions
 
-                                  select new
-                                   {
-                                       Id = c.Id,
-                                       MaxPerson = c.MaxPerson,
-                                       Fullname = cm.Fullname,
-                                       Distric = cf.Distric,
-                                       DateCreated = c.DateCreated,
-                                       Phone = cm.Phone,
-                                       Status = c.Status
+                                 join cm in _context.Mentors on c.MentorId equals cm.Id
+                                 join cf in _context.Cafes on c.CafeId equals cf.Id
+                                 where c.Id == id
 
-                                   }).ToListAsync();
+                                 select new
+                                 {
+                                     Id = c.Id,
+                                     MaxPerson = c.MaxPerson,
+                                     Fullname = cm.Fullname,
+                                     Distric = cf.Distric,
+                                     DateCreated = c.DateCreated,
+                                     Phone = cm.Phone,
+                                     Status = c.Status
+
+                                 }).ToListAsync();
 
 
             if (!session.Any())
