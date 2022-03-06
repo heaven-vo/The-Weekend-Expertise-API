@@ -50,6 +50,8 @@ namespace WebAPItwe.Repositories
             foreach(MentorModel mentor in listMentor)
             {
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
             }
             return listMentor;
         }
@@ -61,6 +63,7 @@ namespace WebAPItwe.Repositories
                 Id = x.Id,
                 Fullname = x.Fullname,
                 Address = x.Address,
+                Slogan = x.Slogan,
                 Phone = x.Phone,
                 Image = x.Image,
                 Sex = x.Sex,
@@ -70,8 +73,13 @@ namespace WebAPItwe.Repositories
                 Description = x.Description,
                 Status = x.Status
             }).FirstOrDefaultAsync();
-            if (mentor != null) 
-                    mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+            if (mentor != null)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
+            }
+                    
             return mentor;
         }
 
@@ -82,6 +90,7 @@ namespace WebAPItwe.Repositories
                 Id = x.Id,
                 Fullname = x.Fullname,
                 Address = x.Address,
+                Slogan = x.Slogan,
                 Phone = x.Phone,
                 Image = x.Image,
                 Sex = x.Sex,
@@ -94,6 +103,8 @@ namespace WebAPItwe.Repositories
             foreach (MentorModel mentor in listMentor)
             {
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
             }
             return listMentor;
         }
@@ -105,6 +116,7 @@ namespace WebAPItwe.Repositories
                 Id = x.Id,
                 Fullname = x.Fullname,
                 Address = x.Address,
+                Slogan = x.Slogan,
                 Phone = x.Phone,
                 Image = x.Image,
                 Sex = x.Sex,
@@ -117,6 +129,8 @@ namespace WebAPItwe.Repositories
             foreach (MentorModel mentor in listMentor)
             {
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
             }
             return listMentor;
         }
@@ -132,6 +146,7 @@ namespace WebAPItwe.Repositories
                                   Id = me.Id,
                                   Fullname = me.Fullname,
                                   Address = me.Address,
+                                  Slogan = me.Slogan,
                                   Phone = me.Phone,
                                   Image = me.Image,
                                   Sex = me.Sex,
@@ -145,6 +160,8 @@ namespace WebAPItwe.Repositories
             foreach (MentorModel mentor in listMentor)
             {
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
             }
             return listMentor;
         }
@@ -157,6 +174,27 @@ namespace WebAPItwe.Repositories
                                 select ma.Name                            
                               ).ToListAsync();
             return listMajor;
+        }
+
+        public async Task<List<string>> GetSkillByMentorId(string mentorId)
+        {
+            List<string> listSkill = await (from me in context.Mentors
+                                            join mt in context.MentorSkills on me.Id equals mt.MentorId
+                                            join s in context.Skills on mt.SkillId equals s.Id
+                                            where me.Id == mentorId
+                                            select s.Name
+                              ).ToListAsync();
+            return listSkill;
+        }
+        public async Task<List<string>> GetCertificateByMentorId(string mentorId)
+        {
+            List<string> listCertificate = await (from me in context.Mentors
+                                            join mt in context.MentorCertificates on me.Id equals mt.MentorId
+                                            join s in context.Certificates on mt.CertificateId equals s.Id
+                                            where me.Id == mentorId
+                                            select s.Name
+                              ).ToListAsync();
+            return listCertificate;
         }
 
         public async Task<IEnumerable<object>> LoadMentorFeedback(string id, int pageIndex, int pageSize)

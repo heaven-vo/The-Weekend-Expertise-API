@@ -20,5 +20,7 @@ namespace WebAPItwe.Models
         public string Description { get; set; }
         public Boolean Status { get; set; }
         public List<string> ListMajor { get; set; }
+        public List<string> ListSkill { get; set; }
+        public List<string> ListCertificate { get; set; }
     }
 }
