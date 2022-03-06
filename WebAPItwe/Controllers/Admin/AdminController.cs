@@ -186,69 +186,43 @@ namespace WebAPItwe.Controllers.Admin
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
-        ///// <summary>
-        ///// Update cafe by Id
-        ///// </summary>
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult>PutMemberAccount(string id, MemberAccountModel memAccount)
-        //{
-        //    try
-        //    {
-        //        var result = _context.Members.Find(id);
-        //        var majorId = _context.Majors.Where(x => x.Name == memAccount.MajorName).Select(x => x.Id).FirstOrDefault();
-        //        result.Id = memAccount.Id;
-        //        result.Fullname = memAccount.Fullname;
-        //        result.Image = memAccount.Image;
-        //        result.Address = memAccount.Address;
-        //        result.Phone = memAccount.Phone;
-        //        result.Sex = memAccount.Sex;
-        //        result.Facebook = memAccount.Facebook;
-        //        result.Birthday = memAccount.Birthday;  
-        //        result.Grade = memAccount.Grade;
-        //        result.MajorId = majorId.ToString();
-        //        result.Status = memAccount.Status;
+        /// <summary>
+        /// Sort memberAccount by name
+        /// </summary>
+        [HttpGet("sorting/fullName")]
+        public async Task<ActionResult<MemberAccountModel>> SortByName(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var mem = await (from c in _context.Members.OrderBy(c => c.Fullname)
+                                 join ma in _context.Majors on c.MajorId equals ma.Id
+                                 select new MemberAccountModel
+                                 {
 
-        //        await _context.SaveChangesAsync();
-        //        return Ok(result);
+                                     Id = c.Id,
+                                     Fullname = c.Fullname,
+                                     Image = c.Image,
+                                     Address = c.Address,
+                                     Phone = c.Phone,
+                                     Sex = c.Sex,
+                                     Facebook = c.Facebook,
+                                     Birthday = c.Birthday,
+                                     Grade = c.Grade,
+                                     MajorName = ma.Name,
+                                     Status = c.Status,
+                                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                foreach (var member in mem)
+                {
+                    string email = _context.Users.Where(x => x.Id == member.Id).Select(x => x.Email).FirstOrDefault();
+                    member.Email = email;
+                }
+                return Ok(mem);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(409, new { StatusCode = 409, message = ex.Message });
-        //    }
-        //}
-        ///// <summary>
-        ///// Create cafe by Id
-        ///// </summary>
-        //[HttpPost]
-        //public async Task<ActionResult<MemberAccountModel>> PostMemberAccount(MemberAccountModel memAccount)
-        //{
-        //    try
-        //    {
-        //        var result = new MemberAccountModel();
-
-        //        result.Id = memAccount.Id;
-        //        result.Fullname = memAccount.Fullname;
-        //        result.Image = memAccount.Image;
-        //        result.Address = memAccount.Address;
-        //        result.Phone = memAccount.Phone;
-        //        result.Sex = memAccount.Sex;
-        //        result.Facebook = memAccount.Facebook;
-        //        result.Birthday = memAccount.Birthday;
-        //        result.Grade = memAccount.Grade;
-        //        result.MajorName = memAccount.MajorName;
-        //        result.Status = memAccount.Status;
-
-        //        _context.Members.Add(result);
-        //        await _context.SaveChangesAsync();
-
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(409, new { StatusCode = 409, message = ex.Message });
-        //    }
-
-        //}
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
     }
 }
