@@ -171,6 +171,27 @@ namespace WebAPItwe.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// Sort skill by name
+        /// </summary>
+        [HttpGet("sorting/name")]
+        public async Task<ActionResult<Skill>> SortByName(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listSkill = await _context.Skills.OrderBy(c => c.Name).Select(c => new Skill
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
+                return Ok(listSkill);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
     }
 }

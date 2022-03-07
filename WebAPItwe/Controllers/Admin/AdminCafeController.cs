@@ -196,5 +196,65 @@ namespace WebAPItwe.Controllers.Admin
             return NoContent();
 
         }
+        /// <summary>
+        /// Sort cafe by price
+        /// </summary>
+        [HttpGet("sorting/price")]
+        public async Task<ActionResult<Cafe>> SortByPrice(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listCafe = await _context.Cafes.OrderBy(c => c.Price).Select(c => new Cafe
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Image = c.Image,
+                    OpenTime = c.OpenTime,
+                    CloseTime = c.CloseTime,
+                    Price = c.Price,
+                    Street = c.Street,
+                    Distric = c.Distric,
+                    Description = c.Description,
+                    Rate = c.Rate
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+                return Ok(listCafe);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// Sort cafe by name
+        /// </summary>
+        [HttpGet("sorting/name")]
+        public async Task<ActionResult<Cafe>> SortByName(int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listCafe = await _context.Cafes.OrderBy(c => c.Name).Select(c => new Cafe
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Image = c.Image,
+                    OpenTime = c.OpenTime,
+                    CloseTime = c.CloseTime,
+                    Price = c.Price,
+                    Street = c.Street,
+                    Distric = c.Distric,
+                    Description = c.Description,
+                    Rate = c.Rate
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+                return Ok(listCafe);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
     }
 }
