@@ -33,7 +33,7 @@ namespace WebAPItwe.Controllers
 
         //GET: api/v1/mentors/sorting?pageIndex=1&pageSize=3
         /// <summary>
-        /// Sort list mentor by price
+        /// Get list mentors top rate
         /// </summary>
         [HttpGet("top_rate")]
         public async Task<ActionResult> GetTopByRate(int pageIndex, int pageSize)

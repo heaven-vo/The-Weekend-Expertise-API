@@ -9,6 +9,6 @@ namespace WebAPItwe.Models
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Status { get; set; }
+        public Boolean Status { get; set; }
     }
 }

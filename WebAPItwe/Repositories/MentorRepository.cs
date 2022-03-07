@@ -49,6 +49,7 @@ namespace WebAPItwe.Repositories
             }).Skip((pageIndex-1)*pageSize).Take(pageSize).ToListAsync();
             foreach(MentorModel mentor in listMentor)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
@@ -75,6 +76,7 @@ namespace WebAPItwe.Repositories
             }).FirstOrDefaultAsync();
             if (mentor != null)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
@@ -102,6 +104,7 @@ namespace WebAPItwe.Repositories
             }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (MentorModel mentor in listMentor)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
@@ -128,6 +131,7 @@ namespace WebAPItwe.Repositories
             }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (MentorModel mentor in listMentor)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
@@ -159,6 +163,7 @@ namespace WebAPItwe.Repositories
                               ).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (MentorModel mentor in listMentor)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
@@ -232,6 +237,7 @@ namespace WebAPItwe.Repositories
             }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (MentorModel mentor in listMentor)
             {
+                mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();
                 mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
                 mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);

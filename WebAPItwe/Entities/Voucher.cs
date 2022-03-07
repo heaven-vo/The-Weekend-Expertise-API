@@ -19,6 +19,7 @@ namespace WebAPItwe.Entities
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public string CafeId { get; set; }
+        public Boolean Status { get; set; }
 
         public virtual Cafe Cafe { get; set; }
     }

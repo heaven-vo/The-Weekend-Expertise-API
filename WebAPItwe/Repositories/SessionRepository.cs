@@ -25,7 +25,7 @@ namespace WebAPItwe.Repositories
             var subject = await context.Subjects.FindAsync(newSession.SubjectId);
             string cafeName = await context.Cafes.Where(x => x.Id == newSession.CafeId).Select(x => x.Name).FirstOrDefaultAsync();
             Session session = new Session { Id = sessionId, Slot = newSession.Slot, Date = newSession.Date,
-                                            DateCreated = dateCreated, MaxPerson = newSession.MaxPerson, Status = "WaitCafe",
+                                            DateCreated = dateCreated, MaxPerson = newSession.MaxPerson, Status = 0,
                                             MemberId = newSession.MemberId, MajorId = newSession.MajorId, SubjectId = newSession.SubjectId, 
                                             SubjectName = subject.Name, SubjectImage = subject.Image, CafeId = newSession.CafeId, CafeName = cafeName};
             context.Add(session);
@@ -43,10 +43,10 @@ namespace WebAPItwe.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<object> LoadRecommendSession(string memberId)
+        public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.Where(x => x.MajorId == majorId).Where(x => x.Status == "Going")
+            var listSessions = await context.Sessions.Where(x => x.MajorId == majorId).Where(x => x.Status == 2).Where(x => x.CafeActive == false)
                                 .Select(x => new SessionHomeModel 
                                 {
                                     SessionId = x.Id,
@@ -57,7 +57,7 @@ namespace WebAPItwe.Repositories
                                     CafeName = x.CafeName,
                                     MentorName = x.MentorName,
                                     Price = x.Price
-                                }).Take(4).ToListAsync();
+                                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach(var session in listSessions)
             {
                 List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();

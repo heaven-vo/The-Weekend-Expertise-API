@@ -42,9 +42,9 @@ namespace WebAPItwe.Controllers
         /// Load 4 recommend session for home page  
         /// </summary>
         [HttpGet("home")]
-        public async Task<ActionResult> LoadRecommendSession (string memberId)
+        public async Task<ActionResult> LoadRecommendSession (string memberId, int pageIndex, int pageSize)
         {
-            var listSession = await sessionRepository.LoadRecommendSession(memberId);
+            var listSession = await sessionRepository.LoadRecommendSession(memberId, pageIndex, pageSize);
             return Ok(listSession);
         }
 

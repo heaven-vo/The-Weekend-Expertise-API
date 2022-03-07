@@ -18,7 +18,7 @@ namespace WebAPItwe.Entities
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Status { get; set; }
+        public Boolean Status { get; set; }
 
         public virtual ICollection<Member> Members { get; set; }
         public virtual ICollection<MentorMajor> MentorMajors { get; set; }
