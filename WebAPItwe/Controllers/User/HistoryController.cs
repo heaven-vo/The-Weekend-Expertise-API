@@ -19,6 +19,10 @@ namespace WebAPItwe.Controllers.User
         {
             this.inMemberSessionRepository = inMemberSessionRepository;
         }
+
+        /// <summary>
+        /// Load history of member 
+        /// </summary>
         [HttpGet("{memberId}")]
         public async Task<ActionResult> LoadHistory(string memberId, int pageIndex, int pageSize)
         {

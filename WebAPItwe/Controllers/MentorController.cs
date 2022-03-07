@@ -31,6 +31,16 @@ namespace WebAPItwe.Controllers
             return Ok( await mentorRepository.GetAll(pageIndex, pageSize));
         }
 
+        //GET: api/v1/mentors/sorting?pageIndex=1&pageSize=3
+        /// <summary>
+        /// Sort list mentor by price
+        /// </summary>
+        [HttpGet("top_rate")]
+        public async Task<IEnumerable<MentorModel>> GetTopByRate(int pageIndex, int pageSize)
+        {
+            return await mentorRepository.LoadTopMentorHome(pageIndex, pageSize);
+        }
+
         //GET: api/v1/mentors/{id}
         /// <summary>
         /// Get a mentor by id

@@ -16,6 +16,7 @@ namespace WebAPItwe.Entities
 
         public string Id { get; set; }
         public string Name { get; set; }
+        public bool Status { get; set; }
 
         public virtual ICollection<MentorSkill> MentorSkills { get; set; }
     }

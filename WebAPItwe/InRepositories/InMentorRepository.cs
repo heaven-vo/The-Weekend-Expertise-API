@@ -14,6 +14,7 @@ namespace WebAPItwe.InRepositories
         Task<IEnumerable<MentorModel>> SortByPrice(int pageIndex, int pageSize);
         Task<IEnumerable<MentorModel>> FindByName(string name, int pageIndex, int pageSize);
         Task<IEnumerable<MentorModel>> Filter(string major, int pageIndex, int pageSize);
-        Task<IEnumerable<Object>> LoadMentorFeedback(string id, int pageIndex, int pageSize); 
+        Task<IEnumerable<Object>> LoadMentorFeedback(string id, int pageIndex, int pageSize);
+        Task<Object> LoadTopMentorHome(int pageIndex, int pageSize);
     }
 }

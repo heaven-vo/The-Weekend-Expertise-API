@@ -26,6 +26,7 @@ namespace WebAPItwe.Entities
         public string Birthday { get; set; }
         public string MajorId { get; set; }
         public string Grade { get; set; }
+        public string Description { get; set; }
         public Boolean Status { get; set; }
 
         public virtual Major Major { get; set; }

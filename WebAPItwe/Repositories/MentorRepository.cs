@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace WebAPItwe.Repositories
                 Sex = x.Sex,
                 Price = x.Price,
                 Birthday =x.Birthday,
-                Rate = x.Rate, 
+                Rate = x.Rate,
                 Description = x.Description,
                 Status = x.Status
 
@@ -210,6 +211,33 @@ namespace WebAPItwe.Repositories
                                                         meses.FeedbackOfMentor
                                            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return feedback; 
+        }
+
+        public async Task<object> LoadTopMentorHome(int pageIndex, int pageSize)
+        {
+            var listMentor = await context.Mentors.OrderByDescending(x => x.Rate).Select(x => new MentorModel
+            {
+                Id = x.Id,
+                Fullname = x.Fullname,
+                Address = x.Address,
+                Slogan = x.Slogan,
+                Phone = x.Phone,
+                Image = x.Image,
+                Sex = x.Sex,
+                Price = x.Price,
+                Birthday = x.Birthday,
+                Rate = x.Rate,
+                Description = x.Description,
+                Status = x.Status
+
+            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (MentorModel mentor in listMentor)
+            {
+                mentor.ListMajor = await GetMajorByMentorId(mentor.Id);
+                mentor.ListSkill = await GetSkillByMentorId(mentor.Id);
+                mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
+            }
+            return listMentor;
         }
     }
 }
