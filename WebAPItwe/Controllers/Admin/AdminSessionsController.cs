@@ -38,6 +38,10 @@ namespace WebAPItwe.Controllers.Admin
                                      {
                                          Id = c.Id,
                                          MaxPerson = c.MaxPerson,
+                                         SubjectName = c.SubjectName,
+                                         MentorName = c.MentorName,
+                                         Price = c.Price,
+                                         Street = cf.Street,
                                          Fullname = cm.Fullname,
                                          Distric = cf.Distric,
                                          Date = c.Date,
@@ -70,11 +74,16 @@ namespace WebAPItwe.Controllers.Admin
 
                                  select new
                                  {
+
                                      Id = c.Id,
                                      MaxPerson = c.MaxPerson,
+                                     SubjectName = c.SubjectName,
+                                     MentorName = c.MentorName,
+                                     Price = c.Price,
+                                     Street = cf.Street,
                                      Fullname = cm.Fullname,
                                      Distric = cf.Distric,
-                                     DateCreated = c.DateCreated,
+                                     Date = c.Date,
                                      Phone = cm.Phone,
                                      Status = c.Status
 
