@@ -21,13 +21,14 @@ namespace WebAPItwe.Repositories
         {
             var history = await (from s in context.Sessions 
                                  join m in context.MemberSessions on s.Id equals m.SessionId 
-                                 where m.MemberId == memberId && s.Status == 3 
+                                 where m.MemberId == memberId && s.Status == 3 && s.Status ==4 
                                  select new HistoryModel {
                                         SessionId = s.Id,
                                         SubjectName = s.SubjectName,
                                         Slot = s.Slot,
                                         Date = s.Date,
-                                        MentorName = s.MentorName
+                                        MentorName = s.MentorName,
+                                        Status = s.Status
                                  }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
             return history;

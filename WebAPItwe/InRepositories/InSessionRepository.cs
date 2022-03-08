@@ -11,5 +11,6 @@ namespace WebAPItwe.InRepositories
         Task CreateNewSession(NewSessionModel newSession);
         Task<object> LoadSession(string memberId, int pageIndex, int pageSize);
         Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize);
+        Task<object> LoadSessionDetail(string memberId, string sessionId);
     }
 }

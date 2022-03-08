@@ -12,5 +12,6 @@ namespace WebAPItwe.Models
         public int Slot { get; set; }
         public string Date { get; set; }
         public string MentorName { get; set; }
+        public int Status { get; set; }
     }
 }

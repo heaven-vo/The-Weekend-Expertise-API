@@ -42,18 +42,18 @@ namespace WebAPItwe.Controllers
         /// Load recommend session by major of member (for home page)  
         /// </summary>
         [HttpGet("home")]
-        public async Task<ActionResult> LoadRecommendSession (string memberId, int pageIndex, int pageSize)
+        public async Task<ActionResult> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
-            //try
-            //{
+            try
+            {
                 var listSession = await sessionRepository.LoadRecommendSession(memberId, pageIndex, pageSize);
                 return Ok(listSession);
-            //}
-            //catch
-            //{
-            //    return Conflict();
-            //}
-            
+            }
+            catch
+            {
+                return Conflict();
+            }
+
         }
 
         /// <summary>
@@ -62,17 +62,33 @@ namespace WebAPItwe.Controllers
         [HttpGet()]
         public async Task<ActionResult> LoadSession(string memberId, int pageIndex, int pageSize)
         {
-            //try
-            //{
+            try
+            {
                 var listSession = await sessionRepository.LoadSession(memberId, pageIndex, pageSize);
                 return Ok(listSession);
-            //}
-            //catch
-            //{
-            //    return Conflict();
-            //}
+            }
+            catch
+            {
+                return Conflict();
+            }
 
         }
+        /// <summary>
+        /// Load detail of session (for search page)  
+        /// </summary>
+        [HttpGet("detail")]
+        public async Task<ActionResult> LoadSessionDetail(string memberId, string sessionId)
+        {
+            try
+            {
+                var session = await sessionRepository.LoadSessionDetail(memberId, sessionId);
+                return Ok(session);
+            }
+            catch
+            {
+                return Conflict();
+            }
 
+        }
     }
 }
