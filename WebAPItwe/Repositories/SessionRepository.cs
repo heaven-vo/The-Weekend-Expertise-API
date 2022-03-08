@@ -64,10 +64,48 @@ namespace WebAPItwe.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
+        //public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
+        //{
+        //    string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
+        //    var listSessions = await context.Sessions.Where(x => x.MajorId == majorId).Where(x => x.Status == 2).Where(x => x.CafeActive == false)
+        //                        .Select(x => new SessionHomeModel
+        //                        {
+        //                            SessionId = x.Id,
+        //                            SubjectImage = x.SubjectImage,
+        //                            SubjectName = x.SubjectName,
+        //                            Date = x.Date,
+        //                            Slot = x.Slot,
+        //                            CafeName = x.CafeName,
+        //                            MentorName = x.MentorName,
+        //                            Price = x.Price,
+        //                            isJoin = false
+        //                        }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        //    List<int> remove = new List<int>(); 
+        //    for (int i = 0; i < listSessions.Count(); i++)
+        //    {
+        //        var cafeId = await context.Sessions.Where(x => x.Id == listSessions[i].SessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
+        //        var cafe = await context.Cafes.FindAsync(cafeId);
+        //        listSessions[i].CafeDistric = cafe.Distric;
+        //        listSessions[i].CafeStreet = cafe.Street;
+        //        List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == listSessions[i].SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();
+        //        listSessions[i].ListMemberImage = listImage;
+        //        var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == listSessions[i].SessionId).FirstOrDefaultAsync();
+        //        if (join != null)
+        //        {
+        //            //listSessions.Remove(listSessions[i]);
+        //            remove.Add(i);
+        //        }               
+        //    }
+        //    foreach (int i in remove)
+        //    {
+        //        listSessions.RemoveAt(i);
+        //    }
+        //    return listSessions;
+        //}
+
+        public async Task<object> LoadSession(string memberId, int pageIndex, int pageSize)
         {
-            string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.Where(x => x.MajorId == majorId).Where(x => x.Status == 2).Where(x => x.CafeActive == false)
+            var listSessions = await context.Sessions.Where(x => x.Status == 2).Where(x => x.CafeActive == false)
                                 .Select(x => new SessionHomeModel
                                 {
                                     SessionId = x.Id,
@@ -77,10 +115,50 @@ namespace WebAPItwe.Repositories
                                     Slot = x.Slot,
                                     CafeName = x.CafeName,
                                     MentorName = x.MentorName,
-                                    Price = x.Price
-                                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();           
+                                    Price = x.Price,
+                                    isJoin = true
+                                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (var session in listSessions)
             {
+                var cafeId = await context.Sessions.Where(x => x.Id == session.SessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
+                var cafe = await context.Cafes.FindAsync(cafeId);
+                session.CafeDistric = cafe.Distric;
+                session.CafeStreet = cafe.Street;
+                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();
+                session.ListMemberImage = listImage;
+                var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
+                if (join == null)
+                {
+                    session.isJoin = false;
+                }
+            }
+
+            return listSessions;
+        }
+        public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
+        {
+            string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
+            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where Status = 2 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {0})", memberId)
+                .Select(x => new SessionHomeModel
+                {
+                    SessionId = x.Id,
+                    SubjectImage = x.SubjectImage,
+                    SubjectName = x.SubjectName,
+                    Date = x.Date,
+                    Slot = x.Slot,
+                    CafeName = x.CafeName,
+                    MentorName = x.MentorName,
+                    Price = x.Price,
+                    isJoin = true
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+
+            foreach (var session in listSessions)
+            {
+                var cafeId = await context.Sessions.Where(x => x.Id == session.SessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
+                var cafe = await context.Cafes.FindAsync(cafeId);
+                session.CafeDistric = cafe.Distric;
+                session.CafeStreet = cafe.Street;
                 List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();
                 session.ListMemberImage = listImage;
                 var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();

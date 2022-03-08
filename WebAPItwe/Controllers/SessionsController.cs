@@ -39,13 +39,39 @@ namespace WebAPItwe.Controllers
 
         }
         /// <summary>
-        /// Load 4 recommend session for home page  
+        /// Load recommend session by major of member (for home page)  
         /// </summary>
         [HttpGet("home")]
         public async Task<ActionResult> LoadRecommendSession (string memberId, int pageIndex, int pageSize)
         {
-            var listSession = await sessionRepository.LoadRecommendSession(memberId, pageIndex, pageSize);
-            return Ok(listSession);
+            //try
+            //{
+                var listSession = await sessionRepository.LoadRecommendSession(memberId, pageIndex, pageSize);
+                return Ok(listSession);
+            //}
+            //catch
+            //{
+            //    return Conflict();
+            //}
+            
+        }
+
+        /// <summary>
+        /// Load all session (for search page)  
+        /// </summary>
+        [HttpGet()]
+        public async Task<ActionResult> LoadSession(string memberId, int pageIndex, int pageSize)
+        {
+            //try
+            //{
+                var listSession = await sessionRepository.LoadSession(memberId, pageIndex, pageSize);
+                return Ok(listSession);
+            //}
+            //catch
+            //{
+            //    return Conflict();
+            //}
+
         }
 
     }

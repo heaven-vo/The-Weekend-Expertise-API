@@ -13,6 +13,8 @@ namespace WebAPItwe.Models
         public string Date { get; set; }
         public int Slot { get; set; }
         public string CafeName { get; set; }
+        public string CafeDistric { get; set; }
+        public string CafeStreet { get; set; }
         public string MentorName { get; set; }
         public double Price { get; set; }
         public Boolean isJoin { get; set; }
