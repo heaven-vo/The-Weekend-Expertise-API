@@ -24,10 +24,11 @@ namespace WebAPItwe.Controllers.Admin
         /// Get list all cafe with pagination.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cafe>>> GetAll(int pageIndex, int pageSize)
+        public async Task<ActionResult<IEnumerable<Cafe>>> GetAll(int pageIndex = 1 , int pageSize = 5)
         {
             try
             {
+                
                 var caf = await (from c in _context.Cafes
                                  select new
                                  {
@@ -40,10 +41,9 @@ namespace WebAPItwe.Controllers.Admin
                                      Street = c.Street,
                                      Distric = c.Distric,
                                      Description = c.Description,
-                                     Rate = c.Rate
+                                     Rate = c.Rate,
+                                     Status = c.Status,
                                  }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-
-
                 return Ok(caf);
             }
             catch (Exception ex)
@@ -200,7 +200,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Sort cafe by price
         /// </summary>
         [HttpGet("sorting/price")]
-        public async Task<ActionResult<Cafe>> SortByPrice(int pageIndex, int pageSize)
+        public async Task<ActionResult<Cafe>> SortByPrice(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
@@ -230,7 +230,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Sort cafe by name
         /// </summary>
         [HttpGet("sorting/name")]
-        public async Task<ActionResult<Cafe>> SortByName(int pageIndex, int pageSize)
+        public async Task<ActionResult<Cafe>> SortByName(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
