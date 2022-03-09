@@ -70,10 +70,10 @@ namespace WebAPItwe.Controllers
                                   c.Distric,
                                   c.Description,
                                   c.Rate
-                              }).ToListAsync();
+                              }).FirstOrDefaultAsync();
 
 
-            if (!cafe.Any())
+            if (cafe != null)
             {
                 return BadRequest(new { StatusCode = 404, message = "Not Found" });
             }

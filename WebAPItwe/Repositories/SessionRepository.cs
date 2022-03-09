@@ -22,8 +22,10 @@ namespace WebAPItwe.Repositories
         {
             string sessionId = Guid.NewGuid().ToString();
             string dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            var subject = await context.Subjects.FindAsync(newSession.SubjectId);
+            
+            var subject = await context.Subjects.FindAsync(newSession.SubjectId); 
             string cafeName = await context.Cafes.Where(x => x.Id == newSession.CafeId).Select(x => x.Name).FirstOrDefaultAsync();
+            
             Session session = new Session
             {
                 Id = sessionId,
@@ -38,7 +40,8 @@ namespace WebAPItwe.Repositories
                 SubjectName = subject.Name,
                 SubjectImage = subject.Image,
                 CafeId = newSession.CafeId,
-                CafeName = cafeName
+                CafeName = cafeName,
+                CafeActive = false
             };
             context.Add(session);
             var memberSession = new MemberSession

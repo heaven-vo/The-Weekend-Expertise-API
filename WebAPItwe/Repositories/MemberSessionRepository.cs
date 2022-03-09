@@ -21,7 +21,7 @@ namespace WebAPItwe.Repositories
         {
             var history = await (from s in context.Sessions 
                                  join m in context.MemberSessions on s.Id equals m.SessionId 
-                                 where m.MemberId == memberId && s.Status == 3 && s.Status ==4 
+                                 where m.MemberId == memberId && (s.Status == 3 || s.Status ==4) 
                                  select new HistoryModel {
                                         SessionId = s.Id,
                                         SubjectName = s.SubjectName,

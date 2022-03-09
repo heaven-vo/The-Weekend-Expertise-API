@@ -27,15 +27,15 @@ namespace WebAPItwe.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateNewSession(NewSessionModel newSession)
         {
-            try
-            {
+            //try
+            //{
                 await sessionRepository.CreateNewSession(newSession);
                 return Ok();
-            }
-            catch
-            {
-                return Conflict();
-            }
+            //}
+            //catch
+            //{
+            //    return Conflict();
+            //}
 
         }
         /// <summary>
