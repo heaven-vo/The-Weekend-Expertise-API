@@ -198,7 +198,7 @@ namespace WebAPItwe.Repositories
                                             join s in context.Certificates on mt.CertificateId equals s.Id
                                             where me.Id == mentorId
                                             select s.Name
-                              ).ToListAsync();
+                              ).Take(3).ToListAsync();
             return listCertificate;
         }
 

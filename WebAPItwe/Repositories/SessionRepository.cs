@@ -102,7 +102,7 @@ namespace WebAPItwe.Repositories
         public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where Status = 2 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {0})", memberId)
+            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where MajorId = {0} and Status = 2 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
                 .Select(x => new SessionHomeModel
                 {
                     SessionId = x.Id,
@@ -152,6 +152,7 @@ namespace WebAPItwe.Repositories
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
             sessionDetail.ListMentor = await getListMentor(sessionId);
+            sessionDetail.ListMember = await getListMember(sessionId);
             //Confirm who what detail is leader
             var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
             if(leadId == memberId)
@@ -182,8 +183,9 @@ namespace WebAPItwe.Repositories
         public async Task<List<MentorInSessionModel>> getListMentor(string sessionId)
         {
             List<MentorInSessionModel> list = new List<MentorInSessionModel>();
-            var listMentorId = await context.MentorSessions.Where(x => x.Id == sessionId).Select(x => x.MentorId).ToListAsync();
-            foreach(var mentorId in listMentorId)
+            var listMentorId = await context.MentorSessions.Where(x => x.SessionId == sessionId).Select(x => x.MentorId).ToListAsync();
+            
+            foreach (var mentorId in listMentorId)
             {
                 var mentor = await context.Mentors.Where(x => x.Id == mentorId)
                     .Select(x => new MentorInSessionModel
@@ -199,8 +201,24 @@ namespace WebAPItwe.Repositories
         }
         public async Task<List<MemberInSessionModel>> getListMember(string sessionId)
         {
-            var listMemberId = await context.MemberSessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).ToListAsync();
-            return null;
+            var listMember = await context.MemberSessions.Where(x => x.SessionId == sessionId)
+                .Select(x => new MemberInSessionModel 
+                {
+                    Id =x.MemberId,
+                    Name = x.MemberName,
+                    Image = x.MemberImage
+                   
+                }).ToListAsync();
+            if (listMember.Count == 0) Console.WriteLine("NULL");
+            foreach(var member in listMember)
+            {
+                var majorName = await (from mem in context.Members
+                                       join ma in context .Majors on mem.MajorId equals ma.Id 
+                                       where mem.Id == member.Id 
+                                       select ma.Name).FirstOrDefaultAsync();
+                member.MajorName = majorName;
+            }
+            return listMember;
         }
     }
 }

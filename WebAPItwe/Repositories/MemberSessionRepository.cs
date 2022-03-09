@@ -17,6 +17,26 @@ namespace WebAPItwe.Repositories
         {
             this.context = context;
         }
+
+        public async Task JoinSession(string memberId, string sessionId)
+        {
+            var check = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+            if(check == null)
+            {
+                var member = await context.Members.FindAsync(memberId);
+                var memberSession = new MemberSession { 
+                    Id = Guid.NewGuid().ToString(),
+                    MemberId = memberId,
+                    MemberName = member.Fullname,
+                    MemberImage = member.Image,
+                    MentorVoting = 0,
+                    CafeVoting = 0,
+                    SessionId = sessionId,
+                    Status = false
+                };
+            }
+        }
+
         public async Task<object> LoadHistory(string memberId, int pageIndex, int pageSize)
         {
             var history = await (from s in context.Sessions 
