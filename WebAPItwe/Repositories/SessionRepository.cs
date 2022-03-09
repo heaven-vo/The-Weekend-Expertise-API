@@ -151,7 +151,7 @@ namespace WebAPItwe.Repositories
                 }).FirstOrDefaultAsync();
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
-
+            sessionDetail.ListMentor = await getListMentor(sessionId);
             //Confirm who what detail is leader
             var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
             if(leadId == memberId)
@@ -181,8 +181,21 @@ namespace WebAPItwe.Repositories
         }
         public async Task<List<MentorInSessionModel>> getListMentor(string sessionId)
         {
+            List<MentorInSessionModel> list = new List<MentorInSessionModel>();
             var listMentorId = await context.MentorSessions.Where(x => x.Id == sessionId).Select(x => x.MentorId).ToListAsync();
-            return null;
+            foreach(var mentorId in listMentorId)
+            {
+                var mentor = await context.Mentors.Where(x => x.Id == mentorId)
+                    .Select(x => new MentorInSessionModel
+                    {
+                        Id = x.Id,
+                        Name= x.Fullname,
+                        Image = x.Image,
+                        Rate = x.Rate
+                    }).FirstOrDefaultAsync();
+                list.Add(mentor);
+            }
+            return list;
         }
         public async Task<List<MemberInSessionModel>> getListMember(string sessionId)
         {
