@@ -10,21 +10,21 @@ using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers.Admin
 {
-    [Route("api/v1/admin")]
+    [Route("api/v1/admin/members")]
     [ApiController]
-    public class AdminController : ControllerBase
+    public class AdminMemberController : ControllerBase
     {
         private readonly dbEWTContext _context;
 
-        public AdminController(dbEWTContext context)
+        public AdminMemberController(dbEWTContext context)
         {
             _context = context;
         }
         /// <summary>
         /// Get list all member with pagination.
         /// </summary>
-        [HttpGet("/members")]
-        public async Task<ActionResult<IEnumerable<MemberAccountModel>>> GetAll(int pageIndex, int pageSize)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MemberAccountModel>>> GetAll(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace WebAPItwe.Controllers.Admin
         /// <summary>
         /// Get a member by id
         /// </summary>
-        [HttpGet("/members/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<MemberAccountModel>> GetById(string id)
         {
             var mem = await (from c in _context.Members
@@ -101,7 +101,7 @@ namespace WebAPItwe.Controllers.Admin
         /// <summary>
         /// Search Member by name
         /// </summary>
-        [HttpGet("/members/name")]
+        [HttpGet("name")]
         public async Task<ActionResult<MemberAccountModel>> GetByName(string name)
         {
             try
@@ -145,13 +145,13 @@ namespace WebAPItwe.Controllers.Admin
         /// <summary>
         /// Search Member by majorName
         /// </summary>
-        [HttpGet("/members/majorName")]
+        [HttpGet("majorName")]
         public async Task<ActionResult<MemberAccountModel>> GetByMajorName(string majorName)
         {
             try
             {
                 var mem = await (from c in _context.Members
-                                 join ma in _context.Majors on c.MajorId equals ma.Id   //search gan dung 
+                                 join ma in _context.Majors on c.MajorId equals ma.Id //search gan dung 
                                  where ma.Name.Contains(majorName)
 
                                  select new MemberAccountModel
@@ -190,7 +190,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Sort memberAccount by name
         /// </summary>
         [HttpGet("sorting/fullName")]
-        public async Task<ActionResult<MemberAccountModel>> SortByName(int pageIndex, int pageSize)
+        public async Task<ActionResult<MemberAccountModel>> SortByName(int pageIndex = 1, int pageSize = 5)
         {
             try
             {

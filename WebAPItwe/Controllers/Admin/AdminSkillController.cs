@@ -26,7 +26,7 @@ namespace WebAPItwe.Controllers
         /// Get list all Skill with pagination
         /// </summary>
         [HttpGet("skill")]
-        public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills(int pageIndex, int pageSize)
+        public async Task<ActionResult<IEnumerable<SkillModel>>> GetSkills(int pageIndex=1, int pageSize =5)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace WebAPItwe.Controllers
         /// Sort skill by name
         /// </summary>
         [HttpGet("sorting/name")]
-        public async Task<ActionResult<Skill>> SortByName(int pageIndex, int pageSize)
+        public async Task<ActionResult<Skill>> SortByName(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
@@ -187,6 +187,31 @@ namespace WebAPItwe.Controllers
 
                 return Ok(listSkill);
 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
+        /// <summary>
+        /// update status skill by id
+        /// </summary>
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> PutSkill(string id)
+        {
+            try
+            {
+                var skill = _context.Skills.Find(id);
+                if(skill.Status == true)
+                {
+                    skill.Status = false;
+                }
+                else
+                {
+                    skill.Status = true;
+                }
+                await _context.SaveChangesAsync();
+                return Ok(skill);
             }
             catch (Exception ex)
             {
