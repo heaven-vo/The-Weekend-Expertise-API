@@ -74,7 +74,7 @@ namespace WebAPItwe.Controllers
 
         }
         /// <summary>
-        /// Load detail of session (for search page)  
+        /// Load detail of session
         /// </summary>
         [HttpGet("detail")]
         public async Task<ActionResult> LoadSessionDetail(string memberId, string sessionId)
@@ -89,6 +89,16 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }
 
+        }
+
+        /// <summary>
+        /// Load list request to join session (just leader see it)
+        /// </summary>
+        [HttpGet("{sessionId}/awaiting-members")]
+        public async Task<ActionResult> LoadRequestMember(string sessionId)
+        {
+            var result = await sessionRepository.LoadRequestMember(sessionId);
+            return Ok(result);
         }
     }
 }

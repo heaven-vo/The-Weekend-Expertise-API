@@ -34,6 +34,8 @@ namespace WebAPItwe.Repositories
                     SessionId = sessionId,
                     Status = false
                 };
+                context.Add(memberSession);
+                await context.SaveChangesAsync();
             }
         }
 

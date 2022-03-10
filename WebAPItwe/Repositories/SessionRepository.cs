@@ -80,6 +80,7 @@ namespace WebAPItwe.Repositories
                                     CafeName = x.CafeName,
                                     MentorName = x.MentorName,
                                     Price = x.Price,
+                                    MaxPerson = x.MaxPerson,
                                     isJoin = true
                                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (var session in listSessions)
@@ -88,8 +89,10 @@ namespace WebAPItwe.Repositories
                 var cafe = await context.Cafes.FindAsync(cafeId);
                 session.CafeDistric = cafe.Distric;
                 session.CafeStreet = cafe.Street;
-                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();
+                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId)
+                                        .Where(x => x.Status == true).Select(x => x.MemberImage).Take(5).ToListAsync();
                 session.ListMemberImage = listImage;
+                session.CurrentPerson = listImage.Count();
                 var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
                 if (join == null)
                 {
@@ -113,6 +116,7 @@ namespace WebAPItwe.Repositories
                     CafeName = x.CafeName,
                     MentorName = x.MentorName,
                     Price = x.Price,
+                    MaxPerson = x.MaxPerson,
                     isJoin = true
                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -123,8 +127,10 @@ namespace WebAPItwe.Repositories
                 var cafe = await context.Cafes.FindAsync(cafeId);
                 session.CafeDistric = cafe.Distric;
                 session.CafeStreet = cafe.Street;
-                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId).Select(x => x.MemberImage).Take(5).ToListAsync();
+                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId)
+                                        .Where(x => x.Status == true).Select(x => x.MemberImage).Take(5).ToListAsync();
                 session.ListMemberImage = listImage;
+                session.CurrentPerson = listImage.Count();
                 var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
                 if (join == null)
                 {
@@ -152,7 +158,7 @@ namespace WebAPItwe.Repositories
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
             sessionDetail.ListMentor = await getListMentor(sessionId);
-            sessionDetail.ListMember = await getListMember(sessionId);
+            sessionDetail.ListMember = await getListMember(sessionId, true);
             //Confirm who what detail is leader
             var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
             if(leadId == memberId)
@@ -161,6 +167,14 @@ namespace WebAPItwe.Repositories
             }
             return sessionDetail;
         }
+
+        public async Task<object> LoadRequestMember(string sessionId)
+        {
+            return await getListMember(sessionId, false);
+        }
+
+        //--------------------------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------------
         public async Task<CafeModel> getCafeBySessionId(string sessionId)
         {
             var cafeId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
@@ -199,9 +213,9 @@ namespace WebAPItwe.Repositories
             }
             return list;
         }
-        public async Task<List<MemberInSessionModel>> getListMember(string sessionId)
+        public async Task<List<MemberInSessionModel>> getListMember(string sessionId, bool status)
         {
-            var listMember = await context.MemberSessions.Where(x => x.SessionId == sessionId)
+            var listMember = await context.MemberSessions.Where(x => x.SessionId == sessionId).Where(x => x.Status == status)
                 .Select(x => new MemberInSessionModel 
                 {
                     Id =x.MemberId,
@@ -209,7 +223,6 @@ namespace WebAPItwe.Repositories
                     Image = x.MemberImage
                    
                 }).ToListAsync();
-            if (listMember.Count == 0) Console.WriteLine("NULL");
             foreach(var member in listMember)
             {
                 var majorName = await (from mem in context.Members

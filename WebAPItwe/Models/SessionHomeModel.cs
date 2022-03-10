@@ -17,6 +17,8 @@ namespace WebAPItwe.Models
         public string CafeStreet { get; set; }
         public string MentorName { get; set; }
         public double Price { get; set; }
+        public int MaxPerson { get; set; }
+        public int CurrentPerson { get; set; }
         public Boolean isJoin { get; set; }
         public List<string> ListMemberImage { get; set; }
     }
