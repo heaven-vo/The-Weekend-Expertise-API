@@ -34,5 +34,21 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }           
         }
+        /// <summary>
+        /// Leader of session accept request of memberId
+        /// </summary>
+        [HttpPut("{sessionId}/members/{memberId}/accept")]
+        public async Task<ActionResult> AcceptMember(string sessionId, string memberId)
+        {
+            try
+            {
+                await inMemberSessionRepository.AcceptMember(memberId, sessionId);
+                return Ok();
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
     }
 }

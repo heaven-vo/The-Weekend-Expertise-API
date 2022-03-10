@@ -9,5 +9,6 @@ namespace WebAPItwe.InRepositories
     {
         Task<Object> LoadHistory(string memberId, int pageIndex, int pageSize);
         Task JoinSession(string memberId, string sessionId);
+        Task AcceptMember(string memberId, string sessionId);
     }
 }

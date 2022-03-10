@@ -112,9 +112,9 @@ namespace WebAPItwe.Repositories
             return listMentor;
         }
 
-        public async Task<IEnumerable<MentorModel>> SortByPrice(int pageIndex, int pageSize)
+        public async Task<IEnumerable<MentorModel>> SortByName(int pageIndex, int pageSize)
         {
-            var listMentor = await context.Mentors.OrderBy(x => x.Price).Select(x => new MentorModel
+            var listMentor = await context.Mentors.OrderBy(x => x.Fullname).Select(x => new MentorModel
             {
                 Id = x.Id,
                 Fullname = x.Fullname,
@@ -243,6 +243,13 @@ namespace WebAPItwe.Repositories
                 mentor.ListCertificate = await GetCertificateByMentorId(mentor.Id);
             }
             return listMentor;
+        }
+
+        public async Task<object> LoadSchedule(string mentorId, string date)
+        {
+            var schedule = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Status == 2)
+                .Where(x => x.Date == date).Select(x => x.Slot).ToListAsync() ;
+            return null;
         }
     }
 }

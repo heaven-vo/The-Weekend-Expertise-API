@@ -39,6 +39,24 @@ namespace WebAPItwe.Repositories
             }
         }
 
+        public async Task AcceptMember(string memberId, string sessionId)
+        {
+            var member = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+            if (member != null)
+            {
+                member.Status = true;
+                context.Entry(member).State = EntityState.Modified;
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
         public async Task<object> LoadHistory(string memberId, int pageIndex, int pageSize)
         {
             var history = await (from s in context.Sessions 

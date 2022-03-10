@@ -27,6 +27,7 @@ namespace WebAPItwe.Repositories
                     Id = member.Id,
                     Name = member.Name,
                     Email = member.Email,
+                    Password = "123456",
                     RoleId = "1",
                     Status = true
                 });

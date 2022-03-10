@@ -56,12 +56,12 @@ namespace WebAPItwe.Controllers
 
         //GET: api/v1/mentors/sorting?pageIndex=1&pageSize=3
         /// <summary>
-        /// Sort list mentor by price
+        /// Sort list mentor by name
         /// </summary>
         [HttpGet("sorting")]
-        public async Task<IEnumerable<MentorModel>> SortbyPrice(int pageIndex, int pageSize)
+        public async Task<IEnumerable<MentorModel>> SortbyName(int pageIndex, int pageSize)
         {
-            return await mentorRepository.SortByPrice(pageIndex, pageSize);
+            return await mentorRepository.SortByName(pageIndex, pageSize);
         }
 
         //GET: api/v1/mentors/byName?name=xxx&pageIndex=1&pageSize=3
@@ -94,6 +94,12 @@ namespace WebAPItwe.Controllers
         {
             var feedback = await mentorRepository.LoadMentorFeedback(mentorId, pageIndex, pageSize);
             return Ok(feedback);
+        }
+
+        [HttpGet("{mentorId}/schedule")]
+        public async Task<ActionResult> LoadSchedule(string mentorId, string date)
+        {
+            return Ok();
         }
     }
 }

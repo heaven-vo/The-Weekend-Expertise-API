@@ -73,7 +73,7 @@ namespace WebAPItwe.Controllers
                               }).FirstOrDefaultAsync();
 
 
-            if (cafe != null)
+            if (cafe == null)
             {
                 return BadRequest(new { StatusCode = 404, message = "Not Found" });
             }
