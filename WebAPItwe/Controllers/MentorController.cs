@@ -99,7 +99,7 @@ namespace WebAPItwe.Controllers
         [HttpGet("{mentorId}/schedule")]
         public async Task<ActionResult> LoadSchedule(string mentorId, string date)
         {
-            return Ok();
+            return Ok(await mentorRepository.LoadSchedule(mentorId, date));
         }
     }
 }

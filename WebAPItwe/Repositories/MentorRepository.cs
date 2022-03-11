@@ -249,7 +249,7 @@ namespace WebAPItwe.Repositories
         {
             var schedule = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Status == 2)
                 .Where(x => x.Date == date).Select(x => x.Slot).ToListAsync() ;
-            return null;
+            return schedule;
         }
     }
 }
