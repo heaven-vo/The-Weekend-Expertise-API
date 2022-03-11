@@ -30,7 +30,7 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var session = await (from c in _context.Skills
+                var session = await (from c in _context.SessionCafeModel
                                      select new
                                      {
                                          Id = c.Id,
@@ -54,7 +54,7 @@ namespace WebAPItwe.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SkillModel>> GetSkill(string id)
         {
-            var session = await (from c in _context.Skills
+            var session = await (from c in _context.SessionCafeModel
                                  where c.Id == id
                                  select new
                                  {
@@ -81,7 +81,7 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var session = await (from c in _context.Skills
+                var session = await (from c in _context.SessionCafeModel
                                      where c.Name.Contains(name)
 
                                      select new
@@ -113,7 +113,7 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var result = _context.Skills.Find(id);
+                var result = _context.SessionCafeModel.Find(id);
                 result.Id = skill.Id;
                 result.Name = skill.Name;
 
@@ -142,7 +142,7 @@ namespace WebAPItwe.Controllers
                 result.Id = skill.Id;
                 result.Name = skill.Name;
 
-                _context.Skills.Add(result);
+                _context.SessionCafeModel.Add(result);
                 await _context.SaveChangesAsync();
 
                 return Ok(result);
@@ -160,13 +160,13 @@ namespace WebAPItwe.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSkill(string id)
         {
-            var skill = await _context.Skills.FindAsync(id);
+            var skill = await _context.SessionCafeModel.FindAsync(id);
             if (skill == null)
             {
                 return NotFound();
             }
 
-            _context.Skills.Remove(skill);
+            _context.SessionCafeModel.Remove(skill);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -179,7 +179,7 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var listSkill = await _context.Skills.OrderBy(c => c.Name).Select(c => new Skill
+                var listSkill = await _context.SessionCafeModel.OrderBy(c => c.Name).Select(c => new Skill
                 {
                     Id = c.Id,
                     Name = c.Name
@@ -201,7 +201,7 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                var skill = _context.Skills.Find(id);
+                var skill = _context.SessionCafeModel.Find(id);   
                 if(skill.Status == true)
                 {
                     skill.Status = false;
