@@ -13,10 +13,13 @@ namespace WebAPItwe.Controllers
     public class DemandController : ControllerBase
     {
         private readonly InMemberSessionRepository inMemberSessionRepository;
+        private readonly InSessionRepository sessionRepository;
 
-        public DemandController(InMemberSessionRepository inMemberSessionRepository)
+
+        public DemandController(InMemberSessionRepository inMemberSessionRepository, InSessionRepository sessionRepository)
         {
             this.inMemberSessionRepository = inMemberSessionRepository;
+            this.sessionRepository = sessionRepository;
         }
         /// <summary>
         /// Member push a request to join existed session
@@ -43,6 +46,38 @@ namespace WebAPItwe.Controllers
             try
             {
                 await inMemberSessionRepository.AcceptMember(memberId, sessionId);
+                return Ok();
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Cafe accept request of session
+        /// </summary>
+        [HttpPut("{sessionId}/cafes/{cafeId}/accept")]
+        public async Task<ActionResult> AcceptSessionByCafe(string sessionId, string cafeId)
+        {
+            try
+            {
+                await sessionRepository.AcceptSessionByCafe(cafeId, sessionId);
+                return Ok();
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Cafe accept request of session
+        /// </summary>
+        [HttpPut("{sessionId}/cafes/{cafeId}/cancel")]
+        public async Task<ActionResult> CancelSessionByCafe(string sessionId, string cafeId)
+        {
+            try
+            {
+                await sessionRepository.CancelSessionByCafe(cafeId, sessionId);
                 return Ok();
             }
             catch

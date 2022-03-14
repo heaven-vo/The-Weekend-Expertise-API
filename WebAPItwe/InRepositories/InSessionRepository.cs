@@ -13,5 +13,7 @@ namespace WebAPItwe.InRepositories
         Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize);
         Task<object> LoadSessionDetail(string memberId, string sessionId);
         Task<object> LoadRequestMember(string sessionId);
+        Task AcceptSessionByCafe(string cafeId, string sessionId);
+        Task CancelSessionByCafe(string cafeId, string sessionId);
     }
 }

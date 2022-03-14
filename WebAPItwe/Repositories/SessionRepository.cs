@@ -233,5 +233,41 @@ namespace WebAPItwe.Repositories
             }
             return listMember;
         }
+
+        public async Task AcceptSessionByCafe(string cafeId, string sessionId)
+        {
+            var session = await context.Sessions.Where(x => x.CafeId == cafeId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            if (session != null)
+            {
+                session.Status = 1;
+                context.Entry(session).State = EntityState.Modified;
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
+        public async Task CancelSessionByCafe(string cafeId, string sessionId)
+        {
+            var session = await context.Sessions.Where(x => x.CafeId == cafeId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            if (session != null)
+            {
+                session.Status = 4;
+                context.Entry(session).State = EntityState.Modified;
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
     }
 }
