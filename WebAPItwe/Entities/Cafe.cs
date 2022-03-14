@@ -27,7 +27,7 @@ namespace WebAPItwe.Entities
         public string Distric { get; set; }
         public string Description { get; set; }
         public double Rate { get; set; }
-        public string Price { get; set; }    
+        public string Price { get; set; }
         public Boolean Status { get; set; }
 
         public virtual ICollection<Session> Sessions { get; set; }

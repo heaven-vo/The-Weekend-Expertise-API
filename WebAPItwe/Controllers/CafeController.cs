@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPItwe.Entities;
+using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers
 {
@@ -24,7 +25,7 @@ namespace WebAPItwe.Controllers
         /// Get list all cafe with pagination.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cafe>>> GetAll(int pageIndex, int pageSize)
+        public async Task<ActionResult<IEnumerable<CafeModel>>> GetAll(int pageIndex, int pageSize)
         {
             try
             {
@@ -55,7 +56,7 @@ namespace WebAPItwe.Controllers
         /// Get a cafe by id
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cafe>> GetById(string id)
+        public async Task<ActionResult<CafeModel>> GetById(string id)
         {
             var cafe = await (from c in _context.Cafes
                               where c.Id == id
@@ -85,7 +86,7 @@ namespace WebAPItwe.Controllers
         /// Search cafe by name
         /// </summary>
         [HttpGet("name")]
-        public async Task<ActionResult<Cafe>> GetByName(string name)
+        public async Task<ActionResult<CafeModel>> GetByName(string name)
         {
             try
             {
@@ -120,7 +121,7 @@ namespace WebAPItwe.Controllers
         /// Update cafe by Id
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCafe(string id, Cafe cafe)
+        public async Task<IActionResult> PutCafe(string id, CafeModel cafe)
         {
             try
             {
@@ -142,34 +143,32 @@ namespace WebAPItwe.Controllers
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
-        /// <summary>
-        /// Create cafe by Id
-        /// </summary>
-        [HttpPost]
-        public async Task<ActionResult<Cafe>> PostCafe(Cafe cafe)
-        {
-            try
-            {
-                var result = new Cafe();
+        
+        //[HttpPost]
+        //public async Task<ActionResult<CafeModel>> PostCafe(CafeModel cafe)
+        //{
+        //    try
+        //    {
+        //        var result = new CafeModel();
 
-                result.Id = cafe.Id;
-                result.Name = cafe.Name;
-                result.Image = cafe.Image;
-                result.Description = cafe.Description;
-                result.Distric = cafe.Distric;
-                result.Street = cafe.Street;
+        //        result.Id = cafe.Id;
+        //        result.Name = cafe.Name;
+        //        result.Image = cafe.Image;
+        //        result.Description = cafe.Description;
+        //        result.Distric = cafe.Distric;
+        //        result.Street = cafe.Street;
 
-                _context.Cafes.Add(result);
-                await _context.SaveChangesAsync();
+        //        _context.Cafes.Add(result);
+        //        await _context.SaveChangesAsync();
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
-            }
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+        //    }
 
-        }
+        //}
         /// <summary>
         /// Delete cafe by Id
         /// </summary>
