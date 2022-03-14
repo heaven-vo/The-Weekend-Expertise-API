@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAPItwe.Entities;
+using WebAPItwe.Models;
 
 namespace WebAPItwe.Controllers.Admin
 {
@@ -24,7 +25,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Get list all cafe with pagination.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cafe>>> GetAll(int pageIndex = 1 , int pageSize = 5)
+        public async Task<ActionResult<IEnumerable<CafeModel>>> GetAll(int pageIndex = 1 , int pageSize = 5)
         {
             try
             {
@@ -56,7 +57,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Get a cafe by id
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cafe>> GetById(string id)
+        public async Task<ActionResult<CafeModel>> GetById(string id)
         {
             var cafe = await (from c in _context.Cafes
                               where c.Id == id
@@ -87,7 +88,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Search cafe by name
         /// </summary>
         [HttpGet("name")]
-        public async Task<ActionResult<Cafe>> GetByName(string name)
+        public async Task<ActionResult<CafeModel>> GetByName(string name)
         {
             try
             {
@@ -123,7 +124,7 @@ namespace WebAPItwe.Controllers.Admin
         /// Update cafe by Id
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCafe(string id, Cafe cafe)
+        public async Task<IActionResult> PutCafe(string id, CafeModel cafe)
         {
             try
             {
@@ -150,35 +151,35 @@ namespace WebAPItwe.Controllers.Admin
         /// <summary>
         /// Create cafe by Id
         /// </summary>
-        [HttpPost]
-        public async Task<ActionResult<Cafe>> PostCafe(Cafe cafe)
-        {
-            try
-            {
-                var result = new Cafe();
+        //[HttpPost]
+        //public async Task<ActionResult<CafeModel>> PostCafe(CafeModel cafe)
+        //{
+        //    try
+        //    {
+        //        var result = new CafeModel();
 
-                result.Id = cafe.Id;
-                result.Name = cafe.Name;
-                result.Image = cafe.Image;
-                result.CloseTime= cafe.CloseTime;
-                result.OpenTime= cafe.OpenTime;
-                result.Price= cafe.Price;
-                result.Rate = cafe.Rate;
-                result.Description = cafe.Description;
-                result.Distric = cafe.Distric;
-                result.Street = cafe.Street;
+        //        result.Id = cafe.Id;
+        //        result.Name = cafe.Name;
+        //        result.Image = cafe.Image;
+        //        result.CloseTime= cafe.CloseTime;
+        //        result.OpenTime= cafe.OpenTime;
+        //        result.Price= cafe.Price;
+        //        result.Rate = cafe.Rate;
+        //        result.Description = cafe.Description;
+        //        result.Distric = cafe.Distric;
+        //        result.Street = cafe.Street;
 
-                _context.Cafes.Add(result);
-                await _context.SaveChangesAsync();
+        //        _context.Cafes.Add(result);
+        //        await _context.SaveChangesAsync();
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
-            }
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+        //    }
 
-        }
+        //}
         /// <summary>
         /// Delete cafe by Id
         /// </summary>
@@ -200,11 +201,11 @@ namespace WebAPItwe.Controllers.Admin
         /// Sort cafe by price
         /// </summary>
         [HttpGet("sorting/price")]
-        public async Task<ActionResult<Cafe>> SortByPrice(int pageIndex = 1, int pageSize = 5)
+        public async Task<ActionResult<CafeModel>> SortByPrice(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
-                var listCafe = await _context.Cafes.OrderBy(c => c.Price).Select(c => new Cafe
+                var listCafe = await _context.Cafes.OrderBy(c => c.Price).Select(c => new CafeModel
                 {
                     Id = c.Id,
                     Name = c.Name,
@@ -230,11 +231,11 @@ namespace WebAPItwe.Controllers.Admin
         /// Sort cafe by name
         /// </summary>
         [HttpGet("sorting/name")]
-        public async Task<ActionResult<Cafe>> SortByName(int pageIndex = 1, int pageSize = 5)
+        public async Task<ActionResult<CafeModel>> SortByName(int pageIndex = 1, int pageSize = 5)
         {
             try
             {
-                var listCafe = await _context.Cafes.OrderBy(c => c.Name).Select(c => new Cafe
+                var listCafe = await _context.Cafes.OrderBy(c => c.Name).Select(c => new CafeModel
                 {
                     Id = c.Id,
                     Name = c.Name,
