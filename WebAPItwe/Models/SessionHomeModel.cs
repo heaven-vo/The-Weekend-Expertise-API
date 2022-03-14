@@ -19,7 +19,7 @@ namespace WebAPItwe.Models
         public double Price { get; set; }
         public int MaxPerson { get; set; }
         public int CurrentPerson { get; set; }
-        public Boolean isJoin { get; set; }
+        public int isJoin { get; set; }
         public List<string> ListMemberImage { get; set; }
     }
 }

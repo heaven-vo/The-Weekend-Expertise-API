@@ -81,7 +81,7 @@ namespace WebAPItwe.Repositories
                                     MentorName = x.MentorName,
                                     Price = x.Price,
                                     MaxPerson = x.MaxPerson,
-                                    isJoin = true
+                                    isJoin = 0
                                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             foreach (var session in listSessions)
             {
@@ -94,9 +94,13 @@ namespace WebAPItwe.Repositories
                 session.ListMemberImage = listImage;
                 session.CurrentPerson = listImage.Count();
                 var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
-                if (join == null)
+                if (join != null)
                 {
-                    session.isJoin = false;
+                    session.isJoin = 1;
+                }
+                if(join.Status == true)
+                {
+                    session.isJoin = 2;
                 }
             }
 
@@ -117,7 +121,7 @@ namespace WebAPItwe.Repositories
                     MentorName = x.MentorName,
                     Price = x.Price,
                     MaxPerson = x.MaxPerson,
-                    isJoin = true
+                    isJoin = 0
                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
 
@@ -132,9 +136,9 @@ namespace WebAPItwe.Repositories
                 session.ListMemberImage = listImage;
                 session.CurrentPerson = listImage.Count();
                 var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
-                if (join == null)
+                if (join != null)
                 {
-                    session.isJoin = false;
+                    session.isJoin = 1;
                 }
             }
 
