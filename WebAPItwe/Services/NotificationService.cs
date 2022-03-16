@@ -67,7 +67,11 @@ namespace WebAPItwe.Services
                     else
                     {
                         response.IsSuccess = false;
-                        response.Message = fcmSendResponse.Results[0].Error;
+                        string error = "";
+                        for (int i = 0; i < fcmSendResponse.Results.Count; i++)
+                            error += fcmSendResponse.Results[i].Error + "/n";
+                        response.Message = error;
+                        //response.Message = fcmSendResponse.Results[0].Error + fcmSendResponse.Results[1].Error;
                         return response;
                     }
                 }
