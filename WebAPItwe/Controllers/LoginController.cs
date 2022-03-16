@@ -17,8 +17,26 @@ namespace WebAPItwe.Controllers
         {
             this.inUserRepository = inUserRepository;
         }
+
+        /// <summary>
+        /// Login an account
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult> Login(string userId, string token)
+        {
+            try
+            {
+                var role = await inUserRepository.Login(userId, token);
+                return Ok(role);
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+
+        [HttpGet("test")]
+        public async Task<ActionResult> Login2(string userId, string token)
         {
             try
             {
