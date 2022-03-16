@@ -30,9 +30,11 @@ namespace WebAPItwe.Entities
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Session> Sessions { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<SkillSubject> SkillSubjects { get; set; }
         public virtual DbSet<Certificate> Certificates { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<FcmToken> FcmTokens { get; set; }
         public virtual DbSet<Voucher> Vouchers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

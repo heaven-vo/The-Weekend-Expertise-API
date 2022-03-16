@@ -9,6 +9,10 @@ namespace WebAPItwe.Entities
     [Table("Subject")]
     public partial class Subject
     {
+        public Subject()
+        {
+            SkillSubjects = new HashSet<SkillSubject>();
+        }
         public string Id { get; set; }
         public string Name { get; set; }
         public string MajorId { get; set; }
@@ -16,5 +20,6 @@ namespace WebAPItwe.Entities
         public Boolean Status { get; set; }
 
         public virtual Major Major { get; set; }
+        public virtual ICollection<SkillSubject> SkillSubjects { get; set; }
     }
 }

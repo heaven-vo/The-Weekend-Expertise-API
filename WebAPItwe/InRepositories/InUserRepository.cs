@@ -9,5 +9,6 @@ namespace WebAPItwe.InRepositories
     public interface InUserRepository
     {
         Task RegisterMemberAccount(MemberRegisterModel member);
+        Task<string> Login(string id, string token);
     }
 }

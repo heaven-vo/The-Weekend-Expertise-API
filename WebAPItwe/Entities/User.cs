@@ -9,6 +9,10 @@ namespace WebAPItwe.Entities
     [Table("UserAccount")]
     public partial class User
     {
+        public User()
+        {
+            FcmTokens = new HashSet<FcmToken>();
+        }
         public string Id { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
@@ -17,5 +21,6 @@ namespace WebAPItwe.Entities
         public Boolean Status { get; set; }
 
         public virtual Role Role { get; set; }
+        public virtual ICollection<FcmToken> FcmTokens { get; set; }
     }
 }

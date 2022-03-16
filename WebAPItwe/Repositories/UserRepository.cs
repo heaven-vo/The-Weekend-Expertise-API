@@ -17,6 +17,28 @@ namespace WebAPItwe.Repositories
             this.context = context;
         }
 
+        public async Task<string> Login(string userId, string token)
+        {
+            string role = "";
+            FcmToken fcm = new FcmToken { Id = token, UserId = userId };
+            try
+            {
+                context.Add(fcm);
+                var user = await context.Users.FindAsync(userId);
+                if(user != null)
+                {
+                    role = user.RoleId;
+                    await context.SaveChangesAsync();
+                }
+                return role;
+            }
+            catch
+            {
+                throw;
+            }
+            
+        }
+
         public async Task RegisterMemberAccount(MemberRegisterModel member)
         {
             var check = context.Users.Where(x => x.Email == member.Email).FirstOrDefault();
