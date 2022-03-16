@@ -17,6 +17,10 @@ using System.Threading.Tasks;
 using WebAPItwe.Entities;
 using WebAPItwe.InRepositories;
 using WebAPItwe.Repositories;
+using WebAPItwe.Services;
+using CorePush.Google;
+using CorePush.Apple;
+using WebAPItwe.Setting;
 
 namespace WebAPItwe
 {
@@ -40,6 +44,16 @@ namespace WebAPItwe
             services.AddScoped<InMemberSessionRepository, MemberSessionRepository>();
             services.AddControllers();
             services.AddDbContext<dbEWTContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnectionString")));
+
+            //notification 
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddHttpClient<FcmSender>();
+            services.AddHttpClient<ApnSender>();
+            // Configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("FcmNotification");
+            services.Configure<FcmNotificationSetting>(appSettingsSection);
+
+            // Register the swagger generator
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

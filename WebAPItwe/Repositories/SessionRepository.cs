@@ -97,11 +97,11 @@ namespace WebAPItwe.Repositories
                 if (join != null)
                 {
                     session.isJoin = 1;
-                }
-                if(join.Status == true)
-                {
-                    session.isJoin = 2;
-                }
+                    if (join.Status == true)
+                    {
+                        session.isJoin = 2;
+                    }
+                }               
             }
 
             return listSessions;
