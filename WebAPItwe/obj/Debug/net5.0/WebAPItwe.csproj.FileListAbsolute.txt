@@ -272,3 +272,5 @@ C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\obj\Debug\net5.
 C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\obj\Debug\net5.0\WebAPItwe.xml
 C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\obj\Debug\net5.0\WebAPItwe.pdb
 C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\obj\Debug\net5.0\WebAPItwe.genruntimeconfig.cache
+C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\bin\Debug\net5.0\CorePush.dll
+C:\Users\DUONGAS\Desktop\TWE\The-Weekend-Expertise-API\WebAPItwe\bin\Debug\net5.0\BouncyCastle.Crypto.dll
