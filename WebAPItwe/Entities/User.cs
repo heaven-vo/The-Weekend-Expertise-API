@@ -12,6 +12,7 @@ namespace WebAPItwe.Entities
         public User()
         {
             FcmTokens = new HashSet<FcmToken>();
+            Notifications = new HashSet<Notification>();
         }
         public string Id { get; set; }
         public string Password { get; set; }
@@ -22,5 +23,6 @@ namespace WebAPItwe.Entities
 
         public virtual Role Role { get; set; }
         public virtual ICollection<FcmToken> FcmTokens { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

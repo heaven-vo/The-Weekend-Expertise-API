@@ -27,15 +27,15 @@ namespace WebAPItwe.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateNewSession(NewSessionModel newSession)
         {
-            //try
-            //{
+            try
+            {
                 await sessionRepository.CreateNewSession(newSession);
                 return Ok();
-            //}
-            //catch
-            //{
-            //    return Conflict();
-            //}
+            }
+            catch
+            {
+                return Conflict();
+            }
 
         }
         /// <summary>
@@ -73,6 +73,43 @@ namespace WebAPItwe.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Load my session (for search page)  
+        /// </summary>
+        [HttpGet("my-sessions")]
+        public async Task<ActionResult> LoadMySession(string memberId, int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listSession = await sessionRepository.LoadMySession(memberId, pageIndex, pageSize);
+                return Ok(listSession);
+            }
+            catch
+            {
+                return Conflict();
+            }
+
+        }
+
+        /// <summary>
+        /// Load my session (for search page)  
+        /// </summary>
+        [HttpGet("my-sessions-by-status")]
+        public async Task<ActionResult> LoadMySessionByStatus(string memberId, int status, int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listSession = await sessionRepository.LoadMySessionByStatus(memberId, status, pageIndex, pageSize);
+                return Ok(listSession);
+            }
+            catch
+            {
+                return Conflict();
+            }
+
+        }
+
         /// <summary>
         /// Load detail of session
         /// </summary>

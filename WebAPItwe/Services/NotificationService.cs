@@ -29,64 +29,61 @@ namespace WebAPItwe.Services
             ResponseModel response = new ResponseModel();
             try
             {
-                if (notificationModel.IsAndroiodDevice)
+
+                /* FCM Sender (Android Device) */
+                FcmSettings settings = new FcmSettings()
                 {
-                    /* FCM Sender (Android Device) */
-                    FcmSettings settings = new FcmSettings()
-                    {
-                        SenderId = _fcmNotificationSetting.SenderId,
-                        ServerKey = _fcmNotificationSetting.ServerKey
-                    };
-                    HttpClient httpClient = new HttpClient();
+                    SenderId = _fcmNotificationSetting.SenderId,
+                    ServerKey = _fcmNotificationSetting.ServerKey
+                };
+                HttpClient httpClient = new HttpClient();
 
-                    string authorizationKey = string.Format("keyy={0}", settings.ServerKey);
-                    string deviceToken = notificationModel.DeviceId;
+                string authorizationKey = string.Format("keyy={0}", settings.ServerKey);
+                List<string> ListDeviceToken = notificationModel.DeviceId;
 
-                    httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
-                    httpClient.DefaultRequestHeaders.Accept
-                            .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
+                httpClient.DefaultRequestHeaders.Accept
+                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                    DataPayload dataPayload = new DataPayload();
-                    dataPayload.Title = notificationModel.Title;
-                    dataPayload.Body = notificationModel.Body;
+                DataPayload dataPayload = new DataPayload();
+                dataPayload.Title = notificationModel.Title;
+                dataPayload.Body = notificationModel.Body;
 
-                    GoogleNotification notification = new GoogleNotification();
-                    notification.Data = dataPayload;
-                    notification.Notification = dataPayload;
+                GoogleNotification notification = new GoogleNotification();
+                notification.Data = dataPayload;
+                notification.Notification = dataPayload;
 
-                    var fcm = new FcmSender(settings, httpClient);
+                var fcm = new FcmSender(settings, httpClient);
+                foreach (var deviceToken in ListDeviceToken)
+                {
                     var fcmSendResponse = await fcm.SendAsync(deviceToken, notification);
-
-
-                    if (fcmSendResponse.IsSuccess())
-                    {
-                        response.IsSuccess = true;
-                        response.Message = "Notification sent successfully";
-                        return response;
-                    }
-                    else
-                    {
-                        response.IsSuccess = false;
-                        string error = "";
-                        for (int i = 0; i < fcmSendResponse.Results.Count; i++)
-                            error += fcmSendResponse.Results[i].Error + "/n";
-                        response.Message = error;
-                        //response.Message = fcmSendResponse.Results[0].Error + fcmSendResponse.Results[1].Error;
-                        return response;
-                    }
                 }
-                else
-                {
-                    /* Code here for APN Sender (iOS Device) */
-                    //var apn = new ApnSender(apnSettings, httpClient);
-                    //await apn.SendAsync(notification, deviceToken);
-                }
+                response.IsSuccess = true;
+                response.Message = "Notification sent successfully";
                 return response;
+                //var fcmSendResponse = await fcm.SendAsync(deviceToken, notification);
+
+
+                //    if (fcmSendResponse.IsSuccess())
+                //    {
+                //        response.IsSuccess = true;
+                //        response.Message = "Notification sent successfully";
+                //        return response;
+                //    }
+                //    else
+                //    {
+                //        response.IsSuccess = false;
+                //        string error = "";
+                //        for (int i = 0; i < fcmSendResponse.Results.Count; i++)
+                //            error += fcmSendResponse.Results[i].Error + " ";
+                //        response.Message = error;
+                //        return response;
+                //}            
             }
             catch (Exception ex)
             {
                 response.IsSuccess = false;
-                response.Message = "Something went wrong";
+                response.Message = ex.Message;
                 return response;
             }
         }

@@ -18,8 +18,9 @@ namespace WebAPItwe.Repositories
             this.context = context;
         }
 
-        public async Task JoinSession(string memberId, string sessionId)
+        public async Task<object> JoinSession(string memberId, string sessionId)
         {
+            List<string> listUserId = new List<string>(); 
             var check = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
             if(check == null)
             {
@@ -36,7 +37,12 @@ namespace WebAPItwe.Repositories
                 };
                 context.Add(memberSession);
                 await context.SaveChangesAsync();
+                // add leader id
+                var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
+                listUserId.Add(leadId);
             }
+            
+            return listUserId;
         }
 
         public async Task AcceptMember(string memberId, string sessionId)
@@ -61,7 +67,7 @@ namespace WebAPItwe.Repositories
         {
             var history = await (from s in context.Sessions 
                                  join m in context.MemberSessions on s.Id equals m.SessionId 
-                                 where m.MemberId == memberId && (s.Status == 3 || s.Status ==4) 
+                                 where m.MemberId == memberId && (s.Status == 2 || s.Status == 3) 
                                  select new HistoryModel {
                                         SessionId = s.Id,
                                         SubjectName = s.SubjectName,

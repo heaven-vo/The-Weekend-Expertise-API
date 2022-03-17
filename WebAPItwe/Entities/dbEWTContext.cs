@@ -35,6 +35,7 @@ namespace WebAPItwe.Entities
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<FcmToken> FcmTokens { get; set; }
+        public virtual DbSet<Notification> Notifications { get; set; }
         public virtual DbSet<Voucher> Vouchers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

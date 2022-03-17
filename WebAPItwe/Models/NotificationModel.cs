@@ -9,9 +9,7 @@ namespace WebAPItwe.Models
     public class NotificationModel
     {
         [JsonProperty("deviceId")]
-        public string DeviceId { get; set; }
-        [JsonProperty("isAndroiodDevice")]
-        public bool IsAndroiodDevice { get; set; }
+        public List<string> DeviceId { get; set; }
         [JsonProperty("title")]
         public string Title { get; set; }
         [JsonProperty("body")]

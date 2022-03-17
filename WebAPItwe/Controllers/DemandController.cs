@@ -29,7 +29,8 @@ namespace WebAPItwe.Controllers
         {
             try
             {
-                await inMemberSessionRepository.JoinSession(memberId, sessionId);
+                var listUserId = await inMemberSessionRepository.JoinSession(memberId, sessionId);
+
                 return Ok();
             }
             catch
@@ -56,12 +57,12 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Cafe accept request of session
         /// </summary>
-        [HttpPut("{sessionId}/cafes/{cafeId}/accept")]
-        public async Task<ActionResult> AcceptSessionByCafe(string sessionId, string cafeId)
+        [HttpPut("{sessionId}/mentors/{mentorId}/accept")]
+        public async Task<ActionResult> AcceptSessionByCafe(string sessionId, string mentorId)
         {
             try
             {
-                await sessionRepository.AcceptSessionByCafe(cafeId, sessionId);
+                await sessionRepository.AcceptSessionByMentor(mentorId, sessionId);
                 return Ok();
             }
             catch
@@ -72,12 +73,12 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Cafe accept request of session
         /// </summary>
-        [HttpPut("{sessionId}/cafes/{cafeId}/cancel")]
-        public async Task<ActionResult> CancelSessionByCafe(string sessionId, string cafeId)
+        [HttpPut("{sessionId}/mentors/{mentorId}/cancel")]
+        public async Task<ActionResult> CancelSessionByCafe(string sessionId, string mentorId)
         {
             try
             {
-                await sessionRepository.CancelSessionByCafe(cafeId, sessionId);
+                await sessionRepository.CancelSessionByMentor(mentorId, sessionId);
                 return Ok();
             }
             catch

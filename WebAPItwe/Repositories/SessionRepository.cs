@@ -69,7 +69,7 @@ namespace WebAPItwe.Repositories
 
         public async Task<object> LoadSession(string memberId, int pageIndex, int pageSize)
         {
-            var listSessions = await context.Sessions.Where(x => x.Status == 2).Where(x => x.CafeActive == false)
+            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.CafeActive == false)
                                 .Select(x => new SessionHomeModel
                                 {
                                     SessionId = x.Id,
@@ -109,7 +109,7 @@ namespace WebAPItwe.Repositories
         public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where MajorId = {0} and Status = 2 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
+            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where MajorId = {0} and Status = 1 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
                 .Select(x => new SessionHomeModel
                 {
                     SessionId = x.Id,
@@ -144,6 +144,65 @@ namespace WebAPItwe.Repositories
 
             return listSessions;
         }
+        public async Task<object> LoadMySession(string memberId, int pageIndex, int pageSize)
+        {
+            var listSession = await (from se in context.Sessions
+                                     join ms in context.MemberSessions on se.Id equals ms.SessionId
+                                     where ms.MemberId == memberId
+                                     select new MySessionModel 
+                                     {
+                                        Id = se.Id,
+                                        SubjectImage = se.SubjectImage,
+                                        SubjectName = se.SubjectName,
+                                        Slot = se.Slot,
+                                        Date = se.Date,
+                                        Status = se.Status,
+                                        isLead = false
+                                     }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (var session in listSession)
+            {
+                var cafeId = await context.Sessions.Where(x => x.Id == session.Id).Select(x => x.CafeId).FirstOrDefaultAsync();
+                session.CafeName = await context.Cafes.Where(x => x.Id == cafeId).Select(x => x.Name).FirstOrDefaultAsync();
+                session.ListMentor = await getListMentor(session.Id);
+
+                var leadId = await context.Sessions.Where(x => x.Id == session.Id).Select(x => x.MemberId).FirstOrDefaultAsync();
+                if (leadId == memberId)
+                {
+                    session.isLead = true;
+                }
+            }
+            return listSession;
+        }
+
+        public async Task<object> LoadMySessionByStatus(string memberId, int status, int pageIndex, int pageSize)
+        {
+            var listSession = await (from se in context.Sessions
+                                     join ms in context.MemberSessions on se.Id equals ms.SessionId
+                                     where ms.MemberId == memberId && se.Status == status
+                                     select new MySessionModel
+                                     {
+                                         Id = se.Id,
+                                         SubjectImage = se.SubjectImage,
+                                         SubjectName = se.SubjectName,
+                                         Slot = se.Slot,
+                                         Date = se.Date,
+                                         Status = se.Status,
+                                         isLead = false
+                                     }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (var session in listSession)
+            {
+                var cafeId = await context.Sessions.Where(x => x.Id == session.Id).Select(x => x.CafeId).FirstOrDefaultAsync();
+                session.CafeName = await context.Cafes.Where(x => x.Id == cafeId).Select(x => x.Name).FirstOrDefaultAsync();
+                session.ListMentor = await getListMentor(session.Id);
+
+                var leadId = await context.Sessions.Where(x => x.Id == session.Id).Select(x => x.MemberId).FirstOrDefaultAsync();
+                if (leadId == memberId)
+                {
+                    session.isLead = true;
+                }
+            }
+            return listSession;
+        }
 
         public async Task<object> LoadSessionDetail(string memberId, string sessionId)
         {
@@ -157,7 +216,8 @@ namespace WebAPItwe.Repositories
                     Date = x.Date,
                     Slot = x.Slot,
                     MaxPerson = x.MaxPerson,
-                    Status = x.Status
+                    Status = x.Status,
+                    isLead = false
                 }).FirstOrDefaultAsync();
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
@@ -238,9 +298,9 @@ namespace WebAPItwe.Repositories
             return listMember;
         }
 
-        public async Task AcceptSessionByCafe(string cafeId, string sessionId)
+        public async Task AcceptSessionByMentorId(string mentorId, string sessionId)
         {
-            var session = await context.Sessions.Where(x => x.CafeId == cafeId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            var session = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
             if (session != null)
             {
                 session.Status = 1;
@@ -256,12 +316,12 @@ namespace WebAPItwe.Repositories
             }
         }
 
-        public async Task CancelSessionByCafe(string cafeId, string sessionId)
+        public async Task CancelSessionByMentor(string mentorId, string sessionId)
         {
-            var session = await context.Sessions.Where(x => x.CafeId == cafeId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            var session = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
             if (session != null)
             {
-                session.Status = 4;
+                session.Status = 3;
                 context.Entry(session).State = EntityState.Modified;
                 try
                 {
