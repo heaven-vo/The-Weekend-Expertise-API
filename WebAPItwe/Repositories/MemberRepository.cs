@@ -17,10 +17,9 @@ namespace WebAPItwe.Repositories
         {
             this.context = context;
         }
-        public async Task<MemberModel> CreateNewMember(string id, string name)
+        public async Task<MemberRegisterModel> CreateNewMember(MemberRegisterModel member)
         {
-            var member = new MemberModel { Id = id, Fullname = name };
-            context.Add(new Member { Id = id, Fullname = name, Birthday = "", Status = true });
+            context.Add(new Member { Id = member.Id, Fullname = member.Name, Birthday = "", MajorId = member.MajorId, Status = true });
             await context.SaveChangesAsync();
             return member;
         }

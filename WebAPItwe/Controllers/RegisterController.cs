@@ -25,20 +25,18 @@ namespace WebAPItwe.Controllers
         /// Register a member account and a member
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<MemberModel>> RegisterMember(MemberRegisterModel member)
+        public async Task<ActionResult> RegisterMember(MemberRegisterModel member)
         {
-            MemberModel newMember = null;
+            MemberRegisterModel newMember = null;
             try
             {
                 await inUserRepository.RegisterMemberAccount(member);
-                newMember = await inMemberRepository.CreateNewMember(member.Id, member.Name);
+                newMember = await inMemberRepository.CreateNewMember(member);
             }
             catch
             {
                 return Conflict();
             }
-            //return CreatedAtAction("NewMember", new { id = newMember.Id }, newMember);
-            //return Ok();
             return Ok(newMember);
         }
     }
