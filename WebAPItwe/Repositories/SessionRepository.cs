@@ -256,12 +256,23 @@ namespace WebAPItwe.Repositories
                     Slot = x.Slot,
                     MaxPerson = x.MaxPerson,
                     Status = x.Status,
+                    isJoin = 0,
                     isLead = false
                 }).FirstOrDefaultAsync();
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
             sessionDetail.ListMentor = await getListMentor(sessionId);
             sessionDetail.ListMember = await getListMember(sessionId, true);
+            //
+            var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionDetail.SessionId).FirstOrDefaultAsync();
+            if (join != null)
+            {
+                sessionDetail.isJoin = 1;
+                if (join.Status == true)
+                {
+                    sessionDetail.isJoin = 2;
+                }
+            }
             //Confirm who what detail is leader
             var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
             if(leadId == memberId)

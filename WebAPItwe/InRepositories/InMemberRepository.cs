@@ -9,8 +9,8 @@ namespace WebAPItwe.InRepositories
     public interface InMemberRepository
     {
         Task<MemberRegisterModel> CreateNewMember(MemberRegisterModel member);
-        Task<Object> GetMemberProfile(string username);
-        Task<Object> UpdateMemberProfile(string username, MemberProfileModel member);
+        Task<Object> GetMemberProfile(string memberId);
+        Task<Object> UpdateMemberProfile(string memberId, MemberProfileModel member);
         Task<Object> CreateFeedback(string userId, FeedbackModel feedback);
     }
 }

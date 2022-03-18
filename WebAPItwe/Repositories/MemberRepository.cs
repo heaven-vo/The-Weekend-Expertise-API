@@ -19,14 +19,14 @@ namespace WebAPItwe.Repositories
         }
         public async Task<MemberRegisterModel> CreateNewMember(MemberRegisterModel member)
         {
-            context.Add(new Member { Id = member.Id, Fullname = member.Name, Birthday = "", MajorId = member.MajorId, Status = true });
+            context.Add(new Member { Id = member.Id, Fullname = member.Name, Birthday = "", Image = "https://firebasestorage.googleapis.com/v0/b/twe-mobile.appspot.com/o/member%2Fistockphoto-1212812078-170667a.jpg?alt=media&token=675b6dba-bb3f-4547-8b76-024e399dec11",
+                MajorId = member.MajorId, Status = true });
             await context.SaveChangesAsync();
             return member;
         }
 
-        public async Task<Object> GetMemberProfile(string username)
+        public async Task<Object> GetMemberProfile(string memberId)
         {
-            string memberId =  context.Users.Where(x => x.Email == username).Select(x => x.Id).FirstOrDefault();
             var member = await (from m in context.Members 
                                 join ma in context.Majors on m.MajorId equals ma.Id
                                 into Details
@@ -47,10 +47,9 @@ namespace WebAPItwe.Repositories
             return  member;
         }
 
-        public async Task<object> UpdateMemberProfile(string username, MemberProfileModel memberProfile)
+        public async Task<object> UpdateMemberProfile(string memberId, MemberProfileModel memberProfile)
         {
             
-            string memberId = context.Users.Where(x => x.Email == username).Select(x => x.Id).FirstOrDefault();
             if(memberId == null)
             {
                 return null; 

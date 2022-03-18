@@ -18,8 +18,9 @@ namespace WebAPItwe.Repositories
             this.context = context;
         }
 
-        public async Task<object> JoinSession(string memberId, string sessionId)
+        public async Task<NotificationContentModel> JoinSession(string memberId, string sessionId)
         {
+            NotificationContentModel notification = new NotificationContentModel();
             List<string> listUserId = new List<string>(); 
             var check = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
             if(check == null)
@@ -37,12 +38,15 @@ namespace WebAPItwe.Repositories
                 };
                 context.Add(memberSession);
                 await context.SaveChangesAsync();
+
                 // add leader id
-                var leadId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.MemberId).FirstOrDefaultAsync();
-                listUserId.Add(leadId);
+                var session = await context.Sessions.FindAsync(sessionId);
+                listUserId.Add(session.MemberId);
+                notification.content = memberSession.MemberName + " yêu cầu tham gia vào meetup " + session.SubjectName + " của bạn";
+                notification.listUserId = listUserId;
             }
             
-            return listUserId;
+            return notification;
         }
 
         public async Task AcceptMember(string memberId, string sessionId)

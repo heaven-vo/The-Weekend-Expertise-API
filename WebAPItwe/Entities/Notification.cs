@@ -10,6 +10,7 @@ namespace WebAPItwe.Entities
     public partial class Notification
     {
         public string Id { get; set; }
+        public string Title { get; set; }
         public string ContentNoti { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }

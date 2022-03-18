@@ -20,6 +20,7 @@ namespace WebAPItwe.Models
         public CafeModel Cafe { get; set; }
         public List<MentorInSessionModel> ListMentor { get; set; }
         public List<MemberInSessionModel> ListMember { get; set; }
+        public int isJoin { get; set; }
         public Boolean isLead { get; set; }
         public int Status { get; set; }
     }

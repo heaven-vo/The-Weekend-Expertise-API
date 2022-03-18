@@ -23,21 +23,21 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Get a member profile
         /// </summary>
-        [HttpGet("profile/{username}")]
-        public async Task<ActionResult> GetMemberProfile(string username)
+        [HttpGet("profile/{userId}")]
+        public async Task<ActionResult> GetMemberProfile(string userId)
         {
-            var member = await inMemberRepository.GetMemberProfile(username);
+            var member = await inMemberRepository.GetMemberProfile(userId);
             if (member == null)
                 return NotFound();
             return Ok(member);
         }
 
-        [HttpPut("profile/{username}")]
-        public async Task<ActionResult> UpdateMemberProfile(string username, MemberProfileModel memberProfile)
+        [HttpPut("profile/{userId}")]
+        public async Task<ActionResult> UpdateMemberProfile(string userId, MemberProfileModel memberProfile)
         {
             try
             {
-                var member = await inMemberRepository.UpdateMemberProfile(username, memberProfile);
+                var member = await inMemberRepository.UpdateMemberProfile(userId, memberProfile);
                 return Ok(member);
             }
             catch

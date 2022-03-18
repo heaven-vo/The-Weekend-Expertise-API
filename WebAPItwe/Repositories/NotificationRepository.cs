@@ -16,19 +16,37 @@ namespace WebAPItwe.Repositories
         {
             this.context = context;
         }
-        public async Task<object> SaveNotification(List<string> listUserId)
+
+        public async Task<List<string>> getUserToken(List<string> listUserId)
         {
             var listToken = new List<string>();
-            string date = DateTime.Now.ToString("yyyy-MM-dd");
-            string time = DateTime.Now.ToString("HH:mm:ss");
-
             foreach (var userId in listUserId)
             {
-                //var token = await(from user in context.Users
-                //                  join noti in context.Notifications on user.Id equals noti.UserId 
-                //                  where user.Id == userId 
-                //                  select noti.Id).ToListAsync();
-            
+                var token = await context.FcmTokens.Where(x => x.UserId == userId).Select(x => x.Id).ToListAsync();
+                foreach (var t in token) listToken.Add(t);
+            }
+            return listToken;
+        }
+
+        public async Task<object> SaveNotification(List<string> listUserId, string title, string content)
+        {
+            try
+            {
+                string date = DateTime.Now.ToString("yyyy-MM-dd");
+                string time = DateTime.Now.ToString("HH:mm:ss");
+
+                foreach (var userId in listUserId)
+                {
+
+                    Notification noti = new Notification { Id = Guid.NewGuid().ToString(), Date = date, Time = time,
+                                                            ContentNoti = content, Title = title, UserId = userId};
+                    context.Add(noti);
+                }
+                await context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
             }
             return null;
         }
