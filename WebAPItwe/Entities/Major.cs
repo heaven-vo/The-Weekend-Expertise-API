@@ -13,7 +13,7 @@ namespace WebAPItwe.Entities
         {
             Members = new HashSet<Member>();
             MentorMajors = new HashSet<MentorMajor>();
-            Subjects = new HashSet<Subject>();
+            MajorSkills = new HashSet<MajorSkill>();
         }
 
         public string Id { get; set; }
@@ -22,6 +22,7 @@ namespace WebAPItwe.Entities
 
         public virtual ICollection<Member> Members { get; set; }
         public virtual ICollection<MentorMajor> MentorMajors { get; set; }
-        public virtual ICollection<Subject> Subjects { get; set; }
+        public virtual ICollection<MajorSkill> MajorSkills { get; set; }
+
     }
 }

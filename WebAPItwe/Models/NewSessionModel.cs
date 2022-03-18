@@ -15,7 +15,7 @@ namespace WebAPItwe.Models
         public string Date { get; set; }
         public int Slot { get; set; }
         public string MajorId { get; set; }
-        public string SubjectId { get; set; }
+        public string SkillId { get; set; }
         public int MaxPerson { get; set; }
         public PaymentModel Payments { get; set; }
     }

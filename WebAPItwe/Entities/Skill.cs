@@ -11,15 +11,14 @@ namespace WebAPItwe.Entities
     {
         public Skill()
         {
-            MentorSkills = new HashSet<MentorSkill>();
-            SkillSubjects = new HashSet<SkillSubject>();
+            MajorSkills = new HashSet<MajorSkill>();
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
+        public string Image { get; set; }
         public Boolean Status { get; set; }
 
-        public virtual ICollection<MentorSkill> MentorSkills { get; set; }
-        public virtual ICollection<SkillSubject> SkillSubjects { get; set; }
+        public virtual ICollection<MajorSkill> MajorSkills { get; set; }
     }
 }

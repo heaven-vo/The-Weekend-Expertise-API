@@ -72,6 +72,38 @@ namespace WebAPItwe.Controllers
             }
         }
 
+        //GET: api/v1/cafe/byName?name=xxx
+        /// <summary>
+        /// Search Skill by name
+        /// </summary>
+        [HttpGet("majorId")]
+        public async Task<ActionResult<Skill>> GetByMajorId(string majorId)
+        {
+            try
+            {
+                var result = await (from major in _context.Majors
+                                    join ms in _context.MajorSkills on major.Id equals ms.MajorId
+                                    join skill in _context.Skills on ms.SkillId equals skill.Id
+                                    where major.Id == majorId    // search gần đúng
+                                    select new
+                                    {
+                                        skill.Id,
+                                        skill.Name,
+                                    }
+                               ).ToListAsync();
+                if (!result.Any())
+                {
+                    return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
+                }
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
+
         /// <summary>
         /// Update Skill by Id
         /// </summary>

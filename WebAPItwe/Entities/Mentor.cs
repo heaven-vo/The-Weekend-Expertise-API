@@ -13,7 +13,6 @@ namespace WebAPItwe.Entities
         {
             MentorMajors = new HashSet<MentorMajor>();
             MentorSessions = new HashSet<MentorSession>();
-            MentorSkills = new HashSet<MentorSkill>();
             Sessions = new HashSet<Session>();
             MentorCertificates = new HashSet<MentorCertificate>();
         }
@@ -33,7 +32,6 @@ namespace WebAPItwe.Entities
 
         public virtual ICollection<MentorMajor> MentorMajors { get; set; }
         public virtual ICollection<MentorSession> MentorSessions { get; set; }
-        public virtual ICollection<MentorSkill> MentorSkills { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
         public virtual ICollection<MentorCertificate> MentorCertificates { get; set; }
     }

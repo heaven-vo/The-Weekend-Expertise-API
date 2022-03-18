@@ -23,7 +23,7 @@ namespace WebAPItwe.Repositories
             string sessionId = Guid.NewGuid().ToString();
             string dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             
-            var subject = await context.Subjects.FindAsync(newSession.SubjectId); 
+            var skill = await context.Skills.FindAsync(newSession.SkillId); 
             string cafeName = await context.Cafes.Where(x => x.Id == newSession.CafeId).Select(x => x.Name).FirstOrDefaultAsync();
             
             Session session = new Session
@@ -36,9 +36,9 @@ namespace WebAPItwe.Repositories
                 Status = 0,
                 MemberId = newSession.MemberId,
                 MajorId = newSession.MajorId,
-                SubjectId = newSession.SubjectId,
-                SubjectName = subject.Name,
-                SubjectImage = subject.Image,
+                SubjectId = newSession.SkillId,
+                SubjectName = skill.Name,
+                SubjectImage = skill.Image,
                 CafeId = newSession.CafeId,
                 CafeName = cafeName,
                 CafeActive = false

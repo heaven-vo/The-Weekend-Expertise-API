@@ -183,12 +183,24 @@ namespace WebAPItwe.Repositories
 
         public async Task<List<string>> GetSkillByMentorId(string mentorId)
         {
-            List<string> listSkill = await (from me in context.Mentors
-                                            join mt in context.MentorSkills on me.Id equals mt.MentorId
-                                            join s in context.Skills on mt.SkillId equals s.Id
-                                            where me.Id == mentorId
-                                            select s.Name
+            List<string> listMajorId = await (from me in context.Mentors
+                                              join mt in context.MentorMajors on me.Id equals mt.MentorId
+                                              join ma in context.Majors on mt.MajorId equals ma.Id
+                                              where me.Id == mentorId
+                                              select ma.Id
                               ).ToListAsync();
+            List<string> listSkill = new List<string>();
+            foreach (var majorId in listMajorId)
+            {
+                var list = await (from ma in context.Majors
+                                                join mt in context.MajorSkills on ma.Id equals mt.MajorId
+                                                join skill in context.Skills on mt.SkillId equals skill.Id
+                                                where ma.Id == majorId
+                                                select skill.Name
+                              ).ToListAsync();
+                foreach (var name in list) listSkill.Add(name);
+            }
+            
             return listSkill;
         }
         public async Task<List<string>> GetCertificateByMentorId(string mentorId)
