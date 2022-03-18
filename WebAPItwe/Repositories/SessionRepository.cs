@@ -298,7 +298,7 @@ namespace WebAPItwe.Repositories
             return listMember;
         }
 
-        public async Task AcceptSessionByMentorId(string mentorId, string sessionId)
+        public async Task AcceptSessionByMentor(string mentorId, string sessionId)
         {
             var session = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
             if (session != null)
