@@ -27,6 +27,7 @@ namespace WebAPItwe.Controllers
         [HttpPost("{sessionId}/members/{memberId}/join")]
         public async Task<ActionResult> JoinSession (string sessionId, string memberId)
         {
+            string content = "";
             try
             {
                 var listUserId = await inMemberSessionRepository.JoinSession(memberId, sessionId);

@@ -75,7 +75,7 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
-        /// Load my session (for search page)  
+        /// Load my session (for my meet page)  
         /// </summary>
         [HttpGet("my-sessions")]
         public async Task<ActionResult> LoadMySession(string memberId, int pageIndex, int pageSize)
@@ -93,7 +93,7 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
-        /// Load my session (for search page)  
+        /// Load my session by staus (for my meet page)  
         /// </summary>
         [HttpGet("my-sessions-by-status")]
         public async Task<ActionResult> LoadMySessionByStatus(string memberId, int status, int pageIndex, int pageSize)
