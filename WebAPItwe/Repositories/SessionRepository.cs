@@ -106,6 +106,45 @@ namespace WebAPItwe.Repositories
 
             return listSessions;
         }
+        public async Task<object> LoadSessionByMajor(string memberId, string majorId, int pageIndex, int pageSize)
+        {
+            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.Id == majorId).Where(x => x.CafeActive == false)
+                                .Select(x => new SessionHomeModel
+                                {
+                                    SessionId = x.Id,
+                                    SubjectImage = x.SubjectImage,
+                                    SubjectName = x.SubjectName,
+                                    Date = x.Date,
+                                    Slot = x.Slot,
+                                    CafeName = x.CafeName,
+                                    MentorName = x.MentorName,
+                                    Price = x.Price,
+                                    MaxPerson = x.MaxPerson,
+                                    isJoin = 0
+                                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            foreach (var session in listSessions)
+            {
+                var cafeId = await context.Sessions.Where(x => x.Id == session.SessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
+                var cafe = await context.Cafes.FindAsync(cafeId);
+                session.CafeDistric = cafe.Distric;
+                session.CafeStreet = cafe.Street;
+                List<string> listImage = await context.MemberSessions.Where(x => x.SessionId == session.SessionId)
+                                        .Where(x => x.Status == true).Select(x => x.MemberImage).Take(5).ToListAsync();
+                session.ListMemberImage = listImage;
+                session.CurrentPerson = listImage.Count();
+                var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == session.SessionId).FirstOrDefaultAsync();
+                if (join != null)
+                {
+                    session.isJoin = 1;
+                    if (join.Status == true)
+                    {
+                        session.isJoin = 2;
+                    }
+                }
+            }
+
+            return listSessions;
+        }
         public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();

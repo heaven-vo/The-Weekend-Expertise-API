@@ -59,9 +59,9 @@ namespace WebAPItwe.Controllers
         /// Sort list mentor by name
         /// </summary>
         [HttpGet("sorting")]
-        public async Task<IEnumerable<MentorModel>> SortbyName(int pageIndex, int pageSize)
+        public async Task<IEnumerable<MentorModel>> SortbyName(string order_by_name, int pageIndex, int pageSize)
         {
-            return await mentorRepository.SortByName(pageIndex, pageSize);
+            return await mentorRepository.SortByName(order_by_name, pageIndex, pageSize);
         }
 
         //GET: api/v1/mentors/byName?name=xxx&pageIndex=1&pageSize=3

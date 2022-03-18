@@ -112,23 +112,45 @@ namespace WebAPItwe.Repositories
             return listMentor;
         }
 
-        public async Task<IEnumerable<MentorModel>> SortByName(int pageIndex, int pageSize)
+        public async Task<IEnumerable<MentorModel>> SortByName(string order_by_name, int pageIndex, int pageSize)
         {
-            var listMentor = await context.Mentors.OrderBy(x => x.Fullname).Select(x => new MentorModel
+            var listMentor = new List<MentorModel>();
+            if(order_by_name == "asc")
             {
-                Id = x.Id,
-                Fullname = x.Fullname,
-                Address = x.Address,
-                Slogan = x.Slogan,
-                Phone = x.Phone,
-                Image = x.Image,
-                Sex = x.Sex,
-                Price = x.Price,
-                Birthday = x.Birthday,
-                Rate = x.Rate,
-                Description = x.Description,
-                Status = x.Status
-            }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                listMentor = await context.Mentors.OrderBy(x => x.Fullname).Select(x => new MentorModel
+                {
+                    Id = x.Id,
+                    Fullname = x.Fullname,
+                    Address = x.Address,
+                    Slogan = x.Slogan,
+                    Phone = x.Phone,
+                    Image = x.Image,
+                    Sex = x.Sex,
+                    Price = x.Price,
+                    Birthday = x.Birthday,
+                    Rate = x.Rate,
+                    Description = x.Description,
+                    Status = x.Status
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+            if(order_by_name == "desc")
+            {
+                listMentor = await context.Mentors.OrderByDescending(x => x.Fullname).Select(x => new MentorModel
+                {
+                    Id = x.Id,
+                    Fullname = x.Fullname,
+                    Address = x.Address,
+                    Slogan = x.Slogan,
+                    Phone = x.Phone,
+                    Image = x.Image,
+                    Sex = x.Sex,
+                    Price = x.Price,
+                    Birthday = x.Birthday,
+                    Rate = x.Rate,
+                    Description = x.Description,
+                    Status = x.Status
+                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
             foreach (MentorModel mentor in listMentor)
             {
                 mentor.Email = await context.Users.Where(x => x.Id == mentor.Id).Select(x => x.Email).FirstOrDefaultAsync();

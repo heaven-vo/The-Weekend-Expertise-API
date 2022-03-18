@@ -75,6 +75,24 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
+        /// Load session by major id (for search page)  
+        /// </summary>
+        [HttpGet("byMajor")]
+        public async Task<ActionResult> LoadSessionByMajor(string memberId, string majorId, int pageIndex, int pageSize)
+        {
+            try
+            {
+                var listSession = await sessionRepository.LoadSessionByMajor(memberId, majorId, pageIndex, pageSize);
+                return Ok(listSession);
+            }
+            catch
+            {
+                return Conflict();
+            }
+
+        }
+
+        /// <summary>
         /// Load my session (for my meet page)  
         /// </summary>
         [HttpGet("my-sessions")]
