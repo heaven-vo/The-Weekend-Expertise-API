@@ -19,9 +19,9 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
-        /// Login an account
+        /// Login an account and save fcm token to db
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> Login(string userId, string token)
         {
             try
@@ -35,13 +35,16 @@ namespace WebAPItwe.Controllers
             }
         }
 
-        [HttpGet("test")]
-        public async Task<ActionResult> Login2(string userId, string token)
+        /// <summary>
+        /// Log out an account and remove fcm token
+        /// </summary>
+        [HttpPost]
+        public async Task<ActionResult> Logout(string userId, string token)
         {
             try
             {
-                var role = await inUserRepository.Login(userId, token);
-                return Ok(role);
+                await inUserRepository.Logout(userId, token);
+                return NoContent();
             }
             catch
             {

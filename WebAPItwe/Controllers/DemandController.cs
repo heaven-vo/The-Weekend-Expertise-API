@@ -39,7 +39,7 @@ namespace WebAPItwe.Controllers
                 //get noti include: list user id and notification content
                 NotificationContentModel noti = await inMemberSessionRepository.JoinSession(memberId, sessionId);
                 //save notification to database
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
 
                 //push notification to user's deviece
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
@@ -58,10 +58,16 @@ namespace WebAPItwe.Controllers
         [HttpPut("{sessionId}/members/{memberId}/accept")]
         public async Task<ActionResult> AcceptMember(string sessionId, string memberId)
         {
+            string title = "Yêu cầu đã được xác nhận";
             try
             {
-                await inMemberSessionRepository.AcceptMember(memberId, sessionId);
-                return Ok();
+                NotificationContentModel noti = await inMemberSessionRepository.AcceptMember(memberId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
             }
             catch
             {
@@ -72,7 +78,7 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Leader of session accept request of memberId
         /// </summary>
-        [HttpPut("{sessionId}/members/{memberId}/cancel")]
+        [HttpDelete("{sessionId}/members/{memberId}/cancel")]
         public async Task<ActionResult> CancelMember(string sessionId, string memberId)
         {
             try

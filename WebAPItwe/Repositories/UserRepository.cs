@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace WebAPItwe.Repositories
         public async Task<string> Login(string userId, string token)
         {
             string role = "";
-            FcmToken fcm = new FcmToken { Id = token, UserId = userId };
+            FcmToken fcm = new FcmToken { Id = Guid.NewGuid().ToString(), UserId = userId, Token = token };
             try
             {
                 context.Add(fcm);
@@ -37,6 +38,20 @@ namespace WebAPItwe.Repositories
                 throw;
             }
             
+        }
+
+        public async Task Logout(string userId, string token)
+        {
+            try
+            {
+                var fcm = await context.FcmTokens.Where(x => x.UserId == userId).Where(x => x.Token == token).FirstOrDefaultAsync();
+                context.FcmTokens.Remove(fcm);
+                await context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task RegisterMemberAccount(MemberRegisterModel member)

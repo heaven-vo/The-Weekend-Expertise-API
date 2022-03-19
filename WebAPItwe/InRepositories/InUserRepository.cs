@@ -10,5 +10,6 @@ namespace WebAPItwe.InRepositories
     {
         Task RegisterMemberAccount(MemberRegisterModel member);
         Task<string> Login(string userId, string token);
+        Task Logout(string userId, string token);
     }
 }

@@ -8,6 +8,6 @@ namespace WebAPItwe.InRepositories
     public interface InNotificationRepository
     {
         Task<List<string>> getUserToken(List<string> listUserId);
-        Task<object> SaveNotification(List<string> listUserId, string title, string content);
+        Task<object> SaveNotification(List<string> listUserId, string title, string content, string sessioonId);
     }
 }

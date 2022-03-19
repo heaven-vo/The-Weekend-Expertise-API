@@ -49,9 +49,12 @@ namespace WebAPItwe.Repositories
             return notification;
         }
 
-        public async Task AcceptMember(string memberId, string sessionId)
+        public async Task<NotificationContentModel> AcceptMember(string memberId, string sessionId)
         {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
             var member = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+            var session = await context.Sessions.FindAsync(sessionId);
             if (member != null)
             {
                 member.Status = true;
@@ -59,12 +62,16 @@ namespace WebAPItwe.Repositories
                 try
                 {
                     await context.SaveChangesAsync();
+                    listUserId.Add(memberId);
+                    notification.listUserId = listUserId;
+                    notification.content = "Yêu cầu tham gia vào meetup" + session.SubjectName + " đã được chấp nhận";
                 }
                 catch
                 {
                     throw;
-                }
+                }            
             }
+            return notification;
         }
 
         public async Task<object> LoadHistory(string memberId, int pageIndex, int pageSize)

@@ -40,7 +40,7 @@ namespace WebAPItwe.Services
 
                     string authorizationKey = string.Format("keyy={0}", settings.ServerKey);
                 //string deviceToken = notificationModel.DeviceId;
-                string deviceToken = "eHKfqo-XSoyIfhOmDKZFRD:APA91bHdcAaaE0Sex0kfa0Oe_KF9XjzB3251K9VTz6EXzUAzzGxjBjpD6A2OxnkjTcrrzMI0BqJq6q-N--4Lxr1ZKWMAjWh4zHd_lrhmdK_3-FIkk0jl4F9KXp7b6WotrCT1tdTEyfyh";
+                string deviceToken = "ddMgP8K9Ruykl9vqGUK6my:APA91bF6n-phMghTt35A4w8_VI6AT_4D5UAsFWMoaNzOVEK2P_gA0Ie5l5JEEtTlN_p4_1_bfoTUtKICXdY20lijpA45-DppeA7d0vn3n--BXxd0B7jp9iTwHL7tT8EUi8B_MAzC9GyC";
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
                     httpClient.DefaultRequestHeaders.Accept
                             .Add(new MediaTypeWithQualityHeaderValue("application/json"));

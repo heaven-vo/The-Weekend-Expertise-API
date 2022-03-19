@@ -40,6 +40,7 @@ namespace WebAPItwe.Services
 
                 string authorizationKey = string.Format("keyy={0}", settings.ServerKey);
                 List<string> ListDeviceToken = notificationModel.DeviceId;
+                //ListDeviceToken.Add("eHKfqo-XSoyIfhOmDKZFRD:APA91bHdcAaaE0Sex0kfa0Oe_KF9XjzB3251K9VTz6EXzUAzzGxjBjpD6A2OxnkjTcrrzMI0BqJq6q-N--4Lxr1ZKWMAjWh4zHd_lrhmdK_3-FIkk0jl4F9KXp7b6WotrCT1tdTEyfyh");
 
                 httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
                 httpClient.DefaultRequestHeaders.Accept
