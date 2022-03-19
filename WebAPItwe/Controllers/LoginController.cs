@@ -8,7 +8,7 @@ using WebAPItwe.InRepositories;
 
 namespace WebAPItwe.Controllers
 {
-    [Route("api/v1/login")]
+    [Route("api/v1")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Login an account and save fcm token to db
         /// </summary>
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult> Login(string userId, string token)
         {
             try
@@ -38,7 +38,7 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Log out an account and remove fcm token
         /// </summary>
-        [HttpPost]
+        [HttpPost("logout")]
         public async Task<ActionResult> Logout(string userId, string token)
         {
             try
