@@ -48,6 +48,7 @@ namespace WebAPItwe
 
             //notification 
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<INotificationService2, NotificationService2>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();
             // Configure strongly typed settings objects

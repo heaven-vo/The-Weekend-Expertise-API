@@ -13,8 +13,8 @@ namespace WebAPItwe.Controllers
     [ApiController]
     public class NotificationController : ControllerBase
     {
-        private readonly INotificationService _notificationService;
-        public NotificationController(INotificationService notificationService)
+        private readonly INotificationService2 _notificationService;
+        public NotificationController(INotificationService2 notificationService)
         {
             _notificationService = notificationService;
         }

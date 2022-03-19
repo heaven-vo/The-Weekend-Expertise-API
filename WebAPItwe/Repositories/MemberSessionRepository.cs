@@ -83,5 +83,22 @@ namespace WebAPItwe.Repositories
 
             return history;
         }
+
+        public async Task CancelMember(string memberId, string sessionId)
+        {
+            var member = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+            if (member != null)
+            {
+                context.MemberSessions.Remove(member);
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
     }
 }

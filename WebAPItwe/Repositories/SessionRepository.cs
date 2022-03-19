@@ -108,7 +108,7 @@ namespace WebAPItwe.Repositories
         }
         public async Task<object> LoadSessionByMajor(string memberId, string majorId, int pageIndex, int pageSize)
         {
-            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.Id == majorId).Where(x => x.CafeActive == false)
+            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.MajorId == majorId).Where(x => x.CafeActive == false)
                                 .Select(x => new SessionHomeModel
                                 {
                                     SessionId = x.Id,

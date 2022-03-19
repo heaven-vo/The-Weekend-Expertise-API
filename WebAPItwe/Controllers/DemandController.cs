@@ -68,6 +68,24 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }
         }
+
+        /// <summary>
+        /// Leader of session accept request of memberId
+        /// </summary>
+        [HttpPut("{sessionId}/members/{memberId}/cancel")]
+        public async Task<ActionResult> CancelMember(string sessionId, string memberId)
+        {
+            try
+            {
+                await inMemberSessionRepository.CancelMember(memberId, sessionId);
+                return NoContent();
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+
         /// <summary>
         /// Cafe accept request of session
         /// </summary>
