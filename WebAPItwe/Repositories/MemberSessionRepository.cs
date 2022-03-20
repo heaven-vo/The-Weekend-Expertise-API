@@ -57,6 +57,8 @@ namespace WebAPItwe.Repositories
             var session = await context.Sessions.FindAsync(sessionId);
             if (member != null)
             {
+                session.CurrentPerson += 1;
+                context.Entry(session).State = EntityState.Modified;
                 member.Status = true;
                 context.Entry(member).State = EntityState.Modified;
                 try
