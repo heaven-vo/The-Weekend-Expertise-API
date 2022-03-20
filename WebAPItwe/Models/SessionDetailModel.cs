@@ -22,6 +22,7 @@ namespace WebAPItwe.Models
         public List<MemberInSessionModel> ListMember { get; set; }
         public int isJoin { get; set; }
         public Boolean isLead { get; set; }
+        public Boolean isFeed { get; set; }
         public int Status { get; set; }
     }
 }

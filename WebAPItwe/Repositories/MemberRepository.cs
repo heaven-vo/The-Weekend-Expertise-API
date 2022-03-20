@@ -77,9 +77,9 @@ namespace WebAPItwe.Repositories
         public async Task<object> CreateFeedback(string memberId, FeedbackModel feedback)
         {
             var session = await context.Sessions.FindAsync(feedback.SessionId);
-            if(session.Status == 3) {
-                var memberSessionId = await context.MemberSessions.Where(x => x.MemberId == memberId).Select(x => x.Id).FirstOrDefaultAsync();            
-                var memberSession = await context.MemberSessions.FindAsync(memberSessionId);
+            if(session.Status == 2) {
+                var memberSession = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == feedback.SessionId)
+                    .FirstOrDefaultAsync();            
                 String dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 if (memberSession != null)
                 {

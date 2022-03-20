@@ -11,8 +11,6 @@ namespace WebAPItwe.Models
         public double CafeVoting { get; set; }
         public string FeedbackOfMentor { get; set; }
         public string FeedbackOfCafe { get; set; }
-        public string DateMentorFeedback { get; set; }
-        public string DateCafeFeedback { get; set; }
         public string SessionId { get; set; }
     }
 }

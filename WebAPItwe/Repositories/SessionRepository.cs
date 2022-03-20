@@ -258,13 +258,14 @@ namespace WebAPItwe.Repositories
                     MaxPerson = x.MaxPerson,
                     Status = x.Status,
                     isJoin = 0,
-                    isLead = false
+                    isLead = false,
+                    isFeed = false
                 }).FirstOrDefaultAsync();
             sessionDetail.MajorName = await context.Majors.Where(x => x.Id == sessionDetail.MajorId).Select(x => x.Name).FirstOrDefaultAsync();
             sessionDetail.Cafe = await getCafeBySessionId(sessionId);
             sessionDetail.ListMentor = await getListMentor(sessionId);
             sessionDetail.ListMember = await getListMember(sessionId, true);
-            //
+            //Confirm is join session
             var join = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionDetail.SessionId).FirstOrDefaultAsync();
             if (join != null)
             {
@@ -272,6 +273,10 @@ namespace WebAPItwe.Repositories
                 if (join.Status == true)
                 {
                     sessionDetail.isJoin = 2;
+                    if(join.MentorVoting != 0 || join.FeedbackOfMentor != null)
+                    {
+                        sessionDetail.isFeed = true;
+                    }
                 }
             }
             //Confirm who what detail is leader
