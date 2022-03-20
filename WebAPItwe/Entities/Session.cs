@@ -33,6 +33,7 @@ namespace WebAPItwe.Entities
         public string CafeId { get; set; }
         public string CafeName { get; set; }
         public bool CafeActive { get; set; }
+        public int CurrentPerson { get; set; }
         public int Status { get; set; }
 
         public virtual Cafe Cafe { get; set; }

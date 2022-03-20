@@ -25,7 +25,7 @@ namespace WebAPItwe.Repositories
             
             var skill = await context.Skills.FindAsync(newSession.SkillId); 
             string cafeName = await context.Cafes.Where(x => x.Id == newSession.CafeId).Select(x => x.Name).FirstOrDefaultAsync();
-            
+            var member = await context.Members.FindAsync(newSession.MemberId);
             Session session = new Session
             {
                 Id = sessionId,
@@ -41,15 +41,16 @@ namespace WebAPItwe.Repositories
                 SubjectImage = skill.Image,
                 CafeId = newSession.CafeId,
                 CafeName = cafeName,
-                CafeActive = false
+                CafeActive = false,
+                CurrentPerson = 1
             };
             context.Add(session);
             var memberSession = new MemberSession
             {
                 Id = Guid.NewGuid().ToString(),
                 MemberId = newSession.MemberId,
-                MemberName = newSession.MemberName,
-                MemberImage = newSession.MemberImage,
+                MemberName = member.Fullname,
+                MemberImage = member.Image,
                 MentorVoting = 0,
                 CafeVoting = 0,
                 SessionId = sessionId,
@@ -69,7 +70,7 @@ namespace WebAPItwe.Repositories
 
         public async Task<object> LoadSession(string memberId, int pageIndex, int pageSize)
         {
-            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.CafeActive == false)
+            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.CafeActive == false).Where(x => x.CurrentPerson < 5)
                                 .Select(x => new SessionHomeModel
                                 {
                                     SessionId = x.Id,
@@ -108,7 +109,7 @@ namespace WebAPItwe.Repositories
         }
         public async Task<object> LoadSessionByMajor(string memberId, string majorId, int pageIndex, int pageSize)
         {
-            var listSessions = await context.Sessions.Where(x => x.Status == 1).Where(x => x.MajorId == majorId).Where(x => x.CafeActive == false)
+            var listSessions = await context.Sessions.Where(x => x.CurrentPerson < 5).Where(x => x.Status == 1).Where(x => x.MajorId == majorId).Where(x => x.CafeActive == false)
                                 .Select(x => new SessionHomeModel
                                 {
                                     SessionId = x.Id,
@@ -148,7 +149,7 @@ namespace WebAPItwe.Repositories
         public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where MajorId = {0} and Status = 1 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
+            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where CurrentPerson < 5 MajorId = {0} and Status = 1 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
                 .Select(x => new SessionHomeModel
                 {
                     SessionId = x.Id,
@@ -311,20 +312,37 @@ namespace WebAPItwe.Repositories
         public async Task<List<MentorInSessionModel>> getListMentor(string sessionId)
         {
             List<MentorInSessionModel> list = new List<MentorInSessionModel>();
-            var listMentorId = await context.MentorSessions.Where(x => x.SessionId == sessionId).Select(x => x.MentorId).ToListAsync();
-            
-            foreach (var mentorId in listMentorId)
+            var session = await context.Sessions.FindAsync(sessionId);
+            if(session.Status == 1 || session.Status == 2)
             {
-                var mentor = await context.Mentors.Where(x => x.Id == mentorId)
+                var mentor = await context.Mentors.Where(x => x.Id == session.MentorId)
                     .Select(x => new MentorInSessionModel
                     {
                         Id = x.Id,
-                        Name= x.Fullname,
+                        Name = x.Fullname,
                         Image = x.Image,
                         Rate = x.Rate
                     }).FirstOrDefaultAsync();
                 list.Add(mentor);
             }
+            else
+            {
+                var listMentorId = await context.MentorSessions.Where(x => x.SessionId == sessionId).Select(x => x.MentorId).ToListAsync();
+
+                foreach (var mentorId in listMentorId)
+                {
+                    var mentor = await context.Mentors.Where(x => x.Id == mentorId)
+                        .Select(x => new MentorInSessionModel
+                        {
+                            Id = x.Id,
+                            Name = x.Fullname,
+                            Image = x.Image,
+                            Rate = x.Rate
+                        }).FirstOrDefaultAsync();
+                    list.Add(mentor);
+                }
+            }           
+
             return list;
         }
         public async Task<List<MemberInSessionModel>> getListMember(string sessionId, bool status)
@@ -350,11 +368,19 @@ namespace WebAPItwe.Repositories
 
         public async Task AcceptSessionByMentor(string mentorId, string sessionId)
         {
-            var session = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
-            if (session != null)
+            var mentor = await context.Mentors.FindAsync(mentorId);
+            var session = await context.Sessions.Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            if (session != null && session.MentorId == null)
             {
+                session.MentorId = mentorId;
+                session.MentorName = mentor.Fullname;
+                session.Price = mentor.Price;
                 session.Status = 1;
                 context.Entry(session).State = EntityState.Modified;
+
+                var mentorSession = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+                mentorSession.Status = true;
+                context.Entry(mentorSession).State = EntityState.Modified;
                 try
                 {
                     await context.SaveChangesAsync();
@@ -364,15 +390,15 @@ namespace WebAPItwe.Repositories
                     throw;
                 }
             }
+            else throw new Exception("Conflic");
         }
 
         public async Task CancelSessionByMentor(string mentorId, string sessionId)
         {
-            var session = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
-            if (session != null)
+            var ms = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            if (ms != null && ms.Status == false)
             {
-                session.Status = 3;
-                context.Entry(session).State = EntityState.Modified;
+                context.MentorSessions.Remove(ms);
                 try
                 {
                     await context.SaveChangesAsync();
@@ -382,6 +408,23 @@ namespace WebAPItwe.Repositories
                     throw;
                 }
             }
+            else throw new Exception("Conflic");
         }
+        // Mentor Session --------------------------------------------------------------------------------
+        //public async Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize)
+        //{
+        //    var listSesson = await (from s in context.Sessions
+        //                            join ms in context.MentorSessions on s.Id equals ms.SessionId 
+        //                            where ms.MentorId == mentorId 
+        //                            select new 
+        //                            {
+        //                                s.Id,
+        //                                s.SubjectImage,
+        //                                s.SubjectName,
+        //                                s.Slot,
+        //                                s.Date,
+
+        //                            }).ToListAsync();
+        //}
     }
 }

@@ -24,13 +24,17 @@ namespace WebAPItwe.Repositories
             FcmToken fcm = new FcmToken { Id = Guid.NewGuid().ToString(), UserId = userId, Token = token };
             try
             {
-                context.Add(fcm);
                 var user = await context.Users.FindAsync(userId);
-                if(user != null)
+                if (user != null)
                 {
                     role = user.RoleId;
-                    await context.SaveChangesAsync();
                 }
+                var check = await context.FcmTokens.Where(x => x.UserId == userId).Where(x => x.Token == token).FirstOrDefaultAsync();
+                if(check != null)
+                {
+                    context.Add(fcm);
+                    await context.SaveChangesAsync();
+                }              
                 return role;
             }
             catch

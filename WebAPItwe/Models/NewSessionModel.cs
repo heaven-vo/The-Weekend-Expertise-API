@@ -10,8 +10,6 @@ namespace WebAPItwe.Models
         public List<string> ListMentor { get; set; }
         public string CafeId { get; set; }
         public string MemberId { get; set; }
-        public string MemberName { get; set; }
-        public string MemberImage { get; set; }
         public string Date { get; set; }
         public int Slot { get; set; }
         public string MajorId { get; set; }

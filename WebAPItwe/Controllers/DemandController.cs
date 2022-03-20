@@ -39,6 +39,7 @@ namespace WebAPItwe.Controllers
                 //get noti include: list user id and notification content
                 NotificationContentModel noti = await inMemberSessionRepository.JoinSession(memberId, sessionId);
                 //save notification to database
+                Console.WriteLine(noti.content);
                 await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
 
                 //push notification to user's deviece
