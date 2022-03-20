@@ -30,7 +30,7 @@ namespace WebAPItwe.Repositories
                     role = user.RoleId;
                 }
                 var check = await context.FcmTokens.Where(x => x.UserId == userId).Where(x => x.Token == token).FirstOrDefaultAsync();
-                if(check != null)
+                if(check == null)
                 {
                     context.Add(fcm);
                     await context.SaveChangesAsync();
@@ -49,8 +49,11 @@ namespace WebAPItwe.Repositories
             try
             {
                 var fcm = await context.FcmTokens.Where(x => x.UserId == userId).Where(x => x.Token == token).FirstOrDefaultAsync();
-                context.FcmTokens.Remove(fcm);
-                await context.SaveChangesAsync();
+                if(fcm != null)
+                {
+                    context.FcmTokens.Remove(fcm);
+                    await context.SaveChangesAsync();
+                }                
             }
             catch
             {
