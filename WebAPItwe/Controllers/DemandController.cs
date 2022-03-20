@@ -79,13 +79,19 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Leader of session accept request of memberId
         /// </summary>
-        [HttpDelete("{sessionId}/members/{memberId}/cancel")]
-        public async Task<ActionResult> CancelMember(string sessionId, string memberId)
+        [HttpDelete("{sessionId}/members/{memberId}/reject")]
+        public async Task<ActionResult> RejectMember(string sessionId, string memberId)
         {
+            string title = "Yêu cầu đã bị từ chối";
             try
             {
-                await inMemberSessionRepository.CancelMember(memberId, sessionId);
-                return NoContent();
+                NotificationContentModel noti = await inMemberSessionRepository.RejectMember(memberId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
             }
             catch
             {
@@ -97,12 +103,18 @@ namespace WebAPItwe.Controllers
         /// Cafe accept request of session
         /// </summary>
         [HttpPut("{sessionId}/mentors/{mentorId}/accept")]
-        public async Task<ActionResult> AcceptSessionByCafe(string sessionId, string mentorId)
+        public async Task<ActionResult> AcceptSessionByMentor(string sessionId, string mentorId)
         {
+            string title = "Meetup được xác nhận";
             try
             {
-                await sessionRepository.AcceptSessionByMentor(mentorId, sessionId);
-                return Ok();
+                NotificationContentModel noti = await sessionRepository.AcceptSessionByMentor(mentorId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
             }
             catch
             {
@@ -112,13 +124,19 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Cafe accept request of session
         /// </summary>
-        [HttpPut("{sessionId}/mentors/{mentorId}/cancel")]
-        public async Task<ActionResult> CancelSessionByCafe(string sessionId, string mentorId)
+        [HttpPut("{sessionId}/mentors/{mentorId}/reject")]
+        public async Task<ActionResult> RejectSessionByMentor(string sessionId, string mentorId)
         {
+            string title = "Meetup bị từ chối";
             try
             {
-                await sessionRepository.CancelSessionByMentor(mentorId, sessionId);
-                return Ok();
+                NotificationContentModel noti = await sessionRepository.RejectSessionByMentor(mentorId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
             }
             catch
             {

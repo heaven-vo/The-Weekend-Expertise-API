@@ -11,6 +11,6 @@ namespace WebAPItwe.InRepositories
         Task<Object> LoadHistory(string memberId, int pageIndex, int pageSize);
         Task<NotificationContentModel> JoinSession(string memberId, string sessionId);
         Task<NotificationContentModel> AcceptMember(string memberId, string sessionId);
-        Task CancelMember(string memberId, string sessionId);
+        Task<NotificationContentModel> RejectMember(string memberId, string sessionId);
     }
 }

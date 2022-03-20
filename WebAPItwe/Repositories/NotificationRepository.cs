@@ -28,6 +28,20 @@ namespace WebAPItwe.Repositories
             return listToken;
         }
 
+        public async Task<object> LoadNotification(string userId, int pageIndex, int pageSize)
+        {
+            var listNoti = await context.Notifications.OrderByDescending(x => x.Date).ThenByDescending(x => x.Time)
+                                .Where(x => x.UserId == userId).Select(x => new 
+                                {
+                                    x.Title,
+                                    x.ContentNoti,
+                                    x.Date,
+                                    x.Time,
+                                    x.SessionId
+                                }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            return listNoti;
+        }
+
         public async Task<object> SaveNotification(List<string> listUserId, string title, string content, string sessionId)
         {
             try

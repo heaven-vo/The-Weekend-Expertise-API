@@ -66,7 +66,7 @@ namespace WebAPItwe.Repositories
                     await context.SaveChangesAsync();
                     listUserId.Add(memberId);
                     notification.listUserId = listUserId;
-                    notification.content = "Yêu cầu tham gia vào meetup" + session.SubjectName + " đã được chấp nhận";
+                    notification.content = "Yêu cầu tham gia vào meetup " + session.SubjectName + " đã được chấp nhận";
                 }
                 catch
                 {
@@ -93,21 +93,28 @@ namespace WebAPItwe.Repositories
             return history;
         }
 
-        public async Task CancelMember(string memberId, string sessionId)
+        public async Task<NotificationContentModel> RejectMember(string memberId, string sessionId)
         {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
             var member = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
+            var sessionName = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.SubjectName).FirstOrDefaultAsync();
             if (member != null)
             {
                 context.MemberSessions.Remove(member);
                 try
                 {
                     await context.SaveChangesAsync();
+                    listUserId.Add(memberId);
+                    notification.listUserId = listUserId;
+                    notification.content = "Yêu cầu tham gia vào meetup " + sessionName + " bị từ chối";
                 }
                 catch
                 {
                     throw;
                 }
             }
+            return notification;
         }
     }
 }

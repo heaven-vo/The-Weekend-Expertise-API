@@ -18,6 +18,10 @@ namespace WebAPItwe.Controllers.Mentor
         {
             this.sessionRepository = sessionRepository;
         }
+
+        /// <summary>
+        /// Load the request session(status 0)
+        /// </summary>
         [HttpGet("{mentorId}/requests")]
         public async Task<ActionResult> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize)
         {
@@ -25,6 +29,9 @@ namespace WebAPItwe.Controllers.Mentor
             return Ok(result);
         }
 
+        /// <summary>
+        /// Load the session by status 1(going) or 2(done)
+        /// </summary>
         [HttpGet("{mentorId}/meetups")]
         public async Task<ActionResult> LoadSessionOfMentorByStatus(string mentorId, int status,int pageIndex, int pageSize)
         {

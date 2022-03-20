@@ -63,30 +63,22 @@ namespace WebAPItwe.Repositories
 
         public async Task RegisterMemberAccount(MemberRegisterModel member)
         {
-            var check = context.Users.Where(x => x.Email == member.Email).FirstOrDefault();
-            if(check == null)
+            context.Add(new User
             {
-                context.Add(new User
-                {
-                    Id = member.Id,
-                    Name = member.Name,
-                    Email = member.Email,
-                    Password = "123456",
-                    RoleId = "1",
-                    Status = true
-                });
-                try
-                {
-                   await context.SaveChangesAsync();
-                }
-                catch
-                {
-                    throw;
-                }
+                Id = member.Id,
+                Name = member.Name,
+                Email = member.Email,
+                Password = "123456",
+                RoleId = "1",
+                Status = true
+            });
+            try
+            {
+                await context.SaveChangesAsync();
             }
-            else
+            catch
             {
-                throw new Exception("Email already has used");
+                throw;
             }
         }
     }

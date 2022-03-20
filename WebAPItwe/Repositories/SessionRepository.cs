@@ -371,8 +371,10 @@ namespace WebAPItwe.Repositories
             return listMember;
         }
 
-        public async Task AcceptSessionByMentor(string mentorId, string sessionId)
+        public async Task<NotificationContentModel> AcceptSessionByMentor(string mentorId, string sessionId)
         {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
             var mentor = await context.Mentors.FindAsync(mentorId);
             var session = await context.Sessions.Where(x => x.Id == sessionId).FirstOrDefaultAsync();
             if (session != null && session.MentorId == null)
@@ -389,17 +391,24 @@ namespace WebAPItwe.Repositories
                 try
                 {
                     await context.SaveChangesAsync();
+                    listUserId.Add(session.MemberId);
+                    notification.listUserId = listUserId;
+                    notification.content = "Lời mời tham dự meetup " + session.SubjectName + " đã được mentor " + session.MentorName + " chấp nhận";
+                    return notification;
                 }
                 catch
                 {
                     throw;
                 }
             }
-            else throw new Exception("Conflic");
+            else throw new Exception("Conflict");
         }
 
-        public async Task CancelSessionByMentor(string mentorId, string sessionId)
+        public async Task<NotificationContentModel> RejectSessionByMentor(string mentorId, string sessionId)
         {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
+            var session = await context.Sessions.FindAsync(sessionId);
             var ms = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
             if (ms != null && ms.Status == false)
             {
@@ -407,13 +416,17 @@ namespace WebAPItwe.Repositories
                 try
                 {
                     await context.SaveChangesAsync();
+                    listUserId.Add(session.MemberId);
+                    notification.listUserId = listUserId;
+                    notification.content = "Lời mời tham dự meetup " + session.SubjectName + " đã bị mentor " + session.MentorName + " từ chối";
+                    return notification;
                 }
                 catch
                 {
                     throw;
                 }
             }
-            else throw new Exception("Conflic");
+            else throw new Exception("Conflict");
         }
         // Mentor Session --------------------------------------------------------------------------------
         public async Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize)

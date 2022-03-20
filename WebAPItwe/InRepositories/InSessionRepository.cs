@@ -16,8 +16,8 @@ namespace WebAPItwe.InRepositories
         Task<object> LoadMySessionByStatus(string memberId, int status, int pageIndex, int pageSize);
         Task<object> LoadSessionDetail(string memberId, string sessionId);
         Task<object> LoadRequestMember(string sessionId);
-        Task AcceptSessionByMentor(string mentorId, string sessionId);
-        Task CancelSessionByMentor(string mentorId, string sessionId);
+        Task<NotificationContentModel> AcceptSessionByMentor(string mentorId, string sessionId);
+        Task<NotificationContentModel> RejectSessionByMentor(string mentorId, string sessionId);
         public Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize);
         public Task<object> LoadSessionOfMentorByStatus(string mentorId, int status, int pageIndex, int pageSize);
     }
