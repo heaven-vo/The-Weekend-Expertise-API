@@ -409,7 +409,7 @@ namespace WebAPItwe.Repositories
             NotificationContentModel notification = new NotificationContentModel();
             List<string> listUserId = new List<string>();
             var session = await context.Sessions.FindAsync(sessionId);
-            var ms = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.Id == sessionId).FirstOrDefaultAsync();
+            var ms = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
             if (ms != null && ms.Status == false)
             {
                 context.MentorSessions.Remove(ms);
@@ -450,9 +450,29 @@ namespace WebAPItwe.Repositories
         }
         public async Task<object> LoadSessionOfMentorByStatus(string mentorId,int status ,int pageIndex, int pageSize)
         {
-            var listSession = await (from s in context.Sessions
+            var listSession = new Object();
+            if(status == 1 || status == 2)
+            {
+                listSession = await (from s in context.Sessions
+                                         join m in context.Members on s.MemberId equals m.Id
+                                         where s.MentorId == mentorId && s.Status == status
+                                         select new
+                                         {
+                                             s.Id,
+                                             s.SubjectImage,
+                                             s.SubjectName,
+                                             s.Slot,
+                                             s.Date,
+                                             memberName = m.Fullname,
+                                             s.CafeName,
+                                             s.Status
+                                         }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+            if(status == 3)
+            {
+                listSession = await (from s in context.Sessions
                                      join m in context.Members on s.MemberId equals m.Id
-                                     where s.MentorId == mentorId && s.Status == status
+                                     where s.MentorId == mentorId && (s.Status == 3 || s.Status == 4)
                                      select new
                                      {
                                          s.Id,
@@ -461,8 +481,10 @@ namespace WebAPItwe.Repositories
                                          s.Slot,
                                          s.Date,
                                          memberName = m.Fullname,
-                                         s.CafeName
+                                         s.CafeName,
+                                         s.Status
                                      }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
             return listSession;
         }
     }

@@ -77,7 +77,7 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
-        /// Leader of session accept request of memberId
+        /// Leader of session reject request of memberId
         /// </summary>
         [HttpDelete("{sessionId}/members/{memberId}/reject")]
         public async Task<ActionResult> RejectMember(string sessionId, string memberId)
@@ -100,7 +100,7 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
-        /// Cafe accept request of session
+        /// Mentor accept request of session
         /// </summary>
         [HttpPut("{sessionId}/mentors/{mentorId}/accept")]
         public async Task<ActionResult> AcceptSessionByMentor(string sessionId, string mentorId)
@@ -122,7 +122,7 @@ namespace WebAPItwe.Controllers
             }
         }
         /// <summary>
-        /// Cafe accept request of session
+        /// Mentor reject request
         /// </summary>
         [HttpPut("{sessionId}/mentors/{mentorId}/reject")]
         public async Task<ActionResult> RejectSessionByMentor(string sessionId, string mentorId)
@@ -143,5 +143,6 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }
         }
+        
     }
 }
