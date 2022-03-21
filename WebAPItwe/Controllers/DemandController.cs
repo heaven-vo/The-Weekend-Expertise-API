@@ -27,6 +27,7 @@ namespace WebAPItwe.Controllers
             this.inNotificationRepository = inNotificationRepository;
             _notificationService = notificationService;
         }
+
         /// <summary>
         /// Member push a request to join existed session
         /// </summary>
@@ -39,7 +40,6 @@ namespace WebAPItwe.Controllers
                 //get noti include: list user id and notification content
                 NotificationContentModel noti = await inMemberSessionRepository.JoinSession(memberId, sessionId);
                 //save notification to database
-                Console.WriteLine(noti.content);
                 await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
 
                 //push notification to user's deviece
@@ -53,6 +53,30 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }           
         }
+
+        /// <summary>
+        /// Member leave session
+        /// </summary>
+        [HttpPost("{sessionId}/members/{memberId}/leave")]
+        public async Task<ActionResult> LeaveSession(string sessionId, string memberId)
+        {
+            string title = "Hủy tham gia";
+            try
+            {
+                NotificationContentModel noti = await inMemberSessionRepository.LeaveSession(memberId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+
         /// <summary>
         /// Leader of session accept request of memberId
         /// </summary>
@@ -143,6 +167,28 @@ namespace WebAPItwe.Controllers
                 return Conflict();
             }
         }
-        
+
+        /// <summary>
+        /// Mentor or Member destroy session
+        /// </summary>
+        [HttpPut("{sessionId}/user/{userId}/Cancel")]
+        public async Task<ActionResult> CancelSession(string sessionId, string userId)
+        {
+            string title = "Meetup bị hủy";
+            try
+            {
+                NotificationContentModel noti = await sessionRepository.CancelSession(userId, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
     }
 }

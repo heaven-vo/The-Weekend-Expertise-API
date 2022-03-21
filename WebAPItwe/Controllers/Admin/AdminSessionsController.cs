@@ -29,7 +29,7 @@ namespace WebAPItwe.Controllers.Admin
             {
                 string dateCt = DateTime.Now.ToString("yyyy-MM-dd");
                 var listSessions = await _context.Sessions
-                                 .Where(c => c.Status == 3).Where(c => c.Date == dateCt)
+                                 .Where(c => c.Status == 2).Where(c => c.Date == dateCt)
                                  .Select(c => new SessionMeetingModel
 
                                  {

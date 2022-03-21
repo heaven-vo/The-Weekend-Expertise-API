@@ -30,7 +30,7 @@ namespace WebAPItwe.Controllers.Mentor
         }
 
         /// <summary>
-        /// Load the session by status 1(going) or 2(done)
+        /// Load the session by status 1(going) or 2(done) or 3 (cancel, reporting)
         /// </summary>
         [HttpGet("{mentorId}/meetups")]
         public async Task<ActionResult> LoadSessionOfMentorByStatus(string mentorId, int status,int pageIndex, int pageSize)

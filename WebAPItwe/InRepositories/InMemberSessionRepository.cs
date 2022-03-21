@@ -12,5 +12,6 @@ namespace WebAPItwe.InRepositories
         Task<NotificationContentModel> JoinSession(string memberId, string sessionId);
         Task<NotificationContentModel> AcceptMember(string memberId, string sessionId);
         Task<NotificationContentModel> RejectMember(string memberId, string sessionId);
+        public Task<NotificationContentModel> LeaveSession(string memberId, string sessionId);
     }
 }

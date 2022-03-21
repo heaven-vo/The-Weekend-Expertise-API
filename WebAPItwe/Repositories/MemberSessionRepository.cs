@@ -116,5 +116,31 @@ namespace WebAPItwe.Repositories
             }
             return notification;
         }
+
+        public async Task<NotificationContentModel> LeaveSession(string memberId, string sessionId)
+        {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
+            try
+            {
+                var session = await context.Sessions.FindAsync(sessionId);
+                var member = await context.MemberSessions.Where(x => x.MemberId == memberId)
+                    .Where(x => x.SessionId == sessionId).Where(x => x.Status == true).FirstOrDefaultAsync();
+                if(member != null)
+                {
+                    session.CurrentPerson -= 1;
+                    context.MemberSessions.Remove(member);
+                    await context.SaveChangesAsync();
+                    listUserId.Add(session.MentorId);
+                    notification.listUserId = listUserId;
+                    notification.content = member.MemberName + " đã rời khỏi meetup " + session.SubjectName;
+                }
+            }
+            catch
+            {
+                throw;
+            }
+            return notification;
+        }
     }
 }

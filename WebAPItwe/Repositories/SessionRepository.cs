@@ -371,6 +371,7 @@ namespace WebAPItwe.Repositories
             return listMember;
         }
 
+        //------------------------------------------------------------------------------------------------------------
         public async Task<NotificationContentModel> AcceptSessionByMentor(string mentorId, string sessionId)
         {
             NotificationContentModel notification = new NotificationContentModel();
@@ -428,6 +429,43 @@ namespace WebAPItwe.Repositories
             }
             else throw new Exception("Conflict");
         }
+
+        public async Task<NotificationContentModel> CancelSession(string userId, string sessionId)
+        {
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
+            var member = await context.Members.FindAsync(userId);
+            var session = await context.Sessions.FindAsync(sessionId);
+            session.Status = 3;
+            context.Entry(session).State = EntityState.Modified;
+            try
+            {
+                if (member != null)
+                {           
+                    var listMemberId = await context.MemberSessions.Where(x => x.SessionId == sessionId).Where(x => x.Status == true).Select(x => x.MemberId).ToListAsync();
+                    listUserId = listMemberId;
+                    listUserId.Add(session.MentorId);
+                    listUserId.Remove(userId);
+                    notification.content = "Meetup " + session.SubjectName + " đã bị hủy bởi " + member.Fullname;
+                }
+                else
+                {
+                    var listMemberId = await context.MemberSessions.Where(x => x.SessionId == sessionId).Where(x => x.Status == true).Select(x => x.MemberId).ToListAsync();
+                    listUserId = listMemberId;
+                    notification.content = "Meetup " + session.SubjectName + " đã bị hủy bởi mentor " + session.MentorName;
+                }
+                await context.SaveChangesAsync();
+                notification.listUserId = listUserId;
+                
+            }
+            catch
+            {
+                throw;
+            }
+            
+            return notification;
+        }
+       
         // Mentor Session --------------------------------------------------------------------------------
         public async Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize)
         {
@@ -448,42 +486,65 @@ namespace WebAPItwe.Repositories
                                     }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return listSession;
         }
+
+        class MentorSessionModel
+        {
+            public string Id { get; set; }
+            public string? SessionName { get; set; }
+            public string  SessionImage { get; set; }
+            public int Slot  { get; set; }
+            public string Date { get; set; }
+            public string CafeName { get; set; }
+            public int Status { get; set; }
+            public List<string> ListImage { get; set; }
+    }
+
         public async Task<object> LoadSessionOfMentorByStatus(string mentorId,int status ,int pageIndex, int pageSize)
         {
-            var listSession = new Object();
+            var listSession = new List<MentorSessionModel>();
             if(status == 1 || status == 2)
             {
                 listSession = await (from s in context.Sessions
                                          join m in context.Members on s.MemberId equals m.Id
                                          where s.MentorId == mentorId && s.Status == status
-                                         select new
+                                         select new MentorSessionModel
                                          {
-                                             s.Id,
-                                             s.SubjectImage,
-                                             s.SubjectName,
-                                             s.Slot,
-                                             s.Date,
-                                             memberName = m.Fullname,
-                                             s.CafeName,
-                                             s.Status
-                                         }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                                             Id = s.Id,
+                                             SessionImage = s.SubjectImage,
+                                             SessionName = s.SubjectName,
+                                             Slot = s.Slot,
+                                             Date = s.Date,
+                                             CafeName = s.CafeName,
+                                             Status = s.Status
+                                         }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();   
+                foreach(var session in listSession)
+                {
+                    var listImage = await context.MemberSessions.Where(x => x.SessionId == session.Id).Where(x => x.Status == true)
+                        .Select(x => x.MemberImage).ToListAsync();
+                    session.ListImage = listImage;
+                }
             }
             if(status == 3)
             {
                 listSession = await (from s in context.Sessions
                                      join m in context.Members on s.MemberId equals m.Id
                                      where s.MentorId == mentorId && (s.Status == 3 || s.Status == 4)
-                                     select new
+                                     select new MentorSessionModel
                                      {
-                                         s.Id,
-                                         s.SubjectImage,
-                                         s.SubjectName,
-                                         s.Slot,
-                                         s.Date,
-                                         memberName = m.Fullname,
-                                         s.CafeName,
-                                         s.Status
+                                         Id = s.Id,
+                                         SessionImage = s.SubjectImage,
+                                         SessionName = s.SubjectName,
+                                         Slot = s.Slot,
+                                         Date = s.Date,
+                                         CafeName = s.CafeName,
+                                         Status = s.Status
                                      }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                foreach (var session in listSession)
+                {
+                    var listImage = await context.MemberSessions.Where(x => x.SessionId == session.Id).Where(x => x.Status == true)
+                        .Select(x => x.MemberImage).ToListAsync();
+                    session.ListImage = listImage;
+                }
             }
             return listSession;
         }
