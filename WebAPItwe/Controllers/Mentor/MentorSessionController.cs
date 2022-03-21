@@ -38,5 +38,14 @@ namespace WebAPItwe.Controllers.Mentor
             var result = await sessionRepository.LoadSessionOfMentorByStatus(mentorId, status,pageIndex, pageSize);
             return Ok(result);
         }
+
+        /// <summary>
+        /// Load the number of request and meet
+        /// </summary>
+        [HttpGet("{mentorId}/number_home")]
+        public async Task<object> LoadNumberSessionMentor(string mentorId)
+        {
+            return Ok(await sessionRepository.LoadNumberSessionMentor(mentorId));
+        }
     }
 }
