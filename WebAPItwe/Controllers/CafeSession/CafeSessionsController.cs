@@ -29,7 +29,7 @@ namespace WebAPItwe.Controllers.Cafe
             {
                 string dateCt = DateTime.Now.ToString("yyyy-MM-dd");
                 var listSessions = await _context.Sessions
-                                 .Where(c => c.Status == 3).Where(c => c.Date == dateCt)
+                                 .Where(c => c.Status == 2).Where(c => c.Date == dateCt)
                                  .Select(c => new SessionMeetingModel
 
                                  {
@@ -122,7 +122,7 @@ namespace WebAPItwe.Controllers.Cafe
             try
             {
                 var listSessions = await _context.Sessions
-                                 .Where(c => c.Status == 3 || c.Status == 4)
+                                 .Where(c => c.Status == 2 || c.Status == 3)
                                  .Select(c => new SessionMeetingModel
 
                                  {
