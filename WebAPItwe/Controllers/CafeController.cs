@@ -117,6 +117,42 @@ namespace WebAPItwe.Controllers
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
+        //GET: api/v1/cafe/byName?name=xxx
+        /// <summary>
+        /// Search cafe by Distric
+        /// </summary>
+        [HttpGet("Distric")]
+        public async Task<ActionResult<CafeModel>> GetByDistric(string distric)
+        {
+            try
+            {
+                var result = await (from Cafe in _context.Cafes
+                                    where Cafe.Distric.Contains(distric)   
+                                    select new
+                                    {
+                                        Cafe.Id,
+                                        Cafe.Name,
+                                        Cafe.Image,
+                                        Cafe.OpenTime,
+                                        Cafe.CloseTime,
+                                        Cafe.Street,
+                                        Cafe.Distric,
+                                        Cafe.Description,
+                                        Cafe.Rate
+                                    }
+                               ).ToListAsync();
+                if (!result.Any())
+                {
+                    return BadRequest(new { StatusCode = 404, message = "Name is not found!" });
+                }
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409, new { StatusCode = 409, message = ex.Message });
+            }
+        }
         /// <summary>
         /// Update cafe by Id
         /// </summary>
