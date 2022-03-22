@@ -149,7 +149,7 @@ namespace WebAPItwe.Repositories
         public async Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize)
         {
             string majorId = await context.Members.Where(x => x.Id == memberId).Select(x => x.MajorId).FirstOrDefaultAsync();
-            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where CurrentPerson < 5 MajorId = {0} and Status = 1 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
+            var listSessions = await context.Sessions.FromSqlRaw("Select * from Session where CurrentPerson < 5 and MajorId = {0} and Status = 1 and CafeActive = 0 and Session.Id not in (select SessionId from MemberSession where MemberId = {1})", majorId, memberId)
                 .Select(x => new SessionHomeModel
                 {
                     SessionId = x.Id,
@@ -378,7 +378,7 @@ namespace WebAPItwe.Repositories
             List<string> listUserId = new List<string>();
             var mentor = await context.Mentors.FindAsync(mentorId);
             var session = await context.Sessions.Where(x => x.Id == sessionId).FirstOrDefaultAsync();
-            if (session != null && session.MentorId == null)
+            if (session != null && session.MentorId == null && session.Status == 0)
             {
                 session.MentorId = mentorId;
                 session.MentorName = mentor.Fullname;
