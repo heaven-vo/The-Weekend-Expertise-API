@@ -42,6 +42,7 @@ namespace WebAPItwe.Repositories
                 // add leader id
                 var session = await context.Sessions.FindAsync(sessionId);
                 listUserId.Add(session.MemberId);
+                notification.image = member.Image;
                 notification.content = memberSession.MemberName + " yêu cầu tham gia vào meetup " + session.SubjectName + " của bạn";
                 notification.listUserId = listUserId;
             }
@@ -65,6 +66,7 @@ namespace WebAPItwe.Repositories
                 {
                     await context.SaveChangesAsync();
                     listUserId.Add(memberId);
+                    notification.image = session.SubjectImage;
                     notification.listUserId = listUserId;
                     notification.content = "Yêu cầu tham gia vào meetup " + session.SubjectName + " đã được chấp nhận";
                 }
@@ -98,7 +100,7 @@ namespace WebAPItwe.Repositories
             NotificationContentModel notification = new NotificationContentModel();
             List<string> listUserId = new List<string>();
             var member = await context.MemberSessions.Where(x => x.MemberId == memberId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
-            var sessionName = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.SubjectName).FirstOrDefaultAsync();
+            var session = await context.Sessions.FindAsync(sessionId);
             if (member != null)
             {
                 context.MemberSessions.Remove(member);
@@ -106,8 +108,9 @@ namespace WebAPItwe.Repositories
                 {
                     await context.SaveChangesAsync();
                     listUserId.Add(memberId);
+                    notification.image = session.SubjectImage;
                     notification.listUserId = listUserId;
-                    notification.content = "Yêu cầu tham gia vào meetup " + sessionName + " bị từ chối";
+                    notification.content = "Yêu cầu tham gia vào meetup " + session.SubjectName + " bị từ chối";
                 }
                 catch
                 {
@@ -132,6 +135,7 @@ namespace WebAPItwe.Repositories
                     context.MemberSessions.Remove(member);
                     await context.SaveChangesAsync();
                     listUserId.Add(session.MentorId);
+                    notification.image = member.MemberImage;
                     notification.listUserId = listUserId;
                     notification.content = member.MemberName + " đã rời khỏi meetup " + session.SubjectName;
                 }

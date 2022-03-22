@@ -33,6 +33,7 @@ namespace WebAPItwe.Repositories
             var listNoti = await context.Notifications.OrderByDescending(x => x.Date).ThenByDescending(x => x.Time)
                                 .Where(x => x.UserId == userId).Select(x => new 
                                 {
+                                    x.Image,
                                     x.Title,
                                     x.ContentNoti,
                                     x.Date,
@@ -42,7 +43,7 @@ namespace WebAPItwe.Repositories
             return listNoti;
         }
 
-        public async Task<object> SaveNotification(List<string> listUserId, string title, string content, string sessionId)
+        public async Task<object> SaveNotification(List<string> listUserId,string image ,string title, string content, string sessionId)
         {
             try
             {
@@ -52,7 +53,7 @@ namespace WebAPItwe.Repositories
                 foreach (var userId in listUserId)
                 {
 
-                    Notification noti = new Notification { Id = Guid.NewGuid().ToString(), Date = date, Time = time,
+                    Notification noti = new Notification { Id = Guid.NewGuid().ToString(), Date = date, Time = time, Image = image,
                                                             ContentNoti = content, Title = title, UserId = userId, SessionId = sessionId};
                     context.Add(noti);
                 }

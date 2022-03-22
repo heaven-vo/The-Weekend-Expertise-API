@@ -40,7 +40,7 @@ namespace WebAPItwe.Controllers
                 //get noti include: list user id and notification content
                 NotificationContentModel noti = await inMemberSessionRepository.JoinSession(memberId, sessionId);
                 //save notification to database
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image,title, noti.content, sessionId);
 
                 //push notification to user's deviece
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
@@ -64,7 +64,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await inMemberSessionRepository.LeaveSession(memberId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image,title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
@@ -87,7 +87,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await inMemberSessionRepository.AcceptMember(memberId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image, title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
@@ -110,7 +110,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await inMemberSessionRepository.RejectMember(memberId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image, title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
@@ -133,7 +133,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await sessionRepository.AcceptSessionByMentor(mentorId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image, title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
@@ -155,7 +155,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await sessionRepository.RejectSessionByMentor(mentorId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image, title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
@@ -178,7 +178,7 @@ namespace WebAPItwe.Controllers
             try
             {
                 NotificationContentModel noti = await sessionRepository.CancelSession(userId, sessionId);
-                await inNotificationRepository.SaveNotification(noti.listUserId, title, noti.content, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image,title, noti.content, sessionId);
 
                 var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };

@@ -393,6 +393,7 @@ namespace WebAPItwe.Repositories
                 {
                     await context.SaveChangesAsync();
                     listUserId.Add(session.MemberId);
+                    notification.image = mentor.Image;
                     notification.listUserId = listUserId;
                     notification.content = "Lời mời tham dự meetup " + session.SubjectName + " đã được mentor " + session.MentorName + " chấp nhận";
                     return notification;
@@ -409,6 +410,7 @@ namespace WebAPItwe.Repositories
         {
             NotificationContentModel notification = new NotificationContentModel();
             List<string> listUserId = new List<string>();
+            var mentor = await context.Mentors.FindAsync(mentorId);
             var session = await context.Sessions.FindAsync(sessionId);
             var ms = await context.MentorSessions.Where(x => x.MentorId == mentorId).Where(x => x.SessionId == sessionId).FirstOrDefaultAsync();
             if (ms != null && ms.Status == false)
@@ -418,6 +420,7 @@ namespace WebAPItwe.Repositories
                 {
                     await context.SaveChangesAsync();
                     listUserId.Add(session.MemberId);
+                    notification.image = mentor.Image;
                     notification.listUserId = listUserId;
                     notification.content = "Lời mời tham dự meetup " + session.SubjectName + " đã bị mentor " + session.MentorName + " từ chối";
                     return notification;
@@ -446,12 +449,15 @@ namespace WebAPItwe.Repositories
                     listUserId = listMemberId;
                     listUserId.Add(session.MentorId);
                     listUserId.Remove(userId);
+                    notification.image = member.Image;
                     notification.content = "Meetup " + session.SubjectName + " đã bị hủy bởi " + member.Fullname;
                 }
                 else
                 {
+                    var mentor = await context.Mentors.FindAsync(userId);
                     var listMemberId = await context.MemberSessions.Where(x => x.SessionId == sessionId).Where(x => x.Status == true).Select(x => x.MemberId).ToListAsync();
                     listUserId = listMemberId;
+                    notification.image = mentor.Image;
                     notification.content = "Meetup " + session.SubjectName + " đã bị hủy bởi mentor " + session.MentorName;
                 }
                 await context.SaveChangesAsync();

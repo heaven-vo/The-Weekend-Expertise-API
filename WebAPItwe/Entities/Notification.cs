@@ -16,6 +16,7 @@ namespace WebAPItwe.Entities
         public string Time { get; set; }
         public string SessionId { get; set; }
         public string UserId { get; set; }
+        public string Image { get; set; }
         public virtual User User { get; set; }
     }
 }
