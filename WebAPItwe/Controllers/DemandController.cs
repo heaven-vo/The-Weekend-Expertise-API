@@ -171,7 +171,7 @@ namespace WebAPItwe.Controllers
         /// <summary>
         /// Mentor or Member destroy session
         /// </summary>
-        [HttpPut("{sessionId}/user/{userId}/Cancel")]
+        [HttpPut("{sessionId}/user/{userId}/cancel")]
         public async Task<ActionResult> CancelSession(string sessionId, string userId)
         {
             string title = "Meetup bị hủy";
@@ -184,6 +184,22 @@ namespace WebAPItwe.Controllers
                 var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
                 var result = await _notificationService.SendNotification(notificationModel);
                 return Ok(result);
+            }
+            catch
+            {
+                return Conflict();
+            }
+        }
+        /// <summary>
+        /// Mentor confirm the meetup is completed
+        /// </summary>
+        [HttpPut("{sessionId}/mentor/{mentorId}/complete")]
+        public async Task<ActionResult> CompleteSession(string sessionId, string mentorId)
+        {
+            try
+            {
+                await sessionRepository.CompleteSession(mentorId, sessionId);
+                return Ok();
             }
             catch
             {

@@ -471,6 +471,24 @@ namespace WebAPItwe.Repositories
 
             return notification;
         }
+        public async Task CompleteSession(string mentorId, string sessionId)
+        {
+            try
+            {
+                var session = await context.Sessions.Where(x => x.Id == sessionId).Where(x => x.MentorId == mentorId)
+                    .Where(x => x.Status == 1).FirstOrDefaultAsync();
+                if(session != null)
+                {
+                    session.Status = 2;
+                    context.Entry(session).State = EntityState.Modified;
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
 
         // Mentor Session --------------------------------------------------------------------------------
         public async Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize)
