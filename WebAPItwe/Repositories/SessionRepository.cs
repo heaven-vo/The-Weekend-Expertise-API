@@ -251,11 +251,12 @@ namespace WebAPItwe.Repositories
 
         public async Task<object> LoadTodaySession(string memberId)
         {
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
             var slot = getCurrentSlot();
             var session = await (from se in context.Sessions
                                  join ms in context.MemberSessions on se.Id equals ms.SessionId
                                  join cf in context.Cafes on se.CafeId equals cf.Id
-                                 where ms.MemberId == memberId && se.Status == 1 && se.Slot > slot
+                                 where ms.MemberId == memberId && se.Status == 1 && se.Date == date && se.Slot > slot
                                  orderby se.Slot ascending
                                  select new SessionTodayModel
                                  {
@@ -274,29 +275,40 @@ namespace WebAPItwe.Repositories
             }     
             return session;
         }
-
-        public async Task<object> LoadTodaySessionOfMentor(string memberId)
+        public class TodayMeet
         {
+            public string Id { get; set; }
+            public string SessionImage { get; set; }
+            public string SessionName { get; set; }
+            public string Date { get; set; }
+            public int Slot { get; set; }
+            public string CafeName { get; set; }
+            public string MemberName { get; set; }
+
+        }
+
+        public async Task<object> LoadTodaySessionOfMentor(string mentorId)
+        {
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
             var slot = getCurrentSlot();
             var session = await (from se in context.Sessions
-                                 join ms in context.MemberSessions on se.Id equals ms.SessionId
                                  join cf in context.Cafes on se.CafeId equals cf.Id
-                                 where ms.MemberId == memberId && se.Status == 1 && se.Slot > slot
+                                 where se.MemberId == mentorId && se.Date == date && se.Status == 1 && se.Slot > slot
                                  orderby se.Slot ascending
-                                 select new SessionTodayModel
+                                 select new TodayMeet
                                  {
                                      Id = se.Id,
                                      SessionImage = se.SubjectImage,
                                      SessionName = se.SubjectName,
                                      Slot = se.Slot,
                                      Date = se.Date,
-                                     CafeName = cf.Name
+                                     CafeName = cf.Name,
+                                     MemberName = se.MemberId
                                  }).FirstOrDefaultAsync();
             if (session != null)
             {
-                var mentorId = context.Sessions.Where(x => x.Id == session.Id).Select(x => x.MentorId).FirstOrDefault();
-                var mentor = await context.Mentors.FindAsync(mentorId);
-                session.Mentor = new MentorInSessionModel { Id = mentor.Id, Image = mentor.Image, Name = mentor.Fullname, Rate = mentor.Rate };
+                var name = await context.Members.Where(x => x.Id == session.MemberName).Select(x => x.Fullname).FirstOrDefaultAsync();
+                session.MemberName = name;
             }
             return session;
         }
@@ -686,6 +698,23 @@ namespace WebAPItwe.Repositories
             var meetup = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Status == 1).ToListAsync();
             var number = new number{ request = request.Count(), meetup = meetup.Count() };
             return number;
+        }
+        public class TopSkill
+        {
+            public string Id { get; set; }
+            public string Image{ get; set; }
+            public string Name { get; set; }
+        }
+        public async Task<object> LoadTopSkill(string mentorId)
+        {
+            var top = new List<TopSkill>();
+            var listSkillId = await context.Sessions.FromSqlRaw("select top 3 SubjectId, count(SubjectId) as sn from Session where Status = 2 and MentorId = {0} group by SubjectId order by sn desc", mentorId).Select(x => x.SubjectId).Take(3).ToListAsync();
+            foreach(var id in listSkillId)
+            {
+                var skill = await context.Skills.FindAsync(id);
+                top.Add(new TopSkill { Id = skill.Id, Image = skill.Image, Name = skill.Name });
+            }
+            return top;
         }
     }
 }

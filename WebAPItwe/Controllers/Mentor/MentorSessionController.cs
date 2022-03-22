@@ -40,6 +40,16 @@ namespace WebAPItwe.Controllers.Mentor
         }
 
         /// <summary>
+        /// Load the session in today
+        /// </summary>
+        [HttpGet("{mentorId}/today_meetup")]
+        public async Task<ActionResult> LoadTodayOfMentor(string mentorId)
+        {
+            var result = await sessionRepository.LoadTodaySessionOfMentor(mentorId);
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Load the number of request and meet
         /// </summary>
         [HttpGet("{mentorId}/number_home")]
@@ -51,10 +61,10 @@ namespace WebAPItwe.Controllers.Mentor
         /// <summary>
         /// Top skill had booked
         /// </summary>
-        [HttpGet("{mentorId}/skill")]
+        [HttpGet("{mentorId}/top_skill")]
         public async Task<object> LoadTopSkill(string mentorId)
         {
-            return Ok();
+            return Ok(await sessionRepository.LoadTopSkill(mentorId));
         }
     }
 }

@@ -15,6 +15,7 @@ namespace WebAPItwe.InRepositories
         Task<object> LoadSessionByMajor(string memberId, string majorId, int pageIndex, int pageSize);
         Task<object> LoadMySessionByStatus(string memberId, int status, int pageIndex, int pageSize);
         Task<object> LoadTodaySession(string memberId);
+        Task<object> LoadTodaySessionOfMentor(string mentorId);
         Task<object> LoadSessionDetail(string memberId, string sessionId);
         Task<object> LoadRequestMember(string sessionId);
         Task<NotificationContentModel> AcceptSessionByMentor(string mentorId, string sessionId);
@@ -24,5 +25,6 @@ namespace WebAPItwe.InRepositories
         Task<object> LoadRequestOfMentor(string mentorId, int pageIndex, int pageSize);
         Task<object> LoadSessionOfMentorByStatus(string mentorId, int status, int pageIndex, int pageSize);
         Task<object> LoadNumberSessionMentor(string mentorId);
+        Task<object> LoadTopSkill(string mentorId);
     }
 }

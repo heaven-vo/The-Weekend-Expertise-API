@@ -22,7 +22,7 @@ namespace WebAPItwe.Controllers.Cafe
         }
 
        // GET: api/v1/cafe? pageIndex = 1 & pageSize = 3
-        /// < summary >
+        /// <summary>
        /// Get list all cafe with pagination.
         /// </summary>
             [HttpGet]
