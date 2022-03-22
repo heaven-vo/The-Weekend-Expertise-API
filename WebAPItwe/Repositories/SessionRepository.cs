@@ -18,14 +18,18 @@ namespace WebAPItwe.Repositories
             this.context = context;
         }
 
-        public async Task CreateNewSession(NewSessionModel newSession)
+        public async Task<NotificationContentModel> CreateNewSession(NewSessionModel newSession, string sessionId)
         {
-            string sessionId = Guid.NewGuid().ToString();
+            NotificationContentModel notification = new NotificationContentModel();
+            List<string> listUserId = new List<string>();
             string dateCreated = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             var skill = await context.Skills.FindAsync(newSession.SkillId);
             string cafeName = await context.Cafes.Where(x => x.Id == newSession.CafeId).Select(x => x.Name).FirstOrDefaultAsync();
             var member = await context.Members.FindAsync(newSession.MemberId);
+            notification.image = member.Image;
+            notification.content = member.Fullname + " đã mời bạn bạn tham gia buổi meetup " + skill.Name;
+            notification.listUserId = newSession.ListMentor;
             Session session = new Session
             {
                 Id = sessionId,
@@ -66,6 +70,7 @@ namespace WebAPItwe.Repositories
             var payment = new Payment { Id = Guid.NewGuid().ToString(), Amount = newSession.Payments.Amount, Type = newSession.Payments.Type, SessionId = sessionId, Status = "true" };
             context.Add(payment);
             await context.SaveChangesAsync();
+            return notification;
         }
 
         public async Task<object> LoadSession(string memberId, int pageIndex, int pageSize)

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using WebAPItwe.Entities;
 using WebAPItwe.InRepositories;
 using WebAPItwe.Models;
+using WebAPItwe.Services;
 
 namespace WebAPItwe.Controllers
 {
@@ -16,10 +17,14 @@ namespace WebAPItwe.Controllers
     public class SessionController : ControllerBase
     {
         private readonly InSessionRepository sessionRepository;
+        private readonly InNotificationRepository inNotificationRepository;
+        private readonly INotificationService _notificationService;
 
-        public SessionController(InSessionRepository sessionRepository)
+        public SessionController(InSessionRepository sessionRepository, InNotificationRepository inNotificationRepository, INotificationService notificationService)
         {
             this.sessionRepository = sessionRepository;
+            this.inNotificationRepository = inNotificationRepository;
+            _notificationService = notificationService;
         }
         /// <summary>
         /// Create new Session 
@@ -27,10 +32,17 @@ namespace WebAPItwe.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateNewSession(NewSessionModel newSession)
         {
+            string title = "Mời tham gia";
             try
             {
-                await sessionRepository.CreateNewSession(newSession);
-                return Ok();
+                string sessionId = Guid.NewGuid().ToString();
+                NotificationContentModel noti = await sessionRepository.CreateNewSession(newSession, sessionId);
+                await inNotificationRepository.SaveNotification(noti.listUserId, noti.image, title, noti.content, sessionId);
+
+                var listToken = await inNotificationRepository.getUserToken(noti.listUserId);
+                var notificationModel = new NotificationModel { DeviceId = listToken, Title = "Toad learn", Body = noti.content };
+                var result = await _notificationService.SendNotification(notificationModel);
+                return Ok(result);
             }
             catch
             {

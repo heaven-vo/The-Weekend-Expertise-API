@@ -8,7 +8,7 @@ namespace WebAPItwe.InRepositories
 {
     public interface InSessionRepository
     {
-        Task CreateNewSession(NewSessionModel newSession);
+        Task<NotificationContentModel> CreateNewSession(NewSessionModel newSession, string sessionId);
         Task<object> LoadSession(string memberId, int pageIndex, int pageSize);
         Task<object> LoadRecommendSession(string memberId, int pageIndex, int pageSize);
         Task<object> LoadMySession(string memberId, int pageIndex, int pageSize);
