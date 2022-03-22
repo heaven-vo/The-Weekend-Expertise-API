@@ -47,5 +47,14 @@ namespace WebAPItwe.Controllers.Mentor
         {
             return Ok(await sessionRepository.LoadNumberSessionMentor(mentorId));
         }
+
+        /// <summary>
+        /// Top skill had booked
+        /// </summary>
+        [HttpGet("{mentorId}/skill")]
+        public async Task<object> LoadTopSkill(string mentorId)
+        {
+            return Ok();
+        }
     }
 }
