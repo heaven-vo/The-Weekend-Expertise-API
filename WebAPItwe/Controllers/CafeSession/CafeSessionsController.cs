@@ -20,8 +20,11 @@ namespace WebAPItwe.Controllers.Cafe
         {
             _context = context;
         }
-
-        [HttpGet("/done")]
+        //GET: api/Sessions
+        /// <summary>
+        /// Get list Meeting Done with  pagination
+        /// </summary>
+        [HttpGet("done")]
         public async Task<ActionResult<IEnumerable<Session>>> LoadSessionsCafe(int pageIndex = 1, int pageSize = 5)
         {
 
@@ -29,7 +32,7 @@ namespace WebAPItwe.Controllers.Cafe
             {
                 string dateCt = DateTime.Now.ToString("yyyy-MM-dd");
                 var listSessions = await _context.Sessions
-                                 .Where(c => c.Status == 3).Where(c => c.Date == dateCt)
+                                 .Where(c => c.Status == 2).Where(c => c.Date == dateCt)
                                  .Select(c => new SessionMeetingModel
 
                                  {
@@ -38,6 +41,7 @@ namespace WebAPItwe.Controllers.Cafe
                                      SubjectImage = c.SubjectImage,
                                      MentorName = c.MentorName,
                                      CafeName = c.CafeName,
+                                     Slot = c.Slot,
                                      Price = c.Price,
                                      Date = c.Date,
                                      Status = c.Status
@@ -86,6 +90,7 @@ namespace WebAPItwe.Controllers.Cafe
                                      SubjectImage = c.SubjectImage,
                                      MentorName = c.MentorName,
                                      CafeName = c.CafeName,
+                                     Slot = c.Slot,
                                      Price = c.Price,
                                      Date = c.Date,
                                      Status = c.Status
@@ -115,14 +120,18 @@ namespace WebAPItwe.Controllers.Cafe
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
-        [HttpGet("/history")]
+        //GET: api/Sessions
+        /// <summary>
+        /// Get History list Meeting with  pagination
+        /// </summary>
+        [HttpGet("history")]
         public async Task<ActionResult<IEnumerable<Session>>> LoadHistorySessionsCafe(int pageIndex = 1, int pageSize = 5)
         {
 
             try
             {
                 var listSessions = await _context.Sessions
-                                 .Where(c => c.Status == 3 || c.Status == 4)
+                                 .Where(c => c.Status == 2 || c.Status == 3)
                                  .Select(c => new SessionMeetingModel
 
                                  {
@@ -131,6 +140,7 @@ namespace WebAPItwe.Controllers.Cafe
                                      SubjectImage = c.SubjectImage,
                                      MentorName = c.MentorName,
                                      CafeName = c.CafeName,
+                                     Slot = c.Slot,
                                      Price = c.Price,
                                      Date = c.Date,
                                      Status = c.Status

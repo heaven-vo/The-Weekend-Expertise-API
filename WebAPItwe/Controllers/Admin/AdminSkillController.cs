@@ -35,6 +35,7 @@ namespace WebAPItwe.Controllers
                                      {
                                          Id = c.Id,
                                          Name = c.Name,
+                                         Image = c.Image
 
                                      }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
@@ -59,7 +60,8 @@ namespace WebAPItwe.Controllers
                                  select new SkillModel
                                  {
                                      Id = c.Id,
-                                     Name = c.Name
+                                     Name = c.Name,
+                                     Image = c.Image
 
                                  }).ToListAsync();
 
@@ -88,6 +90,7 @@ namespace WebAPItwe.Controllers
                                      {
                                          Id = c.Id,
                                          Name = c.Name,
+                                         Image = c.Image
 
                                      }).ToListAsync();
                 if (!session.Any())
@@ -116,6 +119,7 @@ namespace WebAPItwe.Controllers
                 var result = _context.Skills.Find(id);
                 result.Id = skill.Id;
                 result.Name = skill.Name;
+                result.Image = skill.Image;
 
                 await _context.SaveChangesAsync();
                 return Ok(result);
@@ -141,7 +145,7 @@ namespace WebAPItwe.Controllers
 
                 result.Id = skill.Id;
                 result.Name = skill.Name;
-
+                result.Image = skill.Image;
                 _context.Skills.Add(result);
                 await _context.SaveChangesAsync();
 
@@ -182,7 +186,8 @@ namespace WebAPItwe.Controllers
                 var listSkill = await _context.Skills.OrderBy(c => c.Name).Select(c => new Skill
                 {
                     Id = c.Id,
-                    Name = c.Name
+                    Name = c.Name,
+                    Image = c.Image
                 }).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
 
                 return Ok(listSkill);
