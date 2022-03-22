@@ -38,6 +38,7 @@ namespace WebAPItwe.Controllers.Cafe
                                      SubjectImage = c.SubjectImage,
                                      MentorName = c.MentorName,
                                      CafeName = c.CafeName,
+                                     Slot = c.Slot,
                                      Price = c.Price,
                                      Date = c.Date,
                                      Status = c.Status
@@ -132,6 +133,7 @@ namespace WebAPItwe.Controllers.Cafe
                                      SubjectImage = c.SubjectImage,
                                      MentorName = c.MentorName,
                                      CafeName = c.CafeName,
+                                     Slot = c.Slot,
                                      Price = c.Price,
                                      Date = c.Date,
                                      Status = c.Status
