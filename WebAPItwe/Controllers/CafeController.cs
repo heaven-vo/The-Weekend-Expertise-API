@@ -119,10 +119,10 @@ namespace WebAPItwe.Controllers
         }
         //GET: api/v1/cafe/byName?name=xxx
         /// <summary>
-        /// Search cafe by Distric
+        /// filter cafe by Distric
         /// </summary>
         [HttpGet("Distric")]
-        public async Task<ActionResult<CafeModel>> GetByDistric(string distric)
+        public async Task<ActionResult<CafeModel>> GetByDistric(string distric ,int pageIndex =1 , int pageSize = 5)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace WebAPItwe.Controllers
                                         Cafe.Description,
                                         Cafe.Rate
                                     }
-                               ).ToListAsync();
+                               ).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
                 if (!result.Any())
                 {
                     return BadRequest(new { StatusCode = 404, message = "Name is not found!" });

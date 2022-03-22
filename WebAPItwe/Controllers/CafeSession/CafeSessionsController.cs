@@ -20,8 +20,11 @@ namespace WebAPItwe.Controllers.Cafe
         {
             _context = context;
         }
-
-        [HttpGet("/done")]
+        //GET: api/Sessions
+        /// <summary>
+        /// Get list Meeting Done with  pagination
+        /// </summary>
+        [HttpGet("done")]
         public async Task<ActionResult<IEnumerable<Session>>> LoadSessionsCafe(int pageIndex = 1, int pageSize = 5)
         {
 
@@ -117,7 +120,11 @@ namespace WebAPItwe.Controllers.Cafe
                 return StatusCode(409, new { StatusCode = 409, message = ex.Message });
             }
         }
-        [HttpGet("/history")]
+        //GET: api/Sessions
+        /// <summary>
+        /// Get History list Meeting with  pagination
+        /// </summary>
+        [HttpGet("history")]
         public async Task<ActionResult<IEnumerable<Session>>> LoadHistorySessionsCafe(int pageIndex = 1, int pageSize = 5)
         {
 
