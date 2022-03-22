@@ -69,6 +69,25 @@ namespace WebAPItwe.Controllers
         }
 
         /// <summary>
+        /// Load recent session in today by member Id 
+        /// </summary>
+        [HttpGet("today")]
+        public async Task<ActionResult> LoadTodaySession(string memberId)
+        {
+            try
+            {
+                var session = await sessionRepository.LoadTodaySession(memberId);
+                return Ok(session);
+            }
+            catch
+            {
+                return Conflict();
+            }
+
+        }
+
+
+        /// <summary>
         /// Load all session (for search page)  
         /// </summary>
         [HttpGet()]

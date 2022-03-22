@@ -249,6 +249,32 @@ namespace WebAPItwe.Repositories
             return listSession;
         }
 
+        public async Task<object> LoadTodaySession(string memberId)
+        {
+            var slot = getCurrentSlot();
+            var session = await (from se in context.Sessions
+                                 join ms in context.MemberSessions on se.Id equals ms.SessionId
+                                 join cf in context.Cafes on se.CafeId equals cf.Id
+                                 where ms.MemberId == memberId && se.Status == 1 && se.Slot > slot
+                                 orderby se.Slot ascending
+                                 select new SessionTodayModel
+                                 {
+                                     Id = se.Id,
+                                     SessionImage = se.SubjectImage,
+                                     SessionName = se.SubjectName,
+                                     Slot = se.Slot,
+                                     Date = se.Date,
+                                     CafeName = cf.Name                                    
+                                 }).FirstOrDefaultAsync();
+            if(session != null)
+            {
+                var mentorId = context.Sessions.Where(x => x.Id == session.Id).Select(x => x.MentorId).FirstOrDefault();
+                var mentor = await context.Mentors.FindAsync(mentorId);
+                session.Mentor = new MentorInSessionModel { Id = mentor.Id, Image = mentor.Image, Name = mentor.Fullname, Rate = mentor.Rate };
+            }     
+            return session;
+        }
+
         public async Task<object> LoadSessionDetail(string memberId, string sessionId)
         {
             var sessionDetail = await context.Sessions.Where(x => x.Id == sessionId)
@@ -300,6 +326,49 @@ namespace WebAPItwe.Repositories
 
         //--------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------
+        public int getCurrentSlot()
+        {
+            string time = DateTime.Now.ToString("HH:mm:ss");
+            string time1 = "07:00:00";
+            string time2 = "08:45:00";
+            string time3 = "10:30:00";
+            string time4 = "12:30:00";
+            string time5 = "14:15:00";
+            string time6 = "16:30:00";
+            var com = String.Compare(time, time1);
+            if (com == 1)
+            {
+                com = string.Compare(time, time2);
+                if (com == 1)
+                {
+                    com = string.Compare(time, time3);
+                    if (com == 1)
+                    {
+                        com = string.Compare(time, time4);
+                        if (com == 1)
+                        {
+                            com = string.Compare(time, time5);
+                            if (com == 1)
+                            {
+                                com = string.Compare(time, time6);
+                                if (com == 1)
+                                {
+                                    com = 6;
+                                }
+                                else com = 5;
+                            }
+                            else com = 4;
+                        }
+                        else com = 3;
+                    }
+                    else com = 2;
+                }
+                else com = 1;
+            }
+            else com = 0;
+            return com;
+        }
+        
         public async Task<CafeModel> getCafeBySessionId(string sessionId)
         {
             var cafeId = await context.Sessions.Where(x => x.Id == sessionId).Select(x => x.CafeId).FirstOrDefaultAsync();
