@@ -275,6 +275,32 @@ namespace WebAPItwe.Repositories
             return session;
         }
 
+        public async Task<object> LoadTodaySessionOfMentor(string memberId)
+        {
+            var slot = getCurrentSlot();
+            var session = await (from se in context.Sessions
+                                 join ms in context.MemberSessions on se.Id equals ms.SessionId
+                                 join cf in context.Cafes on se.CafeId equals cf.Id
+                                 where ms.MemberId == memberId && se.Status == 1 && se.Slot > slot
+                                 orderby se.Slot ascending
+                                 select new SessionTodayModel
+                                 {
+                                     Id = se.Id,
+                                     SessionImage = se.SubjectImage,
+                                     SessionName = se.SubjectName,
+                                     Slot = se.Slot,
+                                     Date = se.Date,
+                                     CafeName = cf.Name
+                                 }).FirstOrDefaultAsync();
+            if (session != null)
+            {
+                var mentorId = context.Sessions.Where(x => x.Id == session.Id).Select(x => x.MentorId).FirstOrDefault();
+                var mentor = await context.Mentors.FindAsync(mentorId);
+                session.Mentor = new MentorInSessionModel { Id = mentor.Id, Image = mentor.Image, Name = mentor.Fullname, Rate = mentor.Rate };
+            }
+            return session;
+        }
+
         public async Task<object> LoadSessionDetail(string memberId, string sessionId)
         {
             var sessionDetail = await context.Sessions.Where(x => x.Id == sessionId)
@@ -329,12 +355,12 @@ namespace WebAPItwe.Repositories
         public int getCurrentSlot()
         {
             string time = DateTime.Now.ToString("HH:mm:ss");
-            string time1 = "07:00:00";
-            string time2 = "08:45:00";
-            string time3 = "10:30:00";
-            string time4 = "12:30:00";
-            string time5 = "14:15:00";
-            string time6 = "16:30:00";
+            string time1 = "00:00:00";
+            string time2 = "01:45:00";
+            string time3 = "03:30:00";
+            string time4 = "5:30:00";
+            string time5 = "7:15:00";
+            string time6 = "9:30:00";
             var com = String.Compare(time, time1);
             if (com == 1)
             {

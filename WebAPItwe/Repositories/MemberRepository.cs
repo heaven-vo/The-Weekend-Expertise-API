@@ -57,7 +57,6 @@ namespace WebAPItwe.Repositories
             var member = await context.Members.FindAsync(memberId);
             var majorId =  context.Majors.Where(x => x.Name == memberProfile.MajorName).Select(x => x.Id).FirstOrDefault();
             member.Fullname = memberProfile.Fullname;
-            member.Image = memberProfile.Image;
             member.Address = memberProfile.Address;
             member.Phone = memberProfile.Phone;
             member.Sex = memberProfile.Sex;
