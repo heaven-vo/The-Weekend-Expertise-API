@@ -281,7 +281,7 @@ namespace WebAPItwe.Repositories
 
         public async Task<object> LoadSchedule(string mentorId, string date)
         {
-            var schedule = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Status == 2)
+            var schedule = await context.Sessions.Where(x => x.MentorId == mentorId).Where(x => x.Status == 1)
                 .Where(x => x.Date == date).Select(x => x.Slot).ToListAsync() ;
             return schedule;
         }
